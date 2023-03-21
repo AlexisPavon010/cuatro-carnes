@@ -1,4 +1,6 @@
-.slider {}
+.slider {
+  background-color: #f4e8e4;
+}
 
 .slider__container {
   max-width: 1176px;
@@ -34,7 +36,6 @@
 .slider__nav_actions_links {
   padding: 8px;
   color: #c94f64;
-  font-family: Flame Sans, sans-serif;
   font-size: 14px;
   font-weight: 600;
   line-height: 1.43;
@@ -55,7 +56,6 @@
 }
 
 .slider__list {
-  // display: flex;
   padding-bottom: 40px;
 }
 
@@ -64,10 +64,21 @@
   flex-direction: column;
 }
 
+.slider__list_item_price {
+  color: white;
+  background-color: #c94f64;
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
 .slider__list_item_image {
-  // width: calc(28vw - 30px);
+  position: relative;
   height: 240px;
-  // background-image: url('https://cdn.discordapp.com/attachments/1064025760932823051/1087743945276129372/Oferta1.jpg');
   border-radius: 16px;
   background-position: 50%;
   background-repeat: no-repeat;

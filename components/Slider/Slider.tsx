@@ -42,14 +42,14 @@ export const Slider = () => {
               spaceBetween={20}
               slidesPerView={3}
               breakpoints={{
-                20: {
+                319: {
                   slidesPerView: 1,
                 },
-                480: {
+                720: {
                   slidesPerView: 2,
                   spaceBetween: 20
                 },
-                768: {
+                1024: {
                   slidesPerView: 3,
                 }
               }}
@@ -61,8 +61,12 @@ export const Slider = () => {
               ].map((_, i) => (
                 <SwiperSlide key={i}>
                   <div className={styles.slider__list_item}>
-                    <div className={styles.slider__list_item_image} style={{ backgroundImage: `url(${_})` }}></div>
-                    <h3 className={styles.slider__list_item_text}>Llegó la promo que todos querían.</h3>
+                    <div className={styles.slider__list_item_image} style={{ backgroundImage: `url(${_})` }}>
+                      <div className={styles.slider__list_item_price}>
+                        $ 2600.00
+                      </div>
+                    </div>
+                    <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
                   </div>
                 </SwiperSlide>
               ))}
