@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { RxHamburgerMenu } from 'react-icons/rx';
 
 import styles from './styles.module.scss'
@@ -8,13 +9,16 @@ export const Header = () => {
       <div className={styles.header__container}>
         <nav className={styles.header__nav}>
           <div className={styles.header__nav_logo_container}>
-
-            <img className={styles.header__nav_logo} src="/assets/logo-cuatro-carnes.svg" alt="" />
+            <Link href='/'>
+              <img className={styles.header__nav_logo} src="/assets/logo-cuatro-carnes.svg" alt="" />
+            </Link>
           </div>
           <div className={styles.header__nav_list}>
             <div className={styles.header__nav_links}>
               <div className={styles.header__nav_item}>
-                Menu
+                <Link href='/products'>
+                  Menu
+                </Link>
               </div>
               <div className={styles.header__nav_item}>
                 Locales

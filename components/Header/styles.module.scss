@@ -1,9 +1,8 @@
 .header {
   padding: 12px 11px 6px 11px;
-  // border-bottom: 1px solid #2c2c3133;
   position: fixed;
   width: 100%;
-  background-color: white;
+  background-color: #f4e8e4;
   z-index: 3;
   box-shadow: 0 2px 4px 0 rgba(80, 35, 20, 0.1);
 }
@@ -63,7 +62,6 @@
 }
 
 .header__button_login {
-  font-family: 'Flame', sans-serif;
   font-weight: 700;
   color: white;
   border-radius: 32px;
