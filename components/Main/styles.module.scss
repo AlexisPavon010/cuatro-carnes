@@ -28,7 +28,7 @@
   box-shadow: 0 4px 10px 0 rgba(80, 35, 20, 0.15);
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: #f4e8e4;
 }
 
 .hero__card_text {
@@ -48,8 +48,7 @@
   margin-top: 8px;
   padding: 14px;
   border: 2px solid transparent;
-  // background: #f4e8e4;
-  box-shadow: 0px 4px 4px 0px rgba(71, 71, 71, 0.185);
+  box-shadow: 0px 4px 4px 1px rgba(71, 71, 71, 0.185);
   border: 1px solid #e4dede;
   border-radius: 8px;
 }
