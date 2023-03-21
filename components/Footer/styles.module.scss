@@ -1,0 +1,118 @@
+.footer {
+  background-color: #3c3c3b;
+}
+
+.footer__container {
+  background-color: inherit;
+  max-width: 1176px;
+  margin: 0 auto;
+  padding: 58px 24px;
+}
+
+.footer__menu {
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 21px;
+}
+
+.footer__menu_text {
+  background-image: url('/assets/logo-cuatrocarnes-blanco.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  max-width: 200px;
+  height: 46px;
+  flex: 0 0 16.6666666667%;
+  max-width: 16.6666666667%;
+  padding: 12px;
+}
+
+.footer__menu_info_text {
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.footer__menu_info_subtitle {
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -.34px;
+  color: #ffffff99;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.footer__spacer {
+  flex-grow: 1;
+}
+
+.footer__menu_info_start {
+  padding: 12px 12px 12px 0px;
+  flex: 0 0 16.6666666667%;
+  max-width: 16.6666666667%;
+}
+
+.footer__menu_info_center {
+  padding: 12px 12px 12px 0px;
+  flex: 0 0 16.6666666667%;
+  max-width: 16.6666666667%;
+}
+
+.footer__menu_info_end {
+  padding: 12px 12px 12px 0px;
+  flex: 0 0 16.6666666667%;
+  max-width: 16.6666666667%;
+}
+
+.footer__bottom {
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 36px;
+}
+
+.footer__copyrights {
+  font-size: 12px;
+}
+
+.footer__social {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__social_icon {}
+
+@media (max-width: 960px) {
+  .footer__menu_text {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+
+
+}
+
+@media (max-width: 600px) {
+  .footer__menu_info_start {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .footer__menu_info_center {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .footer__menu_info_end {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
