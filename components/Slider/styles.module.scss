@@ -1,0 +1,80 @@
+.slider {}
+
+.slider__container {
+  max-width: 1176px;
+  padding: 0 24px;
+  margin: 0 auto;
+}
+
+.slider__layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.slider__nav {
+  display: flex;
+  padding: 40px 0 16px;
+}
+
+.slider__nav_title {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+.slider__nav_actions {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.slider__nav_actions_links {
+  padding: 8px;
+  color: #c94f64;
+  font-family: Flame Sans, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  letter-spacing: -.34px;
+  text-decoration: none;
+}
+
+.slider__nav_actions_button {
+  background-color: transparent;
+  cursor: pointer;
+  color: #c2ac9a;
+  border: none;
+  padding: 8px;
+
+  &:hover {
+    color: #d62300;
+  }
+}
+
+.slider__list {
+  // display: flex;
+  padding-bottom: 40px;
+}
+
+.slider__list_item {
+  display: flex;
+  flex-direction: column;
+}
+
+.slider__list_item_image {
+  // width: calc(28vw - 30px);
+  height: 240px;
+  // background-image: url('https://cdn.discordapp.com/attachments/1064025760932823051/1087743945276129372/Oferta1.jpg');
+  border-radius: 16px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.slider__list_item_text {
+  padding: 16px 0;
+  font-size: 17px;
+}
