@@ -1,0 +1,146 @@
+.hero {
+  background-image: url('/assets/grilled-beef-steaks.jpg');
+  background-size: cover;
+  background-position: 50%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  padding-top: 70px;
+}
+
+.hero__container {
+  max-width: 1176px;
+  margin: 0 auto;
+  padding: 0 24px;
+  background: none;
+}
+
+.hero__home {
+  min-height: calc(100vh - 176px);
+  width: 100%;
+  background: none;
+}
+
+.hero__card {
+  width: 450px;
+  padding: 16px;
+  margin: 40px 0 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px 0 rgba(80, 35, 20, 0.15);
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.hero__card_text {
+  background-color: inherit;
+  padding: 16px;
+}
+
+.hero__card_text_h1 {
+  background-color: inherit;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+.hero__card_item {
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 14px;
+  border: 2px solid transparent;
+  // background: #f4e8e4;
+  box-shadow: 0px 4px 4px 0px rgba(71, 71, 71, 0.185);
+  border: 1px solid #e4dede;
+  border-radius: 8px;
+}
+
+.hero__card_item:hover {
+  &:hover {
+    .hero__card_item_subtitle {
+      visibility: visible;
+      opacity: 1;
+      height: 100%;
+      transition: visibility 0.3s linear, opacity 0.3s linear;
+      // transition: visibility 0s, height 0s, opacity .4s linear
+    }
+
+    .hero__card_item_text_wrap {
+      max-height: 80px;
+      transition: max-height .2s ease-out;
+    }
+  }
+}
+
+.hero__card_item_content {
+  width: 100%;
+  gap: 16px;
+  justify-content: flex-start;
+  white-space: normal;
+  align-items: center;
+  color: inherit;
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: inherit;
+  line-height: normal;
+  position: relative;
+  transition: inherit;
+  transition-property: opacity;
+}
+
+.hero__card_item_image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border-radius: 50%;
+  background-color: #a92b3c;
+
+}
+
+.hero__card_item_text_wrap {
+  max-height: 24px;
+  transition: max-height .2s;
+}
+
+.hero__card_item_text {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.hero__card_item_subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 24px;
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  transition: visibility 0s, height 0s, opacity .4s linear
+}
+
+.hero__card_item_subtitle {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  transition: .2s;
+}
+
+@media (max-width: 1200px) {}
+
+@media (max-width: 768px) {
+  .hero__container {
+    padding: 0;
+  }
+
+  .hero__card {
+    margin: 40px auto 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__card {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+}
