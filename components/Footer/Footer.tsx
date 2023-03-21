@@ -36,16 +36,16 @@ export const Footer = () => {
           <div className={styles.footer__spacer}></div>
           <div className={styles.footer__social}>
             <div className={styles.footer__social_icon}>
-              <FaFacebookF size={24} />
+              <FaFacebookF size={24} color='#f4e8e4' />
             </div>
             <div className={styles.footer__social_icon}>
-              <FaInstagram size={24} />
+              <FaInstagram size={24} color='#f4e8e4' />
             </div>
             <div className={styles.footer__social_icon}>
-              <FaYoutube size={24} />
+              <FaYoutube size={24} color='#f4e8e4' />
             </div>
             <div className={styles.footer__social_icon}>
-              <FaTwitter size={24} />
+              <FaTwitter size={24} color='#f4e8e4' />
             </div>
           </div>
         </div>

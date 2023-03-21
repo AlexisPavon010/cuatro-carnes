@@ -1,5 +1,6 @@
 .footer {
-  background-color: #3c3c3b;
+  background-color: #0f0f0f;
+  color: #f4e8e4;
 }
 
 .footer__container {
@@ -10,7 +11,7 @@
 }
 
 .footer__menu {
-  color: white;
+  color: #f4e8e4;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -20,7 +21,7 @@
 }
 
 .footer__menu_text {
-  background-image: url('/assets/logo-cuatrocarnes-blanco.svg');
+  background-image: url('/assets/logo-cuatrocarnes-crema.svg');
   background-repeat: no-repeat;
   background-size: contain;
   max-width: 200px;
@@ -44,7 +45,7 @@
   color: #ffffff99;
 
   &:hover {
-    color: white;
+    color: #f4e8e4;
   }
 }
 
@@ -71,7 +72,7 @@
 }
 
 .footer__bottom {
-  color: white;
+  color: #f4e8e4;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -96,8 +97,6 @@
     max-width: 100%;
     margin-bottom: 16px;
   }
-
-
 }
 
 @media (max-width: 600px) {
