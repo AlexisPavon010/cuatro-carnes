@@ -78,3 +78,9 @@
   padding: 16px 0;
   font-size: 17px;
 }
+
+@media (max-width: 480px) {
+  .slider__nav {
+    padding: 0 0 16px;
+  }
+}
