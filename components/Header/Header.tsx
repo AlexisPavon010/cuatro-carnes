@@ -32,6 +32,11 @@ export const Header = () => {
               <div className={styles.header__nav_item}>
                 Cupones
               </div>
+              <div className={styles.header__nav_item}>
+                <Link href='/dashboard'>
+                  Dashboard
+                </Link>
+              </div>
             </div>
           </div>
           <div className={styles.header__nav_end}>
