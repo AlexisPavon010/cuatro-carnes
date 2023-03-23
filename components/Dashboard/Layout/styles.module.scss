@@ -1,0 +1,21 @@
+.header {
+  background-color: white;
+  height: 64px;
+  padding-inline: 24px;
+  line-height: 64px;
+}
+
+.header__menu {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .header__menu {
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+.side__image_wrapper {
+  padding: 20px 0 0 20px;
+}
