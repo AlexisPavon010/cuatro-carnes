@@ -1,6 +1,13 @@
-import type { AppProps } from 'next/app'
-import '@/styles/globals.scss'
+import '../public/antd.min.css';
+import '../styles/globals.scss';
+
+import type { AppProps } from 'next/app';
+import { StyleProvider } from '@ant-design/cssinjs';
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <StyleProvider hashPriority='high'>
+      <Component {...pageProps} />
+    </StyleProvider>
+  );
 }

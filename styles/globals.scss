@@ -16,3 +16,13 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.ant-layout-sider {
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .ant-layout-sider {
+    display: none;
+  }
+}

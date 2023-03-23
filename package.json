@@ -6,13 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "predev": "ts-node --project ./tsconfig.node.json ./scripts/genAntdCss.tsx",
+    "prebuild": "ts-node --project ./tsconfig.node.json ./scripts/genAntdCss.tsx"
   },
   "dependencies": {
+    "@ant-design/static-style-extract": "^1.0.1",
     "@types/node": "18.15.0",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "antd": "^5.3.2",
+    "joi": "^17.9.1",
+    "mongoose": "^7.0.2",
+    "mongoose-sequence": "^5.3.1",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
