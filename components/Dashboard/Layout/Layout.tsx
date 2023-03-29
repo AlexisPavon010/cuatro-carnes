@@ -3,21 +3,22 @@ import { useState } from 'react';
 import { Navbar } from './Navbar';
 import { SideMenu } from './SideMenu';
 
-const { Sider, Header, Content } = AntLAyout;
+const { Sider, Content } = AntLAyout;
 
 interface LayoutProps {
   children: JSX.Element | JSX.Element[]
 }
 
 export const Layout = ({ children }: LayoutProps) => {
+  const [collapsed, setCollapsed] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const openMenu = () => setIsMenuOpen(true)
   const closeMenu = () => setIsMenuOpen(false)
 
   return (
     <AntLAyout style={{ minHeight: '100vh', flexDirection: 'row' }}>
-      <Sider width={250} theme="light">
-        <SideMenu />
+      <Sider onCollapse={(value) => setCollapsed(value)} collapsible collapsed={collapsed} width={250} theme="light">
+        <SideMenu collapsed={collapsed} />
       </Sider>
       <Drawer
         placement="left"
@@ -29,7 +30,7 @@ export const Layout = ({ children }: LayoutProps) => {
           padding: 0
         }}
       >
-        <SideMenu />
+        <SideMenu collapsed={collapsed} />
       </Drawer>
       <AntLAyout>
         <Navbar openMenu={openMenu} />
