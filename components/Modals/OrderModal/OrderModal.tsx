@@ -16,7 +16,7 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
 
   const addItemToCart = () => {
     dispatch(addToCart({
-      id: 3,
+      _id: 3,
       price: 2000,
       quantity: 1,
       name: 'Combo Whopper 2x1',

@@ -1,3 +1,4 @@
+import { IProduct } from "@/interfaces/products";
 import { createSlice } from "@reduxjs/toolkit";
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
@@ -25,7 +26,7 @@ export const shoppingSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const itemIndex = state.cart.findIndex(
-        (cartItem) => cartItem.id === action.payload.id
+        (cartItem: IProduct) => cartItem._id === action.payload.id
       );
       let newCart = [...state.cart];
       if (itemIndex >= 0) {
@@ -39,7 +40,7 @@ export const shoppingSlice = createSlice({
 
     removeFromCart: (state, action) => {
       const itemIndex = state.cart.findIndex(
-        (cartItem) => cartItem.id === action.payload
+        (cartItem: IProduct) => cartItem._id === action.payload
       );
       let newCart = [...state.cart];
       if (itemIndex >= 0) {
@@ -57,7 +58,7 @@ export const shoppingSlice = createSlice({
 
     removeAllItems: (state, action) => {
       const newCart = state.cart.filter(
-        (cartItem) => cartItem.id !== action.payload
+        (cartItem: IProduct) => cartItem._id !== action.payload
       );
       setCookie(null, 'cart', JSON.stringify(newCart), { path: '/', })
       state.cart = newCart;
