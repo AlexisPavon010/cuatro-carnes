@@ -1,0 +1,21 @@
+.drawer__content {
+  :global(.ant-drawer-content) {
+    background-color: #f4e8e4 !important;
+  }
+}
+
+.drawer__item {
+  padding: 12px 6px;
+  cursor: pointer;
+}
+
+.drawer__item:hover {
+  background-color: #2c2c310f;
+}
+
+.drawer__item_link {
+  padding: 12px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3C3C3B !important;
+}
