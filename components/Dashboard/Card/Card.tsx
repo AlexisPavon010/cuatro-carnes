@@ -1,4 +1,4 @@
-import { Button, Card as AntdCard, Col, Divider, Row, Space, Typography } from "antd"
+import { Button, Card as AntdCard, Col, Divider, Row, Skeleton, Space, Typography } from "antd"
 
 const { Title, Paragraph } = Typography;
 
@@ -6,10 +6,11 @@ interface CardProps {
   title: string;
   total: number;
   description: string;
-
+  loading: boolean;
 }
 
-export const Card = ({ title, description, total }: CardProps) => {
+export const Card = ({ title, description, total, loading }: CardProps) => {
+
   return (
     <AntdCard
       bodyStyle={{
@@ -28,7 +29,11 @@ export const Card = ({ title, description, total }: CardProps) => {
       </Row>
       <Divider style={{ margin: '16px 0 8px 0' }} />
       <Space size='small' direction='vertical'>
-        <Title style={{ marginBottom: '4px' }} level={2}>{total}</Title>
+        {loading ? (
+          <Skeleton.Avatar active shape="square" />
+        ) : (
+          <Title style={{ marginBottom: '4px' }} level={2}>{total}</Title>
+        )}
         <Paragraph>{description}</Paragraph>
       </Space>
     </AntdCard>
