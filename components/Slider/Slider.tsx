@@ -28,10 +28,10 @@ export const Slider = () => {
               <Link href='/' className={styles.slider__nav_actions_links}>
                 Ver todo
               </Link>
-              <button className={styles.slider__nav_actions_button}>
+              <button aria-label="boton anterior slider" className={styles.slider__nav_actions_button}>
                 <BsChevronLeft onClick={() => swiper.current.slidePrev()} size={16} />
               </button>
-              <button className={styles.slider__nav_actions_button}>
+              <button aria-label="boton siguiente slider" className={styles.slider__nav_actions_button}>
                 <BsChevronRight onClick={() => swiper.current.slideNext()} size={16} />
               </button>
             </div>
