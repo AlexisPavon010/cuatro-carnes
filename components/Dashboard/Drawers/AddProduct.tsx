@@ -1,31 +1,103 @@
-import { useState } from 'react'
-import { Button, Col, Drawer, Form, Input, Row, Select, Space, Upload } from 'antd'
-import { AiOutlineLoading } from 'react-icons/ai';
-import { BiPlusCircle } from 'react-icons/bi';
+import { Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Space, Spin, Upload, } from 'antd'
+import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload';
+import { BiPlus } from 'react-icons/bi';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+import { createProduct, getProductById, updateProductById } from '@/client';
+import { useSwrFetcher } from '@/hooks/useSwrFetcher';
+import { ICategories } from '@/interfaces/categories';
 
 const { TextArea } = Input;
 
-export const AddProduct = ({ onClose, open }: any) => {
+export const AddProduct = ({ onClose, open, mutate }: any) => {
+  const { data: categories } = useSwrFetcher('/api/categories')
   const [form] = Form.useForm();
+  const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [quantity, setQuantity] = useState(1)
+
+  const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+    if (info.file.status === 'uploading') {
+      setLoadingImage(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      const formData = new FormData();
+      formData.append("file", info.file.originFileObj as RcFile);
+      formData.append("upload_preset", "prueba");
+
+      axios
+        .post('https://api.cloudinary.com/v1_1/alexispavon010/image/upload', formData)
+        .then((response) => {
+          setLoadingImage(false);
+          setImageUrl(response.data.secure_url);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const handleSubmit = (values: any) => {
+    setLoading(true)
+    if (!open.id) {
+      createProduct({
+        ...values,
+        price: Number(values.price),
+        quantity: Number(quantity),
+        image: imageUrl
+      })
+        .then(() => {
+          mutate(null);
+          form.resetFields()
+          onClose(false)
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false))
+    } else {
+      updateProductById(open.id, values)
+        .then(() => {
+          form.resetFields()
+          onClose(false)
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false))
+    }
+  }
 
   const uploadButton = (
     <div>
-      {loading ? <AiOutlineLoading /> : <BiPlusCircle />}
+      {loadingImage ? <Spin /> : <BiPlus />}
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
 
+  useEffect(() => {
+    form.resetFields()
+    setImageUrl(undefined)
+    if (!open.id) return
+    getProductById(open.id)
+      .then(({ data }) => {
+        setImageUrl(data.image)
+        form.setFieldsValue(data)
+      })
+      .catch((error) => console.log(error))
+
+  }, [open.id])
+
+
   return (
     <Drawer
       width={400}
-      title="Basic Drawer"
+      title={open.id ? 'Modificar Producto' : 'Agregar Producto'}
       placement="right"
-      onClose={() => onClose(false)}
-      open={open}
+      onClose={() => onClose({ visivle: false, id: undefined })}
+      open={open.visible}
       footer={
-        <Button block type="primary" onClick={() => form.submit()}>
+        <Button loading={loading} block type="primary" onClick={() => form.submit()}>
           Cargar
         </Button>
       }
@@ -37,9 +109,7 @@ export const AddProduct = ({ onClose, open }: any) => {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          // beforeUpload={beforeUpload}
-          // onChange={handleChange}
+            onChange={handleChange}
           >
             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
           </Upload>
@@ -49,13 +119,16 @@ export const AddProduct = ({ onClose, open }: any) => {
         form={form}
         layout='vertical'
         name="basic"
-        onFinish={(e) => console.log(e)}
+        initialValues={{
+          quantity
+        }}
+        onFinish={handleSubmit}
         autoComplete="off"
         requiredMark={false}
       >
         <Form.Item
           label="Nombre del Producto"
-          name="name"
+          name="title"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input placeholder='Escribe el nombre del producto' size='large' />
@@ -67,9 +140,9 @@ export const AddProduct = ({ onClose, open }: any) => {
         // rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button type="primary">-</Button>
-            <Input style={{ textAlign: 'center' }} defaultValue={1} />
-            <Button type="primary">+</Button>
+            <Button onClick={() => setQuantity(quantity - 1)} type="primary">-</Button>
+            <Input onChange={({ target }) => setQuantity(Number(target.value))} style={{ textAlign: 'center' }} value={quantity} defaultValue={quantity} />
+            <Button onClick={() => setQuantity(quantity + 1)} type="primary">+</Button>
           </Space.Compact>
         </Form.Item>
 
@@ -78,23 +151,20 @@ export const AddProduct = ({ onClose, open }: any) => {
           name="price"
         // rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input size='large' addonBefore="$" />
+          <InputNumber size='large' addonBefore="$" />
         </Form.Item>
 
         <Form.Item
           label="Categoria"
-          name="categories"
+          name="category"
         // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Select
+            placeholder='Seleccione una categoria'
             size='large'
-            defaultValue="lucy"
-            options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
-              { value: 'disabled', label: 'Disabled', disabled: true },
-            ]}
+            options={
+              categories.map((item: ICategories) => ({ value: item.name, label: item.name }))
+            }
           />
         </Form.Item>
 
