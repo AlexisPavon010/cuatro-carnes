@@ -1,8 +1,13 @@
 import { Button, Card, Col, Radio, Row, Space, Table, Tooltip } from "antd"
 import { ColumnsType } from "antd/es/table";
+import moment from "moment";
 import { AiOutlineMail, AiOutlineProfile } from "react-icons/ai";
 import { BsPencil, BsWhatsapp } from "react-icons/bs";
 
+interface OrderTableProps {
+  data: any[];
+  isLoading: boolean
+}
 
 const dataSource = [
   {
@@ -31,22 +36,25 @@ const columns: ColumnsType<any> = [
   },
   {
     title: 'Fecha y Hora',
-    dataIndex: 'date',
-    key: 'date',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    width: 180,
+    render: (createdAt) => moment(createdAt).format('MM/DD/YYYY, h:mm:ss a')
   },
   {
     align: 'center',
     title: 'Monto',
     dataIndex: 'total',
-    key: 'totalf',
-    render: (total) => (
+    key: 'total',
+    render: (total: number) => (
       <div>${total}</div>
     )
   },
   {
     title: 'Cliente',
-    dataIndex: 'client',
-    key: 'clientF',
+    dataIndex: 'username',
+    key: 'username',
+    width: 150,
   },
   {
     title: 'Mail',
@@ -59,6 +67,7 @@ const columns: ColumnsType<any> = [
     key: 'status',
   },
   {
+    align: 'center',
     title: 'Acciones',
     dataIndex: 'actions',
     key: 'actions',
@@ -81,25 +90,26 @@ const columns: ColumnsType<any> = [
   },
 ];
 
-export const OrderTable = () => {
+export const OrderTable = ({ isLoading, data }: OrderTableProps) => {
   return (
     <>
       <Card>
         <Row>
           <Col xs={24} md={8} lg={8}>
-            <Radio.Group >
-              <Radio.Button value="large">Todos</Radio.Button>
-              <Radio.Button value="default">Dia</Radio.Button>
-              <Radio.Button value="small">Semana</Radio.Button>
-              <Radio.Button value="mes">Mes</Radio.Button>
+            <Radio.Group defaultValue='all' >
+              <Radio.Button value="all">Todos</Radio.Button>
+              <Radio.Button value="day">Dia</Radio.Button>
+              <Radio.Button value="week">Semana</Radio.Button>
+              <Radio.Button value="month">Mes</Radio.Button>
             </Radio.Group>
           </Col>
         </Row>
       </Card>
       <Table
+        loading={isLoading}
         scroll={{ x: 1000 }}
         columns={columns}
-        dataSource={dataSource}
+        dataSource={data}
       />
     </>
   )
