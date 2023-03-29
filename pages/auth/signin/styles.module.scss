@@ -1,0 +1,147 @@
+.login {}
+
+.login__container {
+  position: relative;
+  display: flex;
+  background-color: rgb(245, 235, 220);
+  height: 100%;
+}
+
+.login__container_goback {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 3;
+}
+
+.login__container_left {
+  position: relative;
+  flex: 1 1 0%;
+  max-width: 50vw;
+  display: unset;
+
+  // &>img {
+  //   height: auto !important;
+  // }
+}
+
+.login__container_rigth {
+  margin: 0px auto;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+// .login__container_rigth {
+//   flex: 1 1 0%;
+//   padding-bottom: 80px;
+// }
+.login__container_rigth_title {
+  font-size: 36px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.login__container_rigth_subtitle {
+  text-align: center;
+  font-size: 20px;
+  padding-bottom: 16px;
+  font-weight: 400;
+}
+
+.login__container_rigth_form {
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 32px;
+}
+
+.login__container_rigth_form_input {
+  margin-bottom: 12px;
+  min-width: 15rem;
+  height: 3.125rem;
+  padding: 0 50px 0 24px;
+  color: #502314;
+  background-color: #fff;
+  border-radius: 24px;
+  width: 100%;
+  padding-bottom: 0.25rem;
+  border: none;
+  border-bottom: 0.0625rem solid rgba(216, 216, 216, .7);
+  font-size: 1rem;
+  outline: none;
+  font-weight: 600;
+}
+
+.login__container_rigth_button {
+  border-radius: 24px;
+  cursor: pointer;
+  color: #fff;
+  background-color: #d62300;
+  border: solid #d62300;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 15rem;
+  height: 3.125rem;
+  text-transform: uppercase;
+  transition: .3s;
+}
+
+.login__container_rigth_footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 12px;
+}
+
+@media (max-width: 1200px) {
+  .login__container_left {
+    display: none;
+    border: 1px solid red;
+  }
+}
+
+.button {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 12px;
+  justify-content: center;
+  border-radius: 24px;
+  color: #502314;
+  background-color: #fff;
+  border: 1px solid #502314;
+  height: 50px;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.button__content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 280px;
+  gap: 8px;
+}
+
+.divider__separators {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  outline: none !important;
+}
+
+.divider__hr1 {
+  width: 100%;
+  margin: 8px;
+  color: red;
+}
