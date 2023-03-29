@@ -1,12 +1,15 @@
 import { Select } from 'antd'
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
-import { BsChevronRight, BsChevronUp } from 'react-icons/bs'
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { BsChevronRight, } from 'react-icons/bs'
+import { Swiper, SwiperSlide, } from 'swiper/react';
 import 'swiper/css';
 
 import { Layout } from '@/components/Layout'
 import styles from './styles.module.scss'
+import { OrderModal } from '@/components/Modals';
+import { CartItem } from '@/components/CartItem'
 
 const NAV_LINKS = [
   { id: 'section-1', label: 'Section 1', isActive: false },
@@ -16,6 +19,8 @@ const NAV_LINKS = [
 
 const ProductsPage = () => {
   const [navLinks, setNavLinks] = useState(NAV_LINKS);
+  const [openModal, setOpenModal] = useState(false)
+  const { cart } = useSelector((state: any) => state.shopping)
   const targetRefs = useRef<any>([]);
 
   const scrollToSection = (sectionId: string) => {
@@ -76,7 +81,6 @@ const ProductsPage = () => {
           {/* <Slider /> */}
           <div className={styles.slider__list}>
             <Swiper
-              // ref={swiperRef}
               spaceBetween={20}
               slidesPerView={3}
               breakpoints={{
@@ -176,7 +180,7 @@ const ProductsPage = () => {
                 </div>
                 <div className={styles.list__products}>
                   {Array(4).fill('').map(() => (
-                    <div className={styles.list__products_item}>
+                    <div onClick={() => setOpenModal(true)} className={styles.list__products_item}>
                       <div>
                         <h3 className={styles.list__products_title}>Combo Whopper 2x1</h3>
                         <div className={styles.list__products_price}>$ 2,000.00</div>
@@ -195,7 +199,7 @@ const ProductsPage = () => {
                 </div>
                 <div id="section-2" ref={el => targetRefs.current[1] = el} className={styles.list__products}>
                   {Array(12).fill('').map(() => (
-                    <div className={styles.list__products_item}>
+                    <div onClick={() => setOpenModal(true)} className={styles.list__products_item}>
                       <div>
                         <h3 className={styles.list__products_title}>Combo Whopper 2x1</h3>
                         <div className={styles.list__products_price}>$ 2,000.00</div>
@@ -267,13 +271,18 @@ const ProductsPage = () => {
               </div>
             </div>
             <div className={styles.cart_card}>
-              <p>
-                Tu carrito aparecerá aquí
-              </p>
+              {cart.length > 0 ? (
+                <CartItem />
+              ) : (
+                <p>
+                  Tu carrito aparecerá aquí
+                </p>
+              )}
             </div>
           </div>
         </div>
       </section>
+      <OrderModal open={openModal} close={setOpenModal} />
     </Layout >
   )
 }
