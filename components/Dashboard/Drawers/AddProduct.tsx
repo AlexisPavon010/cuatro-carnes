@@ -21,9 +21,6 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
       setLoadingImage(true);
-      return;
-    }
-    if (info.file.status === 'done') {
       // Get this url from response in real world.
       const formData = new FormData();
       formData.append("file", info.file.originFileObj as RcFile);
@@ -36,6 +33,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           setImageUrl(response.data.secure_url);
         })
         .catch((error) => {
+          setLoadingImage(false);
           console.log(error);
         });
     }
@@ -105,7 +103,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
       <Row>
         <Col>
           <Upload
-            name="avatar"
+            name="file"
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
