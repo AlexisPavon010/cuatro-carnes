@@ -71,12 +71,10 @@ const CreateOrder = async (
   try {
     // await schema.validateAsync(req.body);
     const data = await Order.create(req.body)
-    const { data: response } = await axios.post('http://54.209.160.199:8000/send-message', {
+    axios.post('http://54.209.160.199:8000/send-message', {
       phoneNumber,
       uniqueID: data.uniqueID
     })
-
-    console.log(response)
 
     return res.status(200).json(data)
 
