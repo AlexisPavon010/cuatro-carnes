@@ -26,7 +26,7 @@ export const shoppingSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const itemIndex = state.cart.findIndex(
-        (cartItem: IProduct) => cartItem._id === action.payload.id
+        (cartItem: IProduct) => cartItem._id === action.payload._id
       );
       let newCart = [...state.cart];
       if (itemIndex >= 0) {
