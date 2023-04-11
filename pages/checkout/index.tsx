@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select } from "antd";
 import { useSession } from "next-auth/react";
 import { useSelector } from "react-redux";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Layout } from "@/components/Layout";
 import styles from './styles.module.scss'
@@ -11,9 +11,16 @@ import { createOrder } from "@/client";
 const { Option } = Select;
 
 const CheckoutPage = () => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
   const { data: session }: any = useSession()
   const { cart } = useSelector((state: any) => state.shopping)
+
+  useEffect(() => {
+    if (!session) return
+    form.setFieldsValue(session.user)
+  }, [session])
+
   const onFinish = (values: any) => {
     setLoading(true)
     console.log({
@@ -31,6 +38,15 @@ const CheckoutPage = () => {
       .finally(() => setLoading(false))
   }
   const onFinishFailed = () => { }
+
+  const validatePhone = (rule: any, value: any, callback: any) => {
+    const pattern = /^\d{10}$/; // regex que verifica si el número tiene 10 dígitos
+    if (value && !pattern.test(value)) {
+      callback('Por favor, ingrese un número de teléfono válido');
+    } else {
+      callback();
+    }
+  };
 
   const selectCodeArea = (
     <Form.Item initialValue='549' name="code" noStyle>
@@ -53,11 +69,8 @@ const CheckoutPage = () => {
               <h2 className={styles.checkout_subtitle}>Información de contacto</h2>
               <div className={styles.checkout__content_card}>
                 <Form
+                  form={form}
                   name="checkout"
-                  initialValues={{
-                    username: session?.user.name,
-                    email: session?.user?.email
-                  }}
                   layout="vertical"
                   onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
@@ -82,9 +95,17 @@ const CheckoutPage = () => {
                   <Form.Item
                     label="Numero de telefono"
                     name='phone'
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Por favor ingrese su teléfono',
+                      },
+                      {
+                        validator: validatePhone,
+                      },
+                    ]}
                   >
-                    <Input type="number" addonBefore={selectCodeArea} />
+                    <Input type="number" className={styles.checkout__input} addonBefore={selectCodeArea} />
                   </Form.Item>
 
                   <Form.Item
