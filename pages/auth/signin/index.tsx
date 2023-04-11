@@ -1,20 +1,27 @@
-import Image from 'next/image';
 import { getProviders, getSession, signIn as LoginWhitProviders, } from 'next-auth/react'
 import { GetServerSideProps } from 'next';
 import { FaFacebook } from 'react-icons/fa';
+import { BsArrowLeft } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react'
 
 import styles from './styles.module.scss'
-import { BsArrowLeft } from 'react-icons/bs';
-import Link from 'next/link';
+import { RecoveryPassword } from '@/components/Modals/RecoveryPassword';
+import { Form } from 'antd';
 
 interface SigninPageProps {
-  providers: Awaited<ReturnType<typeof getProviders>>
+  providers: Awaited<ReturnType<typeof getProviders>>;
+  error: any;
 }
 
-const SigninPage = ({ providers }: SigninPageProps) => {
+const SigninPage = ({ providers, error }: SigninPageProps) => {
+  const [showRecovery, setShowRecovery] = useState(false)
 
-  console.log(providers)
+  const handleLoginWhitEmailAndPassword = async ({ email, password }: { email: string, password: string }) => {
+    await LoginWhitProviders('credentials', { email, password })
+  }
 
   return (
     <div className={styles.login}>
@@ -24,7 +31,7 @@ const SigninPage = ({ providers }: SigninPageProps) => {
         </Link>
         <div className={styles.login__container_left}>
           <Image
-            src='https://cdn.sanity.io/images/czqk28jt/prod_bk_us/de2821c5cf1912ad10fa47a3b6752847581f5fc1-1440x1800.jpg'
+            src='/assets/grilled-beef-steaks.jpg'
             alt='image login'
             layout='fill'
             objectFit='cover'
@@ -36,10 +43,8 @@ const SigninPage = ({ providers }: SigninPageProps) => {
           <div className={styles.login__container_rigth_buttons}>
             {providers ? Object.values(providers).map((provider: any) => {
               if (provider.id === 'credentials') return null
-              console.log(providers)
               let icon;
               let color;
-              let variant;
               switch (provider.id) {
                 case 'facebook':
                   icon = <FaFacebook />
@@ -67,16 +72,37 @@ const SigninPage = ({ providers }: SigninPageProps) => {
               <hr className={styles.divider__hr1} />
             </div>
           </div>
+          {error && (
+            <div className={styles.login__error_message}>
+              Datos de acceso incorrectos
+            </div>
+          )}
           <div className={styles.login__container_rigth_form}>
-            <input className={styles.login__container_rigth_form_input} type="text" placeholder='Correo electronico' />
-            <input className={styles.login__container_rigth_form_input} type="password" placeholder='Contraseña' />
-            <button className={styles.login__container_rigth_button}>ACCEDER</button>
+            <Form
+              onFinish={handleLoginWhitEmailAndPassword}
+              autoComplete="off"
+            >
+              <Form.Item
+                name="email"
+                rules={[{ required: true, message: 'Please input your username!' }]}
+              >
+                <input className={styles.login__container_rigth_form_input} type="text" placeholder='Correo electronico' />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+              >
+                <input className={styles.login__container_rigth_form_input} type="password" placeholder='Contraseña' />
+              </Form.Item>
+              <button type='submit' className={styles.login__container_rigth_button}>ACCEDER</button>
+            </Form>
             <div className={styles.login__container_rigth_footer}>
-              <a href="">He olvidado mi contraseña</a>
+              <a onClick={() => setShowRecovery(true)} href="#">He olvidado mi contraseña</a>
             </div>
           </div>
         </div>
       </div>
+      <RecoveryPassword showRecovery={showRecovery} setShowRecovery={setShowRecovery} />
     </div>
   )
 }

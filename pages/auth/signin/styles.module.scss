@@ -103,7 +103,12 @@
 @media (max-width: 1200px) {
   .login__container_left {
     display: none;
-    border: 1px solid red;
+  }
+}
+
+@media (max-width: 480px) {
+  .login__container_rigth {
+    padding: 0 16px;
   }
 }
 
@@ -144,4 +149,11 @@
   width: 100%;
   margin: 8px;
   color: red;
+}
+
+.login__error_message {
+  color: #d62300;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
 }
