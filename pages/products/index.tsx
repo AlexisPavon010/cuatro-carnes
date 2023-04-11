@@ -10,6 +10,10 @@ import { Layout } from '@/components/Layout'
 import styles from './styles.module.scss'
 import { OrderModal } from '@/components/Modals';
 import { CartItem } from '@/components/CartItem'
+import { useSwrFetcher } from '@/hooks/useSwrFetcher'
+import { IProduct } from '@/interfaces/products'
+import { ICategories } from '@/interfaces/categories'
+import { LoadingItem } from '@/components/LoadingItem'
 
 const NAV_LINKS = [
   { id: 'section-1', label: 'Section 1', isActive: false },
@@ -18,8 +22,29 @@ const NAV_LINKS = [
 ];
 
 const ProductsPage = () => {
+  const { data: categories, isLoading } = useSwrFetcher('/api/categories')
+  const { data: products } = useSwrFetcher('/api/products')
+
+  function filterProductsByCategory(products: IProduct[], categories: ICategories[]) {
+    const filteredProductsByCategory = {};
+
+    categories.forEach((category) => {
+      const filteredProducts = products.filter((product: IProduct) => {
+        return product.category === category.name;
+      });
+
+      // @ts-ignore 
+      filteredProductsByCategory[category.name] = {
+        name: category.name,
+        products: filteredProducts,
+      };
+    });
+
+    return Object.values(filteredProductsByCategory);
+  }
+
   const [navLinks, setNavLinks] = useState(NAV_LINKS);
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
   const { cart } = useSelector((state: any) => state.shopping)
   const targetRefs = useRef<any>([]);
 
@@ -134,33 +159,6 @@ const ProductsPage = () => {
               >
                 Vacuno x Pieza
               </button>
-              <button
-                className={navLinks[2].isActive ? styles.categories__button_active : styles.categories__button}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('section-3');
-                }}
-              >
-                Vacuno x Kg.
-              </button>
-              <button className={styles.categories__button}>
-                Pollo
-              </button>
-              <button className={styles.categories__button}>
-                Cerdo
-              </button>
-              <button className={styles.categories__button}>
-                Cordero
-              </button>
-              <button className={styles.categories__button}>
-                Achuras y Embutidos
-              </button>
-              <button className={styles.categories__button}>
-                Elaborados
-              </button>
-              <button className={styles.categories__button}>
-                Varios
-              </button>
             </div>
             {/* <div className={styles.categories__end}>
               <h5 className={styles.categories__subcategorie}>
@@ -173,63 +171,33 @@ const ProductsPage = () => {
         <div className={styles.list}>
           <div className={styles.list__menu}>
             <div className={styles.list__menu_wrapper}>
-              <div id="section-1" ref={el => targetRefs.current[0] = el} className={styles.list__menu_subcategory}>
-                <div>
-                  <h2 className={styles.list__menu_subcategory_title}>Ofertas de la Semana</h2>
-                  <p className={styles.list__menu_subcategory_description}>Todos los precios son por kg.</p>
-                </div>
-                <div className={styles.list__products}>
-                  {Array(4).fill('').map(() => (
-                    <div onClick={() => setOpenModal(true)} className={styles.list__products_item}>
-                      <div>
-                        <h3 className={styles.list__products_title}>Combo Whopper 2x1</h3>
-                        <div className={styles.list__products_price}>$ 2,000.00</div>
-                      </div>
-                      <div>
-                        <Image src='https://lh3.googleusercontent.com/fife/AMPSemdihEiz5P8O4C0pEF_Z9urCz_Q4ZO4KcP4HeJ7rlgWt5keeyiQafBR9hE9u7eTESSqIbswETaiK1DnZT3UPT6BeLBGdQr5AxhLwomWCAhybmOfNghduoAYJtFhPyDCWkrL5WhYo-NrHFfMGHPfrEivJvYGE3xdXhkQGE7KTRlLGpqfLttlx0fBWGyHincTCCtvaRCgK6UieCP7Dj80ViMUfY6kzDnm83UKqkz5DrtEoqU1FdBFHMMvvbZPSqerceExXa-mldcLNj-i9SZtng9cS1yc1GQu1PGv7S0CvYr_YXAZlRvyfamheUoy2Lk9iH2ChuJHmwmzYRxAxNii6pGyQZayfylQRDm2kGVb-dp4gJMRaUhwRcyepOnEp9R2IeLw2QSiML_ASLiubCETrsqCSQLrR8zT8pUV9Iv0ASte1lyB3QAHuBFa_YdEK6KY9NqBp5PMTeyC_1g5gITL_x4F_JZEzl1D0lyzeb9C-vZK959dU6I-RyCU6dhCVd5nZDcRgQnVM7mib66jz2qfuVCtglO27PskdvU7-M6AAkS9ZT4j7DSaO8rhDGcyKjO7gVUQy7AbdwTpZJE6xM8r_GWH6BLwRtuN4YJqfP-_QYVkfOPNpqKTnALzatpJN8uVc-PsMg8VXJwdUcpbJoXAy1ZK7ktEEzi0lqs1FtvutUopUohE734YjavrgVFPZze99xTECWw-V333XZz4n28rZgh8o765shaOydLUX3AJLJ0kaU5sYvSJk542d27uTZ1Eecn7OHlkhP5WkI4rNRp5xmf51HrC8Ql-dJP6b0pr-f9sn9CRx6wPYGOxEVwToOQnFO4eXPDx3o3Xxd69qWl8U-AYg_BSRX3dX7JM19xtxJUe_OFXW9G2hSYUC230UGIVRAKaXCt6uBk05cpUjBDklUBYPB5e7GWUadMQWl2PKE24PcK5Y7WXwo54F8lZbB-L2lztEyvmY2ACDtGDfQyMia8KuwumFjkI-BQ04o0pd1_zYKpuSD_wFCv9iZfoBNp0DgoXsbdypCAVhU2uXmxGHZ0tVn4HV2tJKOyGK1ysi9PJwrKgO_0HkTckNlrJd2a22G7eDhwjkXV65pyXsmTm3o_aLPtQ5HrFQR1rW3i749gjoVLKMnbdY3hybD0eCz56XeDXGRMVPTsfgKg8aAZXZVlmpqlS8PgAKLpSwmmD0HVbb5S3QDYps3UC64HXh_PwXsNrVQKfkY1Bk85o1RR7KQHO86VEUfjMo3FkyYV3tLypJyN_DStSqBnWWWOblUN69YDMESSMowpeTzt61-baczOBt5m87swR9QFtg1aoiJ6qk-rRVIwkmh_PLDE8wlJOLsnQ4ZgZvmIOvAtIyRx2AueiKPVrN2i6XUTKBfFc_SB87m1BYg3aiqiE2uG4YYzIfU6NZ75mEKuhDkF37589k4d6foMhXqRcOXi1kl_jT2-B3t8NhM-gwtCto_JVizLoGr2_T79h7DsNpJuBb6fkAk7ILeER5VopP5xNpvTL9c3XlrgtGyaAkQn-8utBxuHPt5UFJJ3T5SRGd65IQzmJYswedhq0cZb9X=w1349-h767' alt='' height={50} width={70} />
-                      </div>
+              {isLoading
+                ? <LoadingItem />
+                : filterProductsByCategory(products, categories).map(({ name, products }: any, i: number) => (
+                  <div id={`section-${i + 1}`} ref={el => targetRefs.current[i + 1] = el} className={styles.list__menu_subcategory}>
+                    <div>
+                      <h2 className={styles.list__menu_subcategory_title}>{name}</h2>
+                      <p className={styles.list__menu_subcategory_description}>Todos los precios son por kg.</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className={styles.list__menu_subcategory}>
-                <div>
-                  <h2 className={styles.list__menu_subcategory_title}>Vacuno x Pieza</h2>
-                  <p className={styles.list__menu_subcategory_description}>Ternera y novillito chico de producción propia criado a campo con terminación en corral.</p>
-                </div>
-                <div id="section-2" ref={el => targetRefs.current[1] = el} className={styles.list__products}>
-                  {Array(12).fill('').map(() => (
-                    <div onClick={() => setOpenModal(true)} className={styles.list__products_item}>
-                      <div>
-                        <h3 className={styles.list__products_title}>Combo Whopper 2x1</h3>
-                        <div className={styles.list__products_price}>$ 2,000.00</div>
-                      </div>
-                      <div>
-                        <Image src='https://lh3.googleusercontent.com/fife/AMPSemdihEiz5P8O4C0pEF_Z9urCz_Q4ZO4KcP4HeJ7rlgWt5keeyiQafBR9hE9u7eTESSqIbswETaiK1DnZT3UPT6BeLBGdQr5AxhLwomWCAhybmOfNghduoAYJtFhPyDCWkrL5WhYo-NrHFfMGHPfrEivJvYGE3xdXhkQGE7KTRlLGpqfLttlx0fBWGyHincTCCtvaRCgK6UieCP7Dj80ViMUfY6kzDnm83UKqkz5DrtEoqU1FdBFHMMvvbZPSqerceExXa-mldcLNj-i9SZtng9cS1yc1GQu1PGv7S0CvYr_YXAZlRvyfamheUoy2Lk9iH2ChuJHmwmzYRxAxNii6pGyQZayfylQRDm2kGVb-dp4gJMRaUhwRcyepOnEp9R2IeLw2QSiML_ASLiubCETrsqCSQLrR8zT8pUV9Iv0ASte1lyB3QAHuBFa_YdEK6KY9NqBp5PMTeyC_1g5gITL_x4F_JZEzl1D0lyzeb9C-vZK959dU6I-RyCU6dhCVd5nZDcRgQnVM7mib66jz2qfuVCtglO27PskdvU7-M6AAkS9ZT4j7DSaO8rhDGcyKjO7gVUQy7AbdwTpZJE6xM8r_GWH6BLwRtuN4YJqfP-_QYVkfOPNpqKTnALzatpJN8uVc-PsMg8VXJwdUcpbJoXAy1ZK7ktEEzi0lqs1FtvutUopUohE734YjavrgVFPZze99xTECWw-V333XZz4n28rZgh8o765shaOydLUX3AJLJ0kaU5sYvSJk542d27uTZ1Eecn7OHlkhP5WkI4rNRp5xmf51HrC8Ql-dJP6b0pr-f9sn9CRx6wPYGOxEVwToOQnFO4eXPDx3o3Xxd69qWl8U-AYg_BSRX3dX7JM19xtxJUe_OFXW9G2hSYUC230UGIVRAKaXCt6uBk05cpUjBDklUBYPB5e7GWUadMQWl2PKE24PcK5Y7WXwo54F8lZbB-L2lztEyvmY2ACDtGDfQyMia8KuwumFjkI-BQ04o0pd1_zYKpuSD_wFCv9iZfoBNp0DgoXsbdypCAVhU2uXmxGHZ0tVn4HV2tJKOyGK1ysi9PJwrKgO_0HkTckNlrJd2a22G7eDhwjkXV65pyXsmTm3o_aLPtQ5HrFQR1rW3i749gjoVLKMnbdY3hybD0eCz56XeDXGRMVPTsfgKg8aAZXZVlmpqlS8PgAKLpSwmmD0HVbb5S3QDYps3UC64HXh_PwXsNrVQKfkY1Bk85o1RR7KQHO86VEUfjMo3FkyYV3tLypJyN_DStSqBnWWWOblUN69YDMESSMowpeTzt61-baczOBt5m87swR9QFtg1aoiJ6qk-rRVIwkmh_PLDE8wlJOLsnQ4ZgZvmIOvAtIyRx2AueiKPVrN2i6XUTKBfFc_SB87m1BYg3aiqiE2uG4YYzIfU6NZ75mEKuhDkF37589k4d6foMhXqRcOXi1kl_jT2-B3t8NhM-gwtCto_JVizLoGr2_T79h7DsNpJuBb6fkAk7ILeER5VopP5xNpvTL9c3XlrgtGyaAkQn-8utBxuHPt5UFJJ3T5SRGd65IQzmJYswedhq0cZb9X=w1349-h767' alt='' height={50} width={70} />
-                      </div>
+                    <div className={styles.list__products}>
+                      {products.map((item: IProduct) => (
+                        <div onClick={() => setOpenModal({ visible: true, product: item })} className={styles.list__products_item}>
+                          <div>
+                            <h3 className={styles.list__products_title}>{item.title}</h3>
+                            <div className={styles.list__products_price}>{`$${item.price}`}</div>
+                          </div>
+                          <div>
+                            <Image src={item.image} alt='' height={50} width={70} style={{
+                              height: '100%',
+                              objectFit: 'cover'
+                            }} />
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div id="section-3" ref={el => targetRefs.current[2] = el} className={styles.list__menu_subcategory}>
-                <div>
-                  <h2 className={styles.list__menu_subcategory_title}>Vacuno x Kg.</h2>
-                  <p className={styles.list__menu_subcategory_description}>Ternera y novillito chico de producción propia criado a campo con terminanción en corral.</p>
-                </div>
-                <div className={styles.list__products}>
-                  {Array(1).fill('').map(() => (
-                    <div className={styles.list__products_item}>
-                      <div>
-                        <h3 className={styles.list__products_title}>Combo Whopper 2x1</h3>
-                        <div className={styles.list__products_price}>$ 2,000.00</div>
-                      </div>
-                      <div>
-                        <Image src='https://lh3.googleusercontent.com/fife/AMPSemdihEiz5P8O4C0pEF_Z9urCz_Q4ZO4KcP4HeJ7rlgWt5keeyiQafBR9hE9u7eTESSqIbswETaiK1DnZT3UPT6BeLBGdQr5AxhLwomWCAhybmOfNghduoAYJtFhPyDCWkrL5WhYo-NrHFfMGHPfrEivJvYGE3xdXhkQGE7KTRlLGpqfLttlx0fBWGyHincTCCtvaRCgK6UieCP7Dj80ViMUfY6kzDnm83UKqkz5DrtEoqU1FdBFHMMvvbZPSqerceExXa-mldcLNj-i9SZtng9cS1yc1GQu1PGv7S0CvYr_YXAZlRvyfamheUoy2Lk9iH2ChuJHmwmzYRxAxNii6pGyQZayfylQRDm2kGVb-dp4gJMRaUhwRcyepOnEp9R2IeLw2QSiML_ASLiubCETrsqCSQLrR8zT8pUV9Iv0ASte1lyB3QAHuBFa_YdEK6KY9NqBp5PMTeyC_1g5gITL_x4F_JZEzl1D0lyzeb9C-vZK959dU6I-RyCU6dhCVd5nZDcRgQnVM7mib66jz2qfuVCtglO27PskdvU7-M6AAkS9ZT4j7DSaO8rhDGcyKjO7gVUQy7AbdwTpZJE6xM8r_GWH6BLwRtuN4YJqfP-_QYVkfOPNpqKTnALzatpJN8uVc-PsMg8VXJwdUcpbJoXAy1ZK7ktEEzi0lqs1FtvutUopUohE734YjavrgVFPZze99xTECWw-V333XZz4n28rZgh8o765shaOydLUX3AJLJ0kaU5sYvSJk542d27uTZ1Eecn7OHlkhP5WkI4rNRp5xmf51HrC8Ql-dJP6b0pr-f9sn9CRx6wPYGOxEVwToOQnFO4eXPDx3o3Xxd69qWl8U-AYg_BSRX3dX7JM19xtxJUe_OFXW9G2hSYUC230UGIVRAKaXCt6uBk05cpUjBDklUBYPB5e7GWUadMQWl2PKE24PcK5Y7WXwo54F8lZbB-L2lztEyvmY2ACDtGDfQyMia8KuwumFjkI-BQ04o0pd1_zYKpuSD_wFCv9iZfoBNp0DgoXsbdypCAVhU2uXmxGHZ0tVn4HV2tJKOyGK1ysi9PJwrKgO_0HkTckNlrJd2a22G7eDhwjkXV65pyXsmTm3o_aLPtQ5HrFQR1rW3i749gjoVLKMnbdY3hybD0eCz56XeDXGRMVPTsfgKg8aAZXZVlmpqlS8PgAKLpSwmmD0HVbb5S3QDYps3UC64HXh_PwXsNrVQKfkY1Bk85o1RR7KQHO86VEUfjMo3FkyYV3tLypJyN_DStSqBnWWWOblUN69YDMESSMowpeTzt61-baczOBt5m87swR9QFtg1aoiJ6qk-rRVIwkmh_PLDE8wlJOLsnQ4ZgZvmIOvAtIyRx2AueiKPVrN2i6XUTKBfFc_SB87m1BYg3aiqiE2uG4YYzIfU6NZ75mEKuhDkF37589k4d6foMhXqRcOXi1kl_jT2-B3t8NhM-gwtCto_JVizLoGr2_T79h7DsNpJuBb6fkAk7ILeER5VopP5xNpvTL9c3XlrgtGyaAkQn-8utBxuHPt5UFJJ3T5SRGd65IQzmJYswedhq0cZb9X=w1349-h767' alt='' height={50} width={70} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                ))
+              }
             </div>
           </div>
           <div className={styles.list__menu_configuration}>
@@ -256,16 +224,16 @@ const ProductsPage = () => {
                 <div className={styles.order__card_wrapper}>
                   <p>Orden</p>
                   <Select style={{ width: 'calc(100% - 80px)' }}>
-                    <option value="">1</option>
-                    <option value="">2</option>
+                    <option value="1">Ordenar</option>
+                    <option value="2">Retirar</option>
                   </Select>
                 </div>
                 <hr className={styles.order__card_divider}></hr>
                 <div className={styles.order__card_wrapper}>
                   <p>Para</p>
                   <Select style={{ width: 'calc(100% - 80px)' }}>
-                    <option value="">1</option>
-                    <option value="">2</option>
+                    <option value="1">11:00</option>
+                    <option value="2">13:00</option>
                   </Select>
                 </div>
               </div>
