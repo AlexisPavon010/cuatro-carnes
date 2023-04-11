@@ -92,7 +92,7 @@ export const OptionsTable = () => {
           </Col>
           <Col>
             <Space wrap>
-              <Button onClick={() => setOpenOption({ visible: true, id: undefined })} type="primary">Ingresar Producto</Button>
+              <Button onClick={() => setOpenOption({ visible: true, id: undefined })} type="primary">Ingresar Opción</Button>
             </Space>
           </Col>
         </Row>

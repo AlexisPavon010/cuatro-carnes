@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { Button, Form, Input, Select } from "antd";
 import { useSession } from "next-auth/react";
 import { useSelector } from "react-redux";
@@ -59,6 +60,9 @@ const CheckoutPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Checkout - Cuatro Carnes</title>
+      </Head>
       <div className={styles.checkout}>
         <div className={styles.checkout__container}>
           <div>

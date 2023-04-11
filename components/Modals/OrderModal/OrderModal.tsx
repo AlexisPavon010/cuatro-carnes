@@ -1,7 +1,8 @@
 import { Button, Modal } from "antd"
 import CurrencyFormat from 'react-currency-format';
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import Image from "next/image";
 
 import styles from './styles.module.scss'
 import { IProduct } from "@/interfaces/products"
@@ -30,20 +31,20 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
   return (
     <Modal
       className={styles.modal}
-      width={1000}
       open={open.visible}
       onCancel={() => close({ visible: false, product: undefined })}
       footer={<div></div>}
     >
       <div className={styles.modal__container}>
         <div className={styles.modal__image_content}>
-          <div
-            className={styles.modal__image}
-            style={{
-              backgroundImage: `url(${image})`
-            }}
-          ></div>
+          <Image
+            src={image!}
+            alt={title!}
+            width={300}
+            height={270}
+          />
         </div>
+        <hr className={styles.divider} />
         <div className={styles.modal__content}>
           <div className={styles.modal__card}>
             <h2 className={styles.modal__title}>{title}</h2>

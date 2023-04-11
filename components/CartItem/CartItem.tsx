@@ -22,11 +22,8 @@ export const CartItem = () => {
             <span className={styles.cart__start_span}>{item.quantity}</span>
           </div>
           <div className={styles.cart__center}>
-            <h3 className={styles.cart__center_title}>{item.name}</h3>
+            <h3 className={styles.cart__center_title}>{item.title}</h3>
             <div className={styles.cart__center_description}>{item.description}</div>
-            <div className={styles.cart__center_description}>Papas Fritas</div>
-            <div className={styles.cart__center_description}>Papas Fritas</div>
-
           </div>
           <div className={styles.cart__end}>
             <span className={styles.cart__end_price}>${item.price.toFixed(2)}</span>

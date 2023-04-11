@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { Select } from 'antd'
 import Image from 'next/image'
 import { useSelector } from 'react-redux'
@@ -33,11 +34,13 @@ const ProductsPage = () => {
         return product.category === category.name;
       });
 
-      // @ts-ignore 
-      filteredProductsByCategory[category.name] = {
-        name: category.name,
-        products: filteredProducts,
-      };
+      if (filteredProducts.length > 0) {
+        // @ts-ignore 
+        filteredProductsByCategory[category.name] = {
+          name: category.name,
+          products: filteredProducts,
+        };
+      }
     });
 
     return Object.values(filteredProductsByCategory);
@@ -101,6 +104,9 @@ const ProductsPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Productos - Cuatro Carnes</title>
+      </Head>
       <section className={styles.hero}>
         <div className={styles.hero__container}>
           {/* <Slider /> */}
@@ -204,16 +210,17 @@ const ProductsPage = () => {
             <div>
               <div className={styles.list__card}>
                 <div>
-                  <svg className={styles.list__card_image} style={{ width: '40px' }} xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 24 24" fill='#A92B3C'>
-                    <g>
-                      <path d="M2,9.6c-0.2-1,0.8-1.8,1.6-1.3L7.3,10c0.5,0.3,1.2,0.1,1.5-0.5l2.1-3.7c0.5-0.8,1.6-0.8,2,0L15,9.6   c0.3,0.5,0.9,0.8,1.5,0.5l3.9-1.7C21.3,8,22.2,8.8,22,9.8l-1.7,8.1c-0.1,0.6-0.6,0.9-1.1,0.9H4.9c-0.5,0-1-0.4-1.1-0.9L2,9.6z" />
+                  <svg className={styles.list__card_image} style={{ width: '40px' }} xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" viewBox="0 0 48 48" version="1.1" >
+                    <g id="large_icon/coupon" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                      <circle id="circle" fill='#A92B3C' cx="24" cy="24" r="24" />
+                      <path d="M25.2684309,11.5024332 C26.1789969,10.7367579 27.3511682,10.8502737 28.4829198,11.8151581 C29.8369797,12.9592194 31.0697805,14.088813 32.2531795,15.2606968 C33.2805135,16.2801133 34.2876376,17.3484974 35.3306904,18.5281715 C36.4882657,19.836942 38.0747389,21.1000836 37.9972678,22.7126758 C37.9647075,23.3670611 37.7951693,24.180591 37.1091572,24.8995245 C35.2678153,26.8292933 33.5050674,28.0857575 31.8905249,29.6861078 L31.8905249,29.6861078 L26.9054287,34.7542548 C26.8425537,34.8154643 26.7841696,34.8711093 26.7123124,34.9423349 L26.7123124,34.9423349 L26.6550512,34.9990928 L26.6382096,35.0068831 L25.3110962,36.2611216 C24.9102675,36.6395076 24.3937936,36.8698779 23.8425138,36.913281 C21.3061777,37.1158288 13.7218703,36.9744905 12.9673692,36.3735245 C12.1240571,35.6992461 12.0127752,35.2658807 12.0008266,31.8963529 L12,30.6368794 C12.0070369,27.7740797 12.095492,26.1109162 12.2880937,25.0998465 C12.359951,24.7247992 12.5047882,24.3742357 12.7214827,24.0592849 C12.7259738,24.0526075 12.7293421,24.047043 12.7338332,24.0403656 C13.1941687,23.3703998 13.7106426,22.7449499 14.2798867,22.1629032 C15.2059843,21.215516 16.5956402,19.7913096 18.0529148,18.3173025 L18.6804466,17.683781 C18.8902343,17.4724208 19.1002477,17.2612893 19.3093323,17.0516313 L19.9326456,16.4283229 C21.5812285,14.7845954 23.0964959,13.3148528 23.8874246,12.6565106 L23.8874246,12.6565106 Z M22.524607,29.7065852 C22.7076185,27.525301 19.7199291,25.8770959 17.8056072,26.9721896 C17.4698991,27.1647213 17.188084,27.3650434 16.9556708,27.5709299 C12.7026202,32.0069497 21.9856777,36.169196 22.524607,29.7065852 Z" id="icon" fill="#FFFFFF" />
                     </g>
                   </svg>
                 </div>
                 <div>
-                  <h2 className={styles.list__card_title}>Recompensas y ofertas</h2>
+                  <h2 className={styles.list__card_title}>Cupones</h2>
                   <p className={styles.list__card_description}>
-                    Agrega una oferta o recompensa a tu pedido
+                    Añade el cupón a tu pedido
                   </p>
                 </div>
                 <div className={styles.list__card_actions}>

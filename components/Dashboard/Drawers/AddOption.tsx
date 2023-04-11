@@ -24,7 +24,7 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
   return (
     <Drawer
       width={400}
-      title="Nueva Categoria"
+      title="Nueva Opción"
       placement="right"
       onClose={() => onClose({ id: undefined, visible: false })}
       open={open.visible}

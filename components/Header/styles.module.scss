@@ -104,14 +104,15 @@
 
 .header__button_login {
   font-weight: 700;
+  cursor: pointer;
   color: white;
   border-radius: 32px;
   padding: 12px;
   border: none;
-  background-color: #c94f64;
+  background-color: #a92b3c;
 
   &:hover {
-    background-color: #a92b3c;
+    background-color: #c94f64;
   }
 }
 

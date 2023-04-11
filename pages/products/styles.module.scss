@@ -129,6 +129,7 @@
 .list__menu {
   margin-right: 24px;
   padding-top: 39px;
+  padding-bottom: 40px;
   display: flex;
 }
 
@@ -268,6 +269,11 @@
 @media (max-width: 768px) {
   .list {
     grid-template-columns: 1fr;
+  }
+
+  .list__menu,
+  .list__menu_wrapper {
+    margin-right: 0;
   }
 
   .list__menu_configuration {

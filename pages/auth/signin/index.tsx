@@ -4,6 +4,7 @@ import { FaFacebook } from 'react-icons/fa';
 import { BsArrowLeft } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import Image from 'next/image';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react'
 
@@ -25,6 +26,9 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
 
   return (
     <div className={styles.login}>
+      <Head>
+        <title>Ingresar - Cuatro Carnes</title>
+      </Head>
       <div className={styles.login__container}>
         <Link href='/' className={styles.login__container_goback}>
           <BsArrowLeft color='white' size={26} />

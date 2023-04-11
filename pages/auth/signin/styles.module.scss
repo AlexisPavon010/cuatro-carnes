@@ -3,7 +3,7 @@
 .login__container {
   position: relative;
   display: flex;
-  background-color: rgb(245, 235, 220);
+  background-color: #f4e8e4;
   height: 100%;
 }
 
@@ -81,8 +81,8 @@
   border-radius: 24px;
   cursor: pointer;
   color: #fff;
-  background-color: #d62300;
-  border: solid #d62300;
+  background-color: #a92b3c;
+  border: none;
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -92,6 +92,10 @@
   height: 3.125rem;
   text-transform: uppercase;
   transition: .3s;
+}
+
+.login__container_rigth_button:hover {
+  background-color: #c94f64;
 }
 
 .login__container_rigth_footer {
@@ -122,7 +126,7 @@
   border-radius: 24px;
   color: #502314;
   background-color: #fff;
-  border: 1px solid #502314;
+  border: 1px solid #a92b3c;
   height: 50px;
   align-items: center;
   font-size: 16px;
@@ -132,6 +136,7 @@
 .button__content {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 280px;
   gap: 8px;
@@ -148,7 +153,6 @@
 .divider__hr1 {
   width: 100%;
   margin: 8px;
-  color: red;
 }
 
 .login__error_message {
