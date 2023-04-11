@@ -46,7 +46,7 @@ export const CartItem = () => {
       </div>
       <button onClick={() => router.push('/checkout')} className={styles.cart__button}>
         <span className={styles.cart__button_content}>
-          <div>$1,900.00</div>
+          <div>${getCartTotal(cart)}</div>
           <div>Pagar ahora</div>
         </span>
       </button>
