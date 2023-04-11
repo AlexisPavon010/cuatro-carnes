@@ -66,6 +66,7 @@
 }
 
 .categories__start {
+  align-items: center;
   display: flex;
   gap: 24px;
   position: relative;
@@ -131,7 +132,12 @@
   display: flex;
 }
 
-.list__menu_wrapper {}
+.list__menu_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 24px;
+}
 
 .list__menu_subcategory {
   padding-bottom: 24px;
