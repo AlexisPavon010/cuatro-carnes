@@ -27,7 +27,7 @@ export const CartItem = () => {
           </div>
           <div className={styles.cart__end}>
             <span className={styles.cart__end_price}>${item.price.toFixed(2)}</span>
-            <button onClick={() => removeItemToCart(item.id)} className={styles.cart__end_button}>
+            <button onClick={() => removeItemToCart(item._id)} className={styles.cart__end_button}>
               <AiOutlineClose color='#502314' />
             </button>
           </div>
