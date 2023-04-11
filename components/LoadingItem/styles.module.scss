@@ -1,0 +1,21 @@
+.skeleton {}
+
+
+.skeleton__wrapper {
+  flex-wrap: wrap;
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.skeleton__item {
+  box-shadow: 0px 3px 3px 1px rgba(71, 71, 71, 0.185);
+  border: 1px solid #e4dede;
+  justify-content: space-between;
+  max-width: calc(50% - 8px);
+  display: flex;
+  width: 100%;
+  padding: 18px 24px;
+  border-radius: 12px;
+  background-color: #f4e8e4;
+}

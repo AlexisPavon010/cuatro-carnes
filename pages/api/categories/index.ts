@@ -7,7 +7,6 @@ import Category from '@/models/Category'
 const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   description: Joi.string().required(),
-  image: Joi.string().required(),
 });
 
 type Data = {

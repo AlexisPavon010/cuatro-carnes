@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import axios from 'axios'
 import Joi from 'joi'
 
 import Order from '@/models/Order'
 import '../../../database/db'
-import axios from 'axios'
 
 type Data = {
   message: string
@@ -37,24 +37,62 @@ const getOrders = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { category } = req.query
+  const { date = 'all' } = req.query
 
   let condition = {}
 
-  if (category) {
-    condition = { category }
+  const today = new Date();
+  // Calculas las fechas de inicio y fin del día correspondiente a la fecha recibida
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+  // Calculas las fechas de inicio y fin de la semana correspondiente a la fecha recibida
+  const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+  const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7);
+
+  // Calculas las fechas de inicio y fin del mes correspondiente a la fecha recibida
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
+
+  if (date === 'day') {
+    condition = {
+      createdAt: {
+        $gte: startOfDay,
+        $lt: endOfDay
+      }
+    }
   }
 
-  // const queryDate = new Date('2023-03-22');
-  // Calculas las fechas de inicio y fin del día correspondiente a la fecha recibida
-  // const startDate = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate());
-  // const endDate = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate() + 1);
+  if (date === 'week') {
+    condition = {
+      createdAt: {
+        $gte: startOfWeek,
+        $lt: endOfWeek
+      }
+    }
+  }
+
+  if (date === 'month') {
+    condition = {
+      createdAt: {
+        $gte: startOfMonth,
+        $lt: endOfMonth
+      }
+    }
+  }
 
 
-  const data = await Order.find(condition)
+  const data = await Order.find(condition).sort({ 'createdAt': -1 })
   return res.status(200).json({
     metadata: {
       total: await Order.count(),
+      today: await Order.find({
+        createdAt: {
+          $gte: startOfDay,
+          $lt: endOfDay
+        }
+      }).count(),
       canceled: await Order.find({ status: 'canceled' }).count(),
       delivered: await Order.find({ status: 'delivered' }).count(),
       pending: await Order.find({ status: 'pending' }).count()
@@ -71,10 +109,10 @@ const CreateOrder = async (
   try {
     // await schema.validateAsync(req.body);
     const data = await Order.create(req.body)
-    axios.post('http://54.209.160.199:8000/send-message', {
-      phoneNumber,
-      uniqueID: data.uniqueID
-    })
+    // axios.post('http://54.209.160.199:8000/send-message', {
+    //   phoneNumber,
+    //   uniqueID: data.uniqueID
+    // })
 
     return res.status(200).json(data)
 

@@ -1,5 +1,7 @@
-import { Layout } from "@/components/Dashboard/Layout"
 import Head from "next/head";
+
+import { Layout } from "@/components/Dashboard/Layout"
+import { UsersTable } from "@/components/Dashboard/UsersTable";
 
 const UsersPage = () => {
   return (
@@ -7,7 +9,7 @@ const UsersPage = () => {
       <Head>
         <title>Dashboard - Usuarios | Cuatro Carnes</title>
       </Head>
-      <div>usersPage</div>
+      <UsersTable />
     </Layout>
   )
 }

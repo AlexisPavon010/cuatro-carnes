@@ -16,7 +16,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [quantity, setQuantity] = useState(1)
+  const [stock, setStock] = useState(1)
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
@@ -45,7 +45,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
       createProduct({
         ...values,
         price: Number(values.price),
-        quantity: Number(quantity),
+        stock: Number(stock),
         image: imageUrl
       })
         .then(() => {
@@ -118,7 +118,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         layout='vertical'
         name="basic"
         initialValues={{
-          quantity
+          stock
         }}
         onFinish={handleSubmit}
         autoComplete="off"
@@ -134,13 +134,13 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
 
         <Form.Item
           label="Cantidad"
-          name="quantity"
+          name="stock"
         // rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button onClick={() => setQuantity(quantity - 1)} type="primary">-</Button>
-            <Input onChange={({ target }) => setQuantity(Number(target.value))} style={{ textAlign: 'center' }} value={quantity} defaultValue={quantity} />
-            <Button onClick={() => setQuantity(quantity + 1)} type="primary">+</Button>
+            <Button onClick={() => setStock(stock - 1)} type="primary">-</Button>
+            <Input onChange={({ target }) => setStock(Number(target.value))} style={{ textAlign: 'center' }} value={stock} defaultValue={stock} />
+            <Button onClick={() => setStock(stock + 1)} type="primary">+</Button>
           </Space.Compact>
         </Form.Item>
 

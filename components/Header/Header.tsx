@@ -46,12 +46,6 @@ export const Header = ({ openDrawer }: any) => {
                 </Link>
               </div>
               <div className={styles.header__nav_item}>
-                Locales
-              </div>
-              <div className={styles.header__nav_item}>
-                Ofertas
-              </div>
-              <div className={styles.header__nav_item}>
                 Nosotros
               </div>
               <div className={styles.header__nav_item}>

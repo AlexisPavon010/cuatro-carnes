@@ -10,8 +10,11 @@ type Data = {
 
 const schema = Joi.object({
   name: Joi.string().min(3).required(),
-  status: Joi.boolean(),
   quantity: Joi.number().required(),
+  items: Joi.array().items(Joi.object({
+    name: Joi.string().required(),
+    price: Joi.string().required(),
+  })).required()
 });
 
 export default function handler(

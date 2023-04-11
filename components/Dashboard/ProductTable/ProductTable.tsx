@@ -11,9 +11,11 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { DeleteModal } from '../Modals/DeleteModal';
 import { IProduct } from '@/interfaces/products';
 import { activateProductById } from '@/client';
+import { OptionsModal } from '../Modals/OptionsModal';
 
 
 export const ProductTable = () => {
+  const [isOptionsOpen, setIsOptionsOpen] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined });
   const [isModalOpen, setIsModalOpen] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined });
   const [category, setCategory] = useState('')
   const { data, error, isLoading, mutate } = useSwrFetcher(`/api/products${category}`)
@@ -48,7 +50,7 @@ export const ProductTable = () => {
       key: '3',
       icon: <AiOutlineMenu size={14} />,
       label: 'Opciones',
-      onClick: () => console.log('Opciones', record)
+      onClick: () => setIsOptionsOpen({ visible: true, id: record?._id! })
     },
     {
       key: '4',
@@ -151,7 +153,15 @@ export const ProductTable = () => {
         open={isDrawerOpen}
         mutate={mutate}
       />
-      <DeleteModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} mutate={mutate} />
+      <OptionsModal
+        isOptionsOpen={isOptionsOpen}
+        setIsOptionsOpen={setIsOptionsOpen}
+      />
+      <DeleteModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        mutate={mutate}
+      />
     </>
   )
 }
