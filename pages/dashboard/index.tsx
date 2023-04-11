@@ -17,7 +17,7 @@ const DashboardPage = () => {
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card
-            total={0}
+            total={data?.metadata?.today}
             loading={isLoading}
             title='Pedidos del Dia'
             description='Total de pedidos recibidos en el día'
@@ -25,7 +25,7 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6}>
           <Card
-            total={0}
+            total={data?.metadata?.delivered}
             loading={isLoading}
             title='Pedidos Entregados'
             description='Pedidos entregados del día'
@@ -33,7 +33,7 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6}>
           <Card
-            total={7}
+            total={data?.metadata?.pending}
             loading={isLoading}
             title='Pedidos Pendientes'
             description='Falta entregar'
@@ -41,14 +41,14 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6}>
           <Card
-            total={0}
+            total={data?.metadata?.canceled}
             loading={isLoading}
             title='Pedidos Cancelados'
             description='Cancelados'
           />
         </Col>
         <Col xs={24}>
-          <OrderTable isLoading={isLoading} data={data.data} />
+          <OrderTable />
         </Col>
       </Row>
     </Layout>
