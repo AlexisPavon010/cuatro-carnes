@@ -9,7 +9,7 @@ interface CardProps {
   loading: boolean;
 }
 
-export const Card = ({ title, description, total, loading }: CardProps) => {
+export const Card = ({ title, description, total = 0, loading }: CardProps) => {
 
   return (
     <AntdCard
