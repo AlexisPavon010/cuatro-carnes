@@ -5,7 +5,7 @@ import Credentials from 'next-auth/providers/credentials';
 // import nodemailer from 'nodemailer'
 // import handlebars from 'handlebars'
 
-import { checkUserEmailPassword, getUser, oAuthToDbUser } from '../../../database/dbUsers';
+import { checkUserEmailPassword, oAuthToDbUser } from '../../../database/dbUsers';
 // import templateHtml from '../../../emails/welcome.html'
 
 export default NextAuth({
