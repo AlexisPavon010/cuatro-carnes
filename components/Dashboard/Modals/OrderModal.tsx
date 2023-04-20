@@ -15,7 +15,7 @@ interface OrderModal {
 
 export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState(isModalOpen.order.status)
+  const [status, setStatus] = useState('PENDING')
 
   useEffect(() => {
     setStatus(isModalOpen.order.status)
