@@ -8,6 +8,7 @@ import { Layout } from "@/components/Layout";
 import styles from './styles.module.scss'
 import { getCartTotal } from "@/store/cart/shoppingSlice";
 import { createOrder } from "@/client";
+import { parseCookies, setCookie } from "nookies";
 
 const { Option } = Select;
 
@@ -22,17 +23,28 @@ const CheckoutPage = () => {
     form.setFieldsValue(session.user)
   }, [session])
 
+  const {
+    address,
+    phone,
+    code
+  } = parseCookies()
+
   const onFinish = (values: any) => {
     setLoading(true)
+    setCookie(null, 'address', values.address, { path: '/', })
+    setCookie(null, 'code', values.code, { path: '/', })
+    setCookie(null, 'phone', values.phone, { path: '/', })
     console.log({
       ...values,
+      items: cart,
       total: getCartTotal(cart),
-      phoneNumber: values.code + values.phone
+      phone: values.code + values.phone
     })
     createOrder({
       ...values,
+      items: cart,
       total: getCartTotal(cart),
-      phoneNumber: values.code + values.phone
+      phone: values.code + values.phone
     })
       .then(({ data }) => console.log(data))
       .catch((error) => console.log(error))
@@ -50,7 +62,11 @@ const CheckoutPage = () => {
   };
 
   const selectCodeArea = (
-    <Form.Item initialValue='549' name="code" noStyle>
+    <Form.Item
+      initialValue={code ? code : '549'}
+      name="code"
+      noStyle
+    >
       <Select className={styles.checkout__input_select} style={{ width: 70 }}>
         <Option value="569">+56</Option>
         <Option value="549">+54</Option>
@@ -97,6 +113,7 @@ const CheckoutPage = () => {
                   </Form.Item>
 
                   <Form.Item
+                    initialValue={phone}
                     label="Numero de telefono"
                     name='phone'
                     rules={[
@@ -115,6 +132,7 @@ const CheckoutPage = () => {
                   <Form.Item
                     label="Direccion"
                     name="address"
+                    initialValue={address}
                     rules={[{ required: true, message: 'Please input your username!' }]}
                   >
                     <Input className={styles.checkout__input} />
@@ -140,7 +158,7 @@ const CheckoutPage = () => {
               <h2 className={styles.checkout_subtitle}>Resumen de la orden</h2>
               <div className={styles.checkout__content_summary_card}>
                 <div>
-                  <h2 className={styles.checkout__content_summary_card_title}>OBELISCO- CARLOS PELLEGRINI 451</h2>
+                  <h2 className={styles.checkout__content_summary_card_title}>Av. Crisólogo Larralde 2306, Troncos del Talar.</h2>
                   <p>En el local para aproximadamente 13:46</p>
                 </div>
               </div>

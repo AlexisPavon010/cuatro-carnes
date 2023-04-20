@@ -1,19 +1,42 @@
-import { useState } from 'react'
-import { Modal, Select } from "antd"
+import { useEffect, useState } from 'react'
+import { Modal, Select, notification } from "antd"
+
+import { STATUSES } from '@/constants/status';
+import { updateOrder } from '@/client/Order';
+import { IOrder } from '@/interfaces/order';
+
+interface OrderModal {
+  isModalOpen: {
+    order: IOrder,
+    visible: boolean
+  },
+  setIsModalOpen: (state: { visible: boolean, id: string }) => void
+}
 
 export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState(isModalOpen.order.status)
+
+  useEffect(() => {
+    setStatus(isModalOpen.order.status)
+  }, [isModalOpen.order.status])
 
   const handleOk = () => {
     setLoading(true)
+    updateOrder(isModalOpen.order._id, status)
+      .then((res) => {
+        console.log(res)
+        notification.success({
+          message: 'Orden Actualizada con exito!.',
+        })
+        setIsModalOpen({ visible: false, order: {} });
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false))
   };
 
   const handleCancel = () => {
     setIsModalOpen({ visible: false, order: {} });
-  };
-
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
   };
 
   return (
@@ -23,23 +46,16 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
       open={isModalOpen.visible}
       onOk={handleOk}
       onCancel={handleCancel}
+      okText='Actualizar'
+      cancelText='Cancelar'
     >
       <Select
-        defaultValue="lucy"
+        value={status}
         style={{ width: 200 }}
-        onChange={handleChange}
-        options={[
-          { value: 1, label: 'Solicitado sin pagar' },
-          { value: 2, label: 'Pendiente Mercado Pago' },
-          { value: 3, label: 'Cancelado' },
-          { value: 4, label: 'Solicitado/Pagado MP' },
-          { value: 5, label: 'En proceso para entregar' },
-          { value: 6, label: 'Entregado al cliente' },
-          { value: 7, label: 'En proceso de Pago PayPal' },
-          { value: 8, label: 'Solicitado/Pagado PayPal' },
-          { value: 9, label: 'Cancelado PayPal' },
-          { value: 10, label: 'Pagado otros medios' },
-        ]}
+        onChange={(value) => setStatus(value)}
+        options={STATUSES.map(status => (
+          { value: status.value, label: status.label }
+        ))}
       />
     </Modal>
   )

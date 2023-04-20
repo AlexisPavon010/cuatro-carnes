@@ -82,7 +82,7 @@ export const CategoriesTable = () => {
           </Col>
           <Col>
             <Space wrap>
-              <Button onClick={() => setIsDrawerOpen({ visible: true, id: undefined })} type="primary">Ingresar Categoria</Button>
+              <Button onClick={() => setIsDrawerOpen({ visible: true, id: undefined })} type="primary">Ingresar Categoría</Button>
               <Button>Default Button</Button>
             </Space>
           </Col>

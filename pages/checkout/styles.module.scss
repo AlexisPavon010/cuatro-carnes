@@ -196,3 +196,9 @@
   line-height: 32px;
   letter-spacing: -.53px;
 }
+
+@media (max-width:768px) {
+  .checkout__content {
+    flex-direction: column;
+  }
+}

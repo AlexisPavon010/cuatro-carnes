@@ -26,7 +26,7 @@ export const AddCategory = ({ open, onClose, mutate }: AddCategoryProps) => {
   return (
     <Drawer
       width={400}
-      title="Nueva Categoria"
+      title="Nueva Categoría"
       placement="right"
       onClose={() => onClose({ id: undefined, visible: false })}
       open={open.visible}
@@ -58,7 +58,7 @@ export const AddCategory = ({ open, onClose, mutate }: AddCategoryProps) => {
         requiredMark={false}
       >
         <Form.Item
-          label="Nombre de la Categoria"
+          label="Nombre de la Categoría"
           name="name"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >

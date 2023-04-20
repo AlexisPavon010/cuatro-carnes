@@ -15,7 +15,7 @@ const DashboardPage = () => {
         <title>Cuatro Carnes | Dashboard</title>
       </Head>
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
             total={data?.metadata?.today}
             loading={isLoading}
@@ -23,7 +23,7 @@ const DashboardPage = () => {
             description='Total de pedidos recibidos en el día'
           />
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
             total={data?.metadata?.delivered}
             loading={isLoading}
@@ -31,7 +31,7 @@ const DashboardPage = () => {
             description='Pedidos entregados del día'
           />
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
             total={data?.metadata?.pending}
             loading={isLoading}
@@ -39,7 +39,7 @@ const DashboardPage = () => {
             description='Falta entregar'
           />
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
             total={data?.metadata?.canceled}
             loading={isLoading}

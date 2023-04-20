@@ -81,7 +81,7 @@ export const ProductTable = () => {
       key: 'title',
     },
     {
-      title: 'Categoria',
+      title: 'Categoría',
       dataIndex: 'category',
       key: 'category',
     },
@@ -122,7 +122,7 @@ export const ProductTable = () => {
           <Col xs={24} md={6} lg={6}>
             <Select
               onChange={(value) => setCategory(value ? `?category=${value}` : '')}
-              placeholder='Seleccione una categoria'
+              placeholder='Seleccione una categoría'
               style={{ width: '100%' }}
               allowClear
               options={

@@ -5,6 +5,7 @@ export interface IProduct {
   image: string;
   status: boolean;
   category: string;
-  stock: number;
+  q_stock: number;
+  kg_stock: number;
   description: string;
 }

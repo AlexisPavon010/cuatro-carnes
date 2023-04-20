@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Space, Spin, Upload, } from 'antd'
+import { Button, Col, Drawer, Form, Input, InputNumber, Radio, Row, Select, Space, Spin, Upload, } from 'antd'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload';
 import { BiPlus } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [stockChange, setChangeStock] = useState(false)
   const [stock, setStock] = useState(1)
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
@@ -45,7 +46,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
       createProduct({
         ...values,
         price: Number(values.price),
-        stock: Number(stock),
+        [stockChange ? 'q_stock' : 'kg_stock']: Number(stock),
         image: imageUrl
       })
         .then(() => {
@@ -133,9 +134,17 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Cantidad"
-          name="stock"
-        // rules={[{ required: true, message: 'Please input your password!' }]}
+          label='Stock'
+        >
+          <Radio.Group defaultValue={false} onChange={() => setChangeStock((state) => !state)}>
+            <Radio value={true}>Cantidad</Radio>
+            <Radio value={false}>Kg.</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          label={stockChange ? 'Cantidad' : 'Kilogramo (kg.)'}
+          name={stockChange ? 'q_stock' : 'kg_stock'}
         >
           <Space.Compact size='large' style={{ width: '100%' }}>
             <Button onClick={() => setStock(stock - 1)} type="primary">-</Button>
@@ -145,20 +154,38 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
+          label='Alerta de Stock'
+        >
+          <Space.Compact size='large' style={{ width: '100%' }}>
+            <Button onClick={() => { }} type="primary">-</Button>
+            <Input style={{ textAlign: 'center' }} defaultValue={0} />
+            <Button onClick={() => { }} type="primary">+</Button>
+          </Space.Compact>
+        </Form.Item>
+
+        <Form.Item
           label="Precio"
           name="price"
         // rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <InputNumber size='large' addonBefore="$" />
+          <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
         </Form.Item>
 
         <Form.Item
-          label="Categoria"
+          label="Precio oferta (superior a 2Kg.)"
+        // name="offert_price"
+        // rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
+        </Form.Item>
+
+        <Form.Item
+          label="Categoría"
           name="category"
         // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Select
-            placeholder='Seleccione una categoria'
+            placeholder='Seleccione una categoría'
             size='large'
             options={
               categories.map((item: ICategories) => ({ value: item.name, label: item.name }))
@@ -178,6 +205,6 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           />
         </Form.Item>
       </Form>
-    </Drawer>
+    </Drawer >
   )
 }

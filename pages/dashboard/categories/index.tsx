@@ -8,7 +8,7 @@ const CategoriesPage = () => {
   return (
     <Layout>
       <Head>
-        <title>Dashboard - Categorias | Cuatro Carnes</title>
+        <title>Dashboard - Categorías | Cuatro Carnes</title>
       </Head>
       <CategoriesTable />
     </Layout>

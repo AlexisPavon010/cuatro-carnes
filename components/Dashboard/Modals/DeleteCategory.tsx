@@ -25,13 +25,13 @@ export const DeleteCategory = ({ isModalOpen, setIsModalOpen, mutate }: any) => 
 
   return (
     <Modal
-      title="Eliminar Categoria"
+      title="Eliminar Categoría"
       confirmLoading={loading}
       open={isModalOpen.visible}
       onOk={handleOk}
       onCancel={handleCancel}
     >
-      <p>Estas seguro que desea eliminar esta categoria?.
+      <p>Estas seguro que desea eliminar esta categoría?.
         Una vez eliminado no se podra recuperar.</p>
     </Modal>
   )

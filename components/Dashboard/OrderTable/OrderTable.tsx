@@ -1,19 +1,24 @@
 import { useSwrFetcher } from "@/hooks/useSwrFetcher";
-import { Button, Card, Col, Radio, Row, Space, Table, Tag, Tooltip } from "antd"
+import { Button, Card, Col, Dropdown, MenuProps, Radio, Row, Space, Table, Tag, Tooltip } from "antd"
 import { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import { useState } from "react";
 import { AiOutlineMail, AiOutlineProfile } from "react-icons/ai";
 import { BsPencil, BsWhatsapp } from "react-icons/bs";
+
 import { OrderModal } from "../Modals/OrderModal";
+import { orderToXLS } from "@/utils/reports";
+import { useRouter } from "next/router";
 
 
 
 export const OrderTable = () => {
   const [modalOpen, setModalOpen] = useState({ visible: false, order: {} })
   const [dateFilter, setDateFilter] = useState('')
-  const { data: orders, isLoading } = useSwrFetcher(`/api/order${dateFilter}`, {})
-
+  const [skip, setSkip] = useState(1)
+  const [limit, setLimit] = useState(10)
+  const { data: orders, isLoading } = useSwrFetcher(`/api/order?${dateFilter}`, {})
+  const router = useRouter()
 
   const columns: ColumnsType<any> = [
     {
@@ -44,7 +49,7 @@ export const OrderTable = () => {
       width: 150,
     },
     {
-      title: 'Mail',
+      title: 'Correo',
       dataIndex: 'email',
       key: 'email',
     },
@@ -71,7 +76,7 @@ export const OrderTable = () => {
             <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="text" shape="circle" icon={<BsPencil size={18} />} onClick={() => setModalOpen({ visible: true, order: record })} />
           </Tooltip>
           <Tooltip title="Detalles">
-            <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="primary" shape="circle" icon={<AiOutlineProfile size={18} />} />
+            <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="primary" shape="circle" icon={<AiOutlineProfile size={18} />} onClick={() => router.push(`/dashboard/order/${record._id}`)} />
           </Tooltip>
           <Tooltip title="Enviar un correo">
             <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="link" shape="circle" icon={<AiOutlineMail size={18} />} />
@@ -81,17 +86,55 @@ export const OrderTable = () => {
     },
   ];
 
+  const onPageChange = (page: any) => {
+    setSkip(page)
+  }
+
+  const onPageSizeChange = (current: any, size: number) => {
+    setLimit(size)
+  }
+
+  const downloadReport = (item: any) => {
+    const formatOrders = orders.result.map((order: any) =>
+      [`${order.uniqueID}`, `${moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}`, `$${order.total.toFixed(2)}`, `${order.username}`, `${order.email}`, `${order.status}`]
+    )
+    orderToXLS(
+      ['Nro', 'Fecha y Hora', 'Monto', 'Cliente', 'Correo', 'Estado'],
+      formatOrders
+    )
+  }
+
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'Excel (XLS)',
+      onClick: downloadReport
+    },
+    {
+      key: '2',
+      label: 'Imprimir',
+      onClick: () => window.print()
+    },
+  ];
+
   return (
     <>
-      <Card>
+      <Card id="section-not-print">
         <Row>
-          <Col>
-            <Radio.Group onChange={({ target }) => setDateFilter(target.value ? `?date=${target.value}` : '')} defaultValue='all' >
+          <Col flex={1}>
+            <Radio.Group onChange={({ target }) => setDateFilter(target.value ? `date=${target.value}` : '')} defaultValue='all' >
               <Radio.Button value="all">Todos</Radio.Button>
               <Radio.Button value="day">Dia</Radio.Button>
               <Radio.Button value="week">Semana</Radio.Button>
               <Radio.Button value="month">Mes</Radio.Button>
             </Radio.Group>
+          </Col>
+          <Col>
+          </Col>
+          <Col>
+            <Dropdown menu={{ items }} trigger={['click']} >
+              <Button >Descargar Reporte</Button>
+            </Dropdown>
           </Col>
         </Row>
       </Card>
@@ -99,7 +142,13 @@ export const OrderTable = () => {
         loading={isLoading}
         scroll={{ x: 1000 }}
         columns={columns}
-        dataSource={orders.data}
+        dataSource={orders.result}
+        pagination={{
+          className: 'section-not-print',
+          locale: {
+            items_per_page: 'x pág.',
+          }
+        }}
       />
       <OrderModal
         isModalOpen={modalOpen}

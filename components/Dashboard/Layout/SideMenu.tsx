@@ -49,7 +49,7 @@ export const SideMenu = ({ collapsed }: SideMenuProps) => {
           {
             key: '/dashboard/categories',
             icon: <BiCategory size={20} />,
-            label: 'Categorias',
+            label: 'Categorías',
             onClick: () => router.push('/dashboard/categories')
           },
           {

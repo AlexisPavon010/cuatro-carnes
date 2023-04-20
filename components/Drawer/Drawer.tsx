@@ -44,7 +44,7 @@ export const Drawer = ({ isDrawerOpen, closeDrawer }: DrawerProps) => {
           <Divider />
         </>
       )}
-      <Link className={styles.drawer__item} href='/'>
+      <Link className={styles.drawer__item} href='/products'>
         Menu
       </Link>
       <Link className={styles.drawer__item} href="/">

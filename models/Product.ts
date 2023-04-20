@@ -1,13 +1,15 @@
 import mongoose, { Schema } from 'mongoose'
 
-const ProductSchema = new Schema({
+export const ProductSchema = new Schema({
   title: { type: String },
   price: { type: Number },
   image: { type: String },
-  stock: { type: Number },
+  q_stock: { type: Number },
+  kg_stock: { type: Number },
   category: { type: String },
   status: { type: Boolean, default: true },
-  description: { type: String }
+  description: { type: String },
+  options: []
 }, {
   timestamps: true
 })

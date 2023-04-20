@@ -37,7 +37,7 @@ const getOrders = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { date = 'all' } = req.query
+  const { date = 'all', skip = 1, limit = 10 } = req.query
 
   let condition = {}
 
@@ -83,9 +83,16 @@ const getOrders = async (
   }
 
 
-  const data = await Order.find(condition).sort({ 'createdAt': -1 })
+  const data = await Order.find(condition)
+    .sort({ 'createdAt': -1 })
+    // .skip(Number(skip * limit))
+    // .limit(Number(limit))
+    .lean()
+
   return res.status(200).json({
     metadata: {
+      skip: Number(skip),
+      limit: Number(limit),
       total: await Order.count(),
       today: await Order.find({
         createdAt: {
@@ -93,11 +100,11 @@ const getOrders = async (
           $lt: endOfDay
         }
       }).count(),
-      canceled: await Order.find({ status: 'canceled' }).count(),
-      delivered: await Order.find({ status: 'delivered' }).count(),
-      pending: await Order.find({ status: 'pending' }).count()
+      canceled: await Order.find({ status: 'CANCELLED' }).count(),
+      delivered: await Order.find({ status: 'DELIVERED' }).count(),
+      pending: await Order.find({ status: 'PENDING' }).count(),
     },
-    data
+    result: data
   })
 }
 

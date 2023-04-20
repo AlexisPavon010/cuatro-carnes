@@ -14,7 +14,8 @@ const schema = Joi.object({
   price: Joi.number().required(),
   category: Joi.string().min(3).required(),
   image: Joi.string().required(),
-  stock: Joi.number().required(),
+  q_stock: Joi.number(),
+  kg_stock: Joi.number(),
 });
 
 export default function handler(

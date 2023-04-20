@@ -26,3 +26,25 @@ a {
     display: none;
   }
 }
+
+@media print {
+  header * {
+    display: none;
+  }
+
+  .section-not-print,
+  #section-not-print * {
+    display: none;
+    visibility: hidden;
+  }
+
+  #section-to-print * {
+    visibility: visible;
+  }
+
+  #section-to-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
