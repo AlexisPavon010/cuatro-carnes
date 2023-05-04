@@ -1,8 +1,8 @@
-import { Dropdown, MenuProps } from 'antd';
+import { Dropdown, MenuProps, Skeleton } from 'antd';
 import { useSession, signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import styles from './styles.module.scss'
 
@@ -18,6 +18,7 @@ export const Header = ({ openDrawer }: any) => {
     {
       label: 'Mis Pedidos',
       key: '1',
+      onClick: () => router.push('/my-orders')
     },
     {
       type: 'divider',
@@ -41,8 +42,8 @@ export const Header = ({ openDrawer }: any) => {
           <div className={styles.header__nav_list}>
             <div className={styles.header__nav_links}>
               <div className={styles.header__nav_item}>
-                <Link href='/products'>
-                  Menu
+                <Link href='/offers'>
+                  Ofertas
                 </Link>
               </div>
               <div className={styles.header__nav_item}>
@@ -59,7 +60,10 @@ export const Header = ({ openDrawer }: any) => {
             </div>
           </div>
           <div className={styles.header__nav_end}>
-            {session ? (
+            {session === undefined && (
+              <Skeleton.Button style={{ width: '120px' }} active={true} shape='round' />
+            )}
+            {session && (
               <div className={styles.header__session}>
                 <div className={styles.header__session_user}>
                   <svg className={styles.header__button_icon} xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 24 24" fill='#A92B3C'>
@@ -75,7 +79,8 @@ export const Header = ({ openDrawer }: any) => {
                   </button>
                 </Dropdown>
               </div>
-            ) : (
+            )}
+            {session === null && (
               <>
                 <button className={styles.header__button}>
                   <div className={styles.header__button_content}>
