@@ -4,6 +4,7 @@ export interface IProduct {
   price: number;
   image: string;
   status: boolean;
+  quantity?: number;
   category: string;
   q_stock: number;
   kg_stock: number;

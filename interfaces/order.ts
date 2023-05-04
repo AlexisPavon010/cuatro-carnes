@@ -8,4 +8,5 @@ export interface IOrder {
   updatedAt: string,
   uniqueID: string,
   items: any
+  cords?: [number, number]
 }
