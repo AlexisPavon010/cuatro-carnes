@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd'
+import { useState } from 'react';
 import Head from 'next/head';
 
 import { Layout } from '@/components/Dashboard/Layout/Layout'
@@ -7,7 +8,10 @@ import { OrderTable } from '@/components/Dashboard/OrderTable';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 
 const DashboardPage = () => {
-  const { data, isLoading } = useSwrFetcher('/api/order')
+  const [dateFilter, setDateFilter] = useState('')
+  const { data: orders, isLoading } = useSwrFetcher(`/api/order?${dateFilter}`, {
+    refreshInterval: 5 * 1000
+  })
 
   return (
     <Layout>
@@ -17,7 +21,8 @@ const DashboardPage = () => {
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
-            total={data?.metadata?.today}
+            setDateFilter={() => setDateFilter('date=day')}
+            total={orders?.metadata?.today}
             loading={isLoading}
             title='Pedidos del Dia'
             description='Total de pedidos recibidos en el día'
@@ -25,7 +30,8 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
-            total={data?.metadata?.delivered}
+            setDateFilter={() => setDateFilter('status=DELIVERED')}
+            total={orders?.metadata?.delivered}
             loading={isLoading}
             title='Pedidos Entregados'
             description='Pedidos entregados del día'
@@ -33,7 +39,8 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
-            total={data?.metadata?.pending}
+            setDateFilter={() => setDateFilter('status=PENDING')}
+            total={orders?.metadata?.pending}
             loading={isLoading}
             title='Pedidos Pendientes'
             description='Falta entregar'
@@ -41,14 +48,19 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
-            total={data?.metadata?.canceled}
+            setDateFilter={() => setDateFilter('status=CANCELLED')}
+            total={orders?.metadata?.cancelled}
             loading={isLoading}
             title='Pedidos Cancelados'
             description='Cancelados'
           />
         </Col>
         <Col xs={24}>
-          <OrderTable />
+          <OrderTable
+            orders={orders.result}
+            isLoading={isLoading}
+            setDateFilter={setDateFilter}
+          />
         </Col>
       </Row>
     </Layout>

@@ -7,9 +7,10 @@ interface CardProps {
   total: number;
   description: string;
   loading: boolean;
+  setDateFilter: () => void
 }
 
-export const Card = ({ title, description, total = 0, loading }: CardProps) => {
+export const Card = ({ title, description, total = 0, loading, setDateFilter }: CardProps) => {
 
   return (
     <AntdCard
@@ -22,7 +23,7 @@ export const Card = ({ title, description, total = 0, loading }: CardProps) => {
           {title}
         </Col>
         <Col>
-          <Button size="small">
+          <Button onClick={setDateFilter} size="small">
             VER PEDIDOS
           </Button>
         </Col>
