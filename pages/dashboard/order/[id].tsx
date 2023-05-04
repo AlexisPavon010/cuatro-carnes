@@ -131,7 +131,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           <Descriptions.Item label="Domicilio">{order.address || '--------'}</Descriptions.Item>
           <Descriptions.Item label="Celular">{order.phone ? order.phone : '0000000'}</Descriptions.Item>
           <Descriptions.Item label="Fecha alta">{moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</Descriptions.Item>
-          <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' ? moment(order.updateAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
+          <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
         </Descriptions>
       </Card>
       <List

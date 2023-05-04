@@ -39,7 +39,7 @@ const getOrders = async (
 ) => {
   const { date = 'all', status = '', skip = 1, limit = 10 } = req.query
 
-  let condition = {}
+  let condition: any = {}
 
   const day = new Date();
   // Calculas las fechas de inicio y fin del día correspondiente a la fecha recibida

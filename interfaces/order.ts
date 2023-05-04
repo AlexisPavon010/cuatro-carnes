@@ -4,6 +4,8 @@ export interface IOrder {
   username: string,
   email: string,
   status: string,
+  address: string,
+  phone: string,
   createdAt: string,
   updatedAt: string,
   uniqueID: string,
