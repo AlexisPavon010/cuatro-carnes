@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Card, Col, Dropdown, MenuProps, Row, Select, Space, Table } from "antd"
+import { Button, Card, Col, Dropdown, MenuProps, Row, Select, Space, Table, Tag } from "antd"
 import { ColumnsType } from "antd/es/table";
 import { AiOutlineLock, AiOutlineMenu, AiOutlineUnlock } from "react-icons/ai";
 import { BiPencil } from "react-icons/bi";
@@ -95,9 +95,21 @@ export const ProductTable = () => {
       )
     },
     {
+      align: 'center',
+      title: 'Precio oferta',
+      dataIndex: 'offert_price',
+      key: 'offert_price',
+      render: (total) => (
+        <div>${total ? total : 0}</div>
+      )
+    },
+    {
       title: 'Estado',
       dataIndex: 'status',
       key: 'status',
+      render: (status) => (
+        status ? <Tag color='green'>Activo</Tag> : <Tag color='magenta'>Inactivo</Tag>
+      )
     },
     {
       title: 'Acciones',
