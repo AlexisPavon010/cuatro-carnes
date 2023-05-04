@@ -1,5 +1,6 @@
 import { Button, Col, Row, Space } from "antd"
 import { AiOutlineMenu } from 'react-icons/ai';
+import { signOut, useSession } from 'next-auth/react'
 
 import styles from './styles.module.scss'
 
@@ -8,6 +9,8 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ openMenu }: NavbarProps) => {
+  const { data: session } = useSession()
+
   return (
     <header className={styles.header}>
       <Row align="middle" gutter={16}>
@@ -19,8 +22,8 @@ export const Navbar = ({ openMenu }: NavbarProps) => {
         </Col>
         <Col>
           <Space size='large'>
-            <h3>Cuenta: Tomas C.</h3>
-            <p>Cerrar Session</p>
+            <h3>{session?.user?.name}</h3>
+            <Button onClick={() => signOut()}>Cerrar Sesión</Button>
           </Space>
         </Col>
       </Row>
