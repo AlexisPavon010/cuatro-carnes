@@ -228,8 +228,14 @@
   margin-bottom: 12px;
   box-shadow: 0px 3px 3px 1px rgba(71, 71, 71, 0.185);
   border: 1px solid #e4dede;
+}
 
-
+.order__select {
+  :global(.ant-select-selector) {
+    border: none !important;
+    border-color: none !important;
+    background-color: transparent !important;
+  }
 }
 
 .order__card_wrapper {

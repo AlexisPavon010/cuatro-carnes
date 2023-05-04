@@ -1,7 +1,6 @@
-import Head from 'next/head'
 import { Select } from 'antd'
 import Image from 'next/image'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
 import { Swiper, SwiperSlide, } from 'swiper/react';
@@ -15,6 +14,7 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher'
 import { IProduct } from '@/interfaces/products'
 import { ICategories } from '@/interfaces/categories'
 import { LoadingItem } from '@/components/LoadingItem'
+import { setShippingMethod } from '@/store/cart/shoppingSlice'
 
 const NAV_LINKS = [
   { id: 'section-1', label: 'Section 1', isActive: false },
@@ -23,8 +23,15 @@ const NAV_LINKS = [
 ];
 
 const ProductsPage = () => {
+  const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
+  const { cart, pickup_or_delivery } = useSelector((state: any) => state.shopping)
+  const { userDirection } = useSelector((state: any) => state.places)
   const { data: categories, isLoading } = useSwrFetcher('/api/categories')
+  const [navLinks, setNavLinks] = useState(NAV_LINKS);
   const { data: products } = useSwrFetcher('/api/products')
+  const targetRefs = useRef<any>([]);
+  const dispatch = useDispatch()
+
 
   function filterProductsByCategory(products: IProduct[], categories: ICategories[]) {
     const filteredProductsByCategory = {};
@@ -45,11 +52,6 @@ const ProductsPage = () => {
 
     return Object.values(filteredProductsByCategory);
   }
-
-  const [navLinks, setNavLinks] = useState(NAV_LINKS);
-  const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
-  const { cart } = useSelector((state: any) => state.shopping)
-  const targetRefs = useRef<any>([]);
 
   const scrollToSection = (sectionId: string) => {
     const section: any = document.getElementById(sectionId);
@@ -103,10 +105,7 @@ const ProductsPage = () => {
   }, []);
 
   return (
-    <Layout>
-      <Head>
-        <title>Productos - Cuatro Carnes</title>
-      </Head>
+    <Layout title='Productos - Cuatro Carnes'>
       <section className={styles.hero}>
         <div className={styles.hero__container}>
           {/* <Slider /> */}
@@ -229,18 +228,29 @@ const ProductsPage = () => {
               </div>
               <div className={styles.order__card}>
                 <div className={styles.order__card_wrapper}>
-                  <p>Orden</p>
-                  <Select style={{ width: 'calc(100% - 80px)' }}>
-                    <option value="1">Ordenar</option>
-                    <option value="2">Retirar</option>
+                  <p>{pickup_or_delivery === 'delivery' ? 'Donde' : 'Orden'}</p>
+                  <Select
+                    className={styles.order__select}
+                    style={{ width: 'calc(100% - 80px)' }}
+                    defaultValue={pickup_or_delivery === 'delivery' ? userDirection : 'Para retirar'}
+                    onChange={(value) => dispatch(setShippingMethod(value))}
+                    disabled
+                  >
+                    <option value="delivery">Delivery</option>
+                    <option value="pickup">Retirar</option>
                   </Select>
                 </div>
                 <hr className={styles.order__card_divider}></hr>
                 <div className={styles.order__card_wrapper}>
                   <p>Para</p>
-                  <Select style={{ width: 'calc(100% - 80px)' }}>
-                    <option value="1">11:00</option>
-                    <option value="2">13:00</option>
+                  <Select
+                    className={styles.order__select}
+                    // onChange={(value) => dispatch(setPickUpTime(value))}
+                    style={{ width: 'calc(100% - 80px)', visibility: pickup_or_delivery === 'delivery' ? 'hidden' : 'visible' }}
+                  >
+                    <option value="1">Mañana (7:00am - 12:00pm)</option>
+                    <option value="2">Mediodia (12:00pm - 14:00pm)</option>
+                    <option value="3">Tarde (16:00pm - 21:00pm)</option>
                   </Select>
                 </div>
               </div>
