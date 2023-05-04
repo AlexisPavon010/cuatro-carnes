@@ -1,23 +1,27 @@
-import { useSwrFetcher } from "@/hooks/useSwrFetcher";
 import { Button, Card, Col, Dropdown, MenuProps, Radio, Row, Space, Table, Tag, Tooltip } from "antd"
 import { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import { useState } from "react";
 import { AiOutlineMail, AiOutlineProfile } from "react-icons/ai";
 import { BsPencil, BsWhatsapp } from "react-icons/bs";
+import { useRouter } from "next/router";
 
 import { OrderModal } from "../Modals/OrderModal";
 import { orderToXLS } from "@/utils/reports";
-import { useRouter } from "next/router";
+import { EmailModal } from "../Modals/EmailModal";
+import { IOrder } from "@/interfaces/order";
 
+interface OrderTableProps {
+  orders: IOrder[];
+  isLoading: boolean;
+  setDateFilter: (value: string) => void
+}
 
-
-export const OrderTable = () => {
+export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTableProps) => {
   const [modalOpen, setModalOpen] = useState({ visible: false, order: {} })
-  const [dateFilter, setDateFilter] = useState('')
+  const [emailOpen, setEmailOpen] = useState({ visible: false, order: {} })
   const [skip, setSkip] = useState(1)
   const [limit, setLimit] = useState(10)
-  const { data: orders, isLoading } = useSwrFetcher(`/api/order?${dateFilter}`, {})
   const router = useRouter()
 
   const columns: ColumnsType<any> = [
@@ -79,7 +83,7 @@ export const OrderTable = () => {
             <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="primary" shape="circle" icon={<AiOutlineProfile size={18} />} onClick={() => router.push(`/dashboard/order/${record._id}`)} />
           </Tooltip>
           <Tooltip title="Enviar un correo">
-            <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="link" shape="circle" icon={<AiOutlineMail size={18} />} />
+            <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="link" shape="circle" icon={<AiOutlineMail size={18} />} onClick={() => setEmailOpen({ visible: true, order: record })} />
           </Tooltip>
         </Space>
       )
@@ -94,8 +98,8 @@ export const OrderTable = () => {
     setLimit(size)
   }
 
-  const downloadReport = (item: any) => {
-    const formatOrders = orders.result.map((order: any) =>
+  const downloadReport = () => {
+    const formatOrders = orders.map((order: IOrder) =>
       [`${order.uniqueID}`, `${moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}`, `$${order.total.toFixed(2)}`, `${order.username}`, `${order.email}`, `${order.status}`]
     )
     orderToXLS(
@@ -142,7 +146,8 @@ export const OrderTable = () => {
         loading={isLoading}
         scroll={{ x: 1000 }}
         columns={columns}
-        dataSource={orders.result}
+        dataSource={orders}
+        rowClassName={(row) => row?.fleet ? `ant_table_row_${row?.fleet}` : ''}
         pagination={{
           className: 'section-not-print',
           locale: {
@@ -153,6 +158,10 @@ export const OrderTable = () => {
       <OrderModal
         isModalOpen={modalOpen}
         setIsModalOpen={setModalOpen}
+      />
+      <EmailModal
+        isModalOpen={emailOpen}
+        setIsModalOpen={setEmailOpen}
       />
     </>
   )
