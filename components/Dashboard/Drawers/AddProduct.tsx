@@ -172,8 +172,8 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Precio oferta (superior a 2Kg.)"
-        // name="offert_price"
+          label="Precio oferta (superior a 2Kg. o 2 piezas)"
+          name="offert_price"
         // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
