@@ -2,10 +2,10 @@ import * as XLSX from 'xlsx'
 
 import { IOrder } from "@/interfaces/order"
 
-export const orderToXLS = (heads: any, orders: IOrder[]) => {
+export const orderToXLS = (heads: any, orders: any) => {
   const createXLSLFormatObj = []
   createXLSLFormatObj.push(heads)
-  orders.forEach(order => {
+  orders.forEach((order: IOrder[]) => {
     createXLSLFormatObj.push(order)
   })
   /* File Name */
