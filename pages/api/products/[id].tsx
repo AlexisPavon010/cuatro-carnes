@@ -55,7 +55,7 @@ const updateProductsById = async (
 ) => {
   const { id } = req.query
   try {
-    const data = await Product.findByIdAndUpdate(id, req.body)
+    const data = await Product.findByIdAndUpdate(id, req.body, { new: true })
     return res.status(200).json(data)
   } catch (error: any) {
     return res.status(400).json(error.details)
