@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { isValidObjectId } from 'mongoose'
 import Joi from 'joi'
 
 import '../../../database/db'
@@ -20,6 +21,8 @@ export default function handler(
 ) {
 
   switch (req.method) {
+    case 'GET':
+      return getOptionById(req, res);
     case 'PUT':
       return updateOption(req, res)
     case 'DELETE':
@@ -36,8 +39,8 @@ const updateOption = async (
   const { id } = req.query
   try {
     await schema.validateAsync(req.body);
-    const data = await Option.findByIdAndUpdate(id, req.body, { new: true })
-    return res.status(200).json(data)
+    const options = await Option.findByIdAndUpdate(id, req.body, { new: true })
+    return res.status(200).json(options)
   } catch (error: any) {
     return res.status(400).json(error.details)
   }
@@ -58,4 +61,13 @@ const deleteOption = async (
       message: error.message
     })
   }
+}
+
+const getOptionById = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const { id } = req.query
+  if (!isValidObjectId(id)) return res.status(400).json({ message: 'the id is not mongo id valid' })
+  const options = await Option.findById(id)
+  if (!options) return res.status(404).json({ message: 'option by id not found' })
+
+  return res.status(200).json(options)
 }
