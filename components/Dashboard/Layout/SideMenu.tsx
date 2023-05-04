@@ -3,7 +3,6 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { BsBoxSeam, BsTicketPerforated } from "react-icons/bs"
 import { MdOutlineComputer } from "react-icons/md"
-import { FiUsers } from "react-icons/fi"
 import { BiCategory } from "react-icons/bi"
 import { TfiMenuAlt } from "react-icons/tfi"
 import { RiUserSettingsLine } from "react-icons/ri"
@@ -65,17 +64,11 @@ export const SideMenu = ({ collapsed }: SideMenuProps) => {
             onClick: () => router.push('/dashboard/coupons')
           },
           {
-            key: '/dashboard/clients',
-            icon: <FiUsers size={20} />,
-            label: 'Clientes',
-            onClick: () => router.push('/dashboard/customers')
-          },
-          {
             key: '/dashboard/users',
             icon: <RiUserSettingsLine size={20} />,
             label: 'Usuarios',
             onClick: () => router.push('/dashboard/users')
-          },
+          }
         ]}
       />
     </div>
