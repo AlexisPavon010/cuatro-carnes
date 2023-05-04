@@ -6,6 +6,7 @@ export const ProductSchema = new Schema({
   image: { type: String },
   q_stock: { type: Number },
   kg_stock: { type: Number },
+  offert_price: { type: Number },
   category: { type: String },
   status: { type: Boolean, default: true },
   description: { type: String },
