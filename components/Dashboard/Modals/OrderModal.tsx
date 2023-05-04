@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
-import { Modal, Select, notification } from "antd"
+import { Col, Form, FormInstance, Modal, Row, Select, Tag, notification } from "antd"
+import { useState } from 'react'
 
 import { STATUSES } from '@/constants/status';
 import { updateOrder } from '@/client/Order';
 import { IOrder } from '@/interfaces/order';
+import { FLEETS } from '@/constants/fleets';
 
 interface OrderModal {
   isModalOpen: {
@@ -14,16 +15,12 @@ interface OrderModal {
 }
 
 export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState('PENDING')
 
-  useEffect(() => {
-    setStatus(isModalOpen.order.status)
-  }, [isModalOpen.order.status])
-
-  const handleOk = () => {
+  const onFinish = (values: any) => {
     setLoading(true)
-    updateOrder(isModalOpen.order._id, status)
+    updateOrder(isModalOpen.order._id, values)
       .then((res) => {
         console.log(res)
         notification.success({
@@ -39,24 +36,86 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
     setIsModalOpen({ visible: false, order: {} });
   };
 
+
   return (
     <Modal
       title={`Pedido Nro. ${isModalOpen.order.uniqueID ? isModalOpen.order.uniqueID : '00000'}`}
       confirmLoading={loading}
       open={isModalOpen.visible}
-      onOk={handleOk}
+      onOk={() => form.submit()}
       onCancel={handleCancel}
       okText='Actualizar'
       cancelText='Cancelar'
     >
-      <Select
-        value={status}
-        style={{ width: 200 }}
-        onChange={(value) => setStatus(value)}
-        options={STATUSES.map(status => (
-          { value: status.value, label: status.label }
-        ))}
-      />
+      <Form
+        onFinish={onFinish}
+        layout='vertical'
+        form={form}
+        requiredMark={false}
+        initialValues={{
+          status: isModalOpen.order.status,
+          fleet: isModalOpen.order.fleet
+        }}
+      >
+        <Row gutter={[12, 12]}>
+          <Col>
+            <Form.Item
+              label="Estado"
+              name="status"
+            >
+              <Select
+                style={{ width: 200 }}
+                options={STATUSES.map(status => (
+                  { value: status.value, label: status.label }
+                ))}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item
+              label="Color"
+              name="fleet"
+            >
+              <CustomSelect form={form} />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </Modal>
   )
+}
+
+const CustomSelect = ({ form }: { form: FormInstance<any> }) => {
+  const [selectedValue, setSelectedValue] = useState(undefined);
+
+  const onTagClose = () => {
+    setSelectedValue(undefined);
+  };
+
+  const tagRender = (props: any) => {
+    const { label, value, closable } = props;
+    const isCurrentValue = selectedValue === value;
+
+    return (
+      <Tag color={value} closable={closable && isCurrentValue} onClose={onTagClose}>
+        {label}
+      </Tag>
+    );
+  };
+
+  const onSelect = (value: any) => {
+    setSelectedValue(value);
+    form.setFieldValue('fleet', value)
+  };
+
+  return (
+    <Select
+      mode="tags"
+      tagRender={tagRender}
+      style={{ width: 200 }}
+      options={FLEETS}
+      value={selectedValue}
+      onSelect={onSelect}
+    />
+  );
 }
