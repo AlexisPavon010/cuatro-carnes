@@ -12,6 +12,7 @@ const schema = Joi.object({
   title: Joi.string().min(3).required(),
   description: Joi.string().min(3).required(),
   price: Joi.number().required(),
+  offert_price:Joi.number(),
   category: Joi.string().min(3).required(),
   image: Joi.string().required(),
   q_stock: Joi.number(),
