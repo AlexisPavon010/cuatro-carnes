@@ -61,8 +61,18 @@ export const UsersTable = () => {
       key: 'status',
       render: (status) => {
         let text = status ? 'Activo' : 'Inactivo';
-        let color = status ? '#87d068' : 'default';
+        let color = text === 'active' ? '#87d068' : 'volcano';
         return (<Tag color={color}>{text}</Tag>)
+      }
+    },
+    {
+      title: 'Rol',
+      dataIndex: 'role',
+      key: 'role',
+      render: (role) => {
+        let text = role === 'admin' ? 'Administrado' : 'Cliente';
+        let color = text === 'Administrado' ? '#87d068' : 'cyan';
+        return (<Tag color={color} >{text}</Tag>)
       }
     },
     {
