@@ -23,6 +23,7 @@
     .modal__image_content {
       display: flex;
       justify-content: center;
+      border-bottom: 1px solid rgba(44, 44, 49, 0.2);
     }
 
     .modal__image {
@@ -42,6 +43,10 @@
       width: 100%;
       background-color: #EFE2CF;
       border-radius: 12px;
+
+      max-height: 300px;
+      overflow: hidden;
+      overflow-y: auto;
     }
 
     .modal__card {
@@ -77,12 +82,46 @@
 
     .modal__quantity_actions {
       display: flex;
+      align-items: center;
       justify-content: space-between;
     }
 
     .modal__quantity_buttons {
       display: flex;
       gap: 12px;
+    }
+
+    .combo_item_divider {
+      height: 8px;
+      width: 100%;
+      background-color: #EFE2CF;
+    }
+
+    .modal_options {
+      background-color: #f4e8e4;
+    }
+
+    .modal_options_header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 19px;
+      border-bottom: 1px solid rgba(44, 44, 49, 0.2);
+    }
+
+    .modal_options_list {}
+
+    .modal_options_list_item {
+      padding: 20px 24px 19px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .modal_options_text {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: -.34px;
     }
 
     .button__wrapper {

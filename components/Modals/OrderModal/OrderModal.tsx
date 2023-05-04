@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd"
+import { Button, Checkbox, Modal, Radio } from "antd"
 import CurrencyFormat from 'react-currency-format';
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
 import { useDispatch } from 'react-redux'
@@ -44,7 +44,6 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
             height={270}
           />
         </div>
-        <hr className={styles.divider} />
         <div className={styles.modal__content}>
           <div className={styles.modal__card}>
             <h2 className={styles.modal__title}>{title}</h2>
@@ -67,16 +66,65 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
               </div>
             </div>
           </div>
-          <div className={styles.button__wrapper}>
-            <button onClick={addItemToCart} className={styles.button}>
-              <span className={styles.button__content}>
-                <div>
-                  <CurrencyFormat value={price! * count} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                </div>
-                <div>Añadir</div>
-              </span>
-            </button>
+          <div className={styles.combo_item_divider}></div>
+          <div className={styles.modal_options}>
+            <div className={styles.modal_options_header}>
+              <h2 className={styles.modal_options_text}>Tipo de corte</h2>
+            </div>
+            <div className={styles.modal_options_list}>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+            </div>
           </div>
+          <div className={styles.combo_item_divider}></div>
+          <div className={styles.modal_options}>
+            <div className={styles.modal_options_header}>
+              <h2 className={styles.modal_options_text}>Tipo de corte</h2>
+            </div>
+            <div className={styles.modal_options_list}>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+              <div className={styles.modal_options_list_item}>
+                <Radio value='opcion 1' onChange={({ target }) => console.log(target.value)} />
+                <span>Bifes de 1 dedo</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.combo_item_divider}></div>
+        </div>
+        <div className={styles.button__wrapper}>
+          <button onClick={addItemToCart} className={styles.button}>
+            <span className={styles.button__content}>
+              <div>
+                <CurrencyFormat value={price! * count} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+              </div>
+              <div>Añadir</div>
+            </span>
+          </button>
         </div>
       </div >
     </Modal >
