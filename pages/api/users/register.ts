@@ -17,6 +17,7 @@ type Data =
 const schema = Joi.object({
   email: Joi.string().email().required(),
   username: Joi.string().required(),
+  phone: Joi.string(),
   password: Joi.string()
     .regex(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/) // at least one digit in any position
     .min(6)
@@ -34,7 +35,7 @@ export default function RegisterHandler(req: NextApiRequest, res: NextApiRespons
 }
 
 const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const { email = '', password = '', username = '' } = req.body
+  const { email = '', password = '', username = '', phone = null } = req.body
 
   try {
     await schema.validateAsync(req.body);
@@ -47,6 +48,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
       email: email.toLowerCase(),
       password: bcrypt.hashSync(password, 10),
       username,
+      phone,
     })
 
     newUser.save()
