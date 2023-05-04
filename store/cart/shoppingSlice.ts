@@ -5,11 +5,13 @@ import { parseCookies, setCookie, destroyCookie } from 'nookies'
 const { cart } = parseCookies()
 
 interface initialStateProps {
-  cart: any
+  cart: any,
+  pickup_or_delivery: 'delivery' | 'pickup'
 }
 
 const initialState: initialStateProps = {
-  cart: cart ? JSON.parse(cart) : []
+  cart: cart ? JSON.parse(cart) : [],
+  pickup_or_delivery: 'delivery'
 };
 
 const getCartTotal = (cart: any) =>
@@ -71,6 +73,10 @@ export const shoppingSlice = createSlice({
     emptyCart: (state) => {
       destroyCookie(null, 'cart')
       state.cart = [];
+    },
+
+    setShippingMethod: (state, action) => {
+      state.pickup_or_delivery = action.payload;
     }
 
   },
@@ -82,6 +88,7 @@ export const {
   removeAllItems,
   restoreCart,
   emptyCart,
+  setShippingMethod
 } = shoppingSlice.actions;
 
 export { getCartTotal, getTotalItems };
