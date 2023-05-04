@@ -37,22 +37,22 @@ const getOrders = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { date = 'all', skip = 1, limit = 10 } = req.query
+  const { date = 'all', status = '', skip = 1, limit = 10 } = req.query
 
   let condition = {}
 
-  const today = new Date();
+  const day = new Date();
   // Calculas las fechas de inicio y fin del día correspondiente a la fecha recibida
-  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  const startOfDay = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+  const endOfDay = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1);
 
   // Calculas las fechas de inicio y fin de la semana correspondiente a la fecha recibida
-  const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-  const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7);
+  const startOfWeek = new Date(day.getFullYear(), day.getMonth(), day.getDate() - day.getDay());
+  const endOfWeek = new Date(day.getFullYear(), day.getMonth(), day.getDate() - day.getDay() + 7);
 
   // Calculas las fechas de inicio y fin del mes correspondiente a la fecha recibida
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+  const startOfMonth = new Date(day.getFullYear(), day.getMonth(), 1);
+  const endOfMonth = new Date(day.getFullYear(), day.getMonth() + 1, 1);
 
 
   if (date === 'day') {
@@ -60,7 +60,7 @@ const getOrders = async (
       createdAt: {
         $gte: startOfDay,
         $lt: endOfDay
-      }
+      },
     }
   }
 
@@ -69,7 +69,7 @@ const getOrders = async (
       createdAt: {
         $gte: startOfWeek,
         $lt: endOfWeek
-      }
+      },
     }
   }
 
@@ -78,33 +78,47 @@ const getOrders = async (
       createdAt: {
         $gte: startOfMonth,
         $lt: endOfMonth
-      }
+      },
     }
   }
 
+  if (status !== '') {
+    condition.status = status;
+  }
 
-  const data = await Order.find(condition)
-    .sort({ 'createdAt': -1 })
-    // .skip(Number(skip * limit))
-    // .limit(Number(limit))
-    .lean()
+  const [
+    orders,
+    total,
+    today,
+    cancelled,
+    delivered,
+    pending
+  ] = await Promise.all([
+    Order.find(condition).sort({ 'createdAt': -1 }).lean(),
+    Order.count(),
+    Order.find({
+      createdAt: {
+        $gte: startOfDay,
+        $lt: endOfDay
+      }
+    }).count(),
+    Order.find({ status: 'CANCELLED' }).count(),
+    Order.find({ status: 'DELIVERED' }).count(),
+    Order.find({ status: 'PENDING' }).count(),
+  ])
+
 
   return res.status(200).json({
     metadata: {
       skip: Number(skip),
       limit: Number(limit),
-      total: await Order.count(),
-      today: await Order.find({
-        createdAt: {
-          $gte: startOfDay,
-          $lt: endOfDay
-        }
-      }).count(),
-      canceled: await Order.find({ status: 'CANCELLED' }).count(),
-      delivered: await Order.find({ status: 'DELIVERED' }).count(),
-      pending: await Order.find({ status: 'PENDING' }).count(),
+      total,
+      today,
+      cancelled,
+      delivered,
+      pending,
     },
-    result: data
+    result: orders
   })
 }
 
