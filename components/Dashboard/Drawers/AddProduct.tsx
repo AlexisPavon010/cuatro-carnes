@@ -57,7 +57,10 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         .catch((error) => console.log(error))
         .finally(() => setLoading(false))
     } else {
-      updateProductById(open.id, values)
+      updateProductById(open.id, {
+        ...values,
+        image: imageUrl
+      })
         .then(() => {
           form.resetFields()
           onClose(false)
