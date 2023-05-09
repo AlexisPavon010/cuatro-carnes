@@ -5,6 +5,8 @@ export interface IOrder {
   email: string,
   status: string,
   address: string,
+  reference?: string,
+  paymentOption?: string,
   phone: string,
   createdAt: string,
   updatedAt: string,
