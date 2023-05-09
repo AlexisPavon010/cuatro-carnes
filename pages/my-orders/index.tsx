@@ -28,7 +28,7 @@ const OrderPage = ({ orders }: OrderPageProps) => {
                   extra={
                     < Space >
                       <Typography.Text>${item.price}</Typography.Text>
-                      <Typography.Text>${item.price * item.quantity}</Typography.Text>
+                      <Typography.Text>${item.price * item.quantity!}</Typography.Text>
                       <Badge count={item.quantity} />
                     </Space >
                   }

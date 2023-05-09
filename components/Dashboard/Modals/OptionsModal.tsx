@@ -43,7 +43,7 @@ export const OptionsModal = ({ isOptionsOpen, setIsOptionsOpen }: OptionsModalPr
 
     getProductById(isOptionsOpen.id)
       .then(({ data }) => {
-        setSelectedOptions(data.options.filter(option => option.quantity > 0))
+        setSelectedOptions(data.options.filter((option: IOption) => option.quantity > 0))
       })
 
   }, [isOptionsOpen.id])
