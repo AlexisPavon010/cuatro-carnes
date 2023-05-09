@@ -47,6 +47,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
     const newUser = new User({
       email: email.toLowerCase(),
       password: bcrypt.hashSync(password, 10),
+      role: 'client',
       username,
       phone,
     })
