@@ -1,5 +1,9 @@
 import axios from "axios"
 
+export const getOptions = () => {
+  return axios.get(`/api/options`)
+}
+
 export const getOptionById = (id: string) => {
   return axios.get(`/api/options/${id}`)
 }
@@ -10,6 +14,10 @@ export const createOptions = (payload: any) => {
 
 export const updateOptions = (id: string, payload: any) => {
   return axios.put(`/api/options/${id}`, payload)
+}
+
+export const deletedOptions = (id: string) => {
+  return axios.delete(`/api/options/${id}`)
 }
 
 export const getItemOptionById = (id: string, itemId: string) => {

@@ -21,3 +21,7 @@ export const updateProductById = (id: string, payload: IProduct) => {
 export const activateProductById = (id: string, payload: { status: boolean }) => {
   return axios.patch(`/api/products/${id}`, payload)
 }
+
+export const addOptionProductById = (id: string, payload: any) => {
+  return axios.post(`/api/products/${id}`, payload)
+}
