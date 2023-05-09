@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { ConfigProvider } from 'antd';
+import { useState } from 'react';
+import Head from 'next/head';
 
-import { Drawer } from "../Drawer"
-import { Footer } from "../Footer"
-import { Header } from "../Header"
-import Head from 'next/head'
+import { Drawer } from "../Drawer";
+import { Footer } from "../Footer";
+import { Header } from "../Header";
 
 interface LayoutProps {
   children: JSX.Element | JSX.Element[]
@@ -16,7 +17,13 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
   const openDrawer = () => setIsDrawerOpen(true)
   const closeDrawer = () => setIsDrawerOpen(false)
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#a92b3c',
+        },
+      }}
+    >
       <Head>
         <title>{title}</title>
         {description && (
@@ -30,6 +37,6 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         closeDrawer={closeDrawer}
       />
       <Footer />
-    </>
+    </ConfigProvider>
   )
 }
