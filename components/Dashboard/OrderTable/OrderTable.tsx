@@ -10,6 +10,7 @@ import { OrderModal } from "../Modals/OrderModal";
 import { orderToXLS } from "@/utils/reports";
 import { EmailModal } from "../Modals/EmailModal";
 import { IOrder } from "@/interfaces/order";
+import { STATUSES } from "@/constants/status";
 
 interface OrderTableProps {
   orders: IOrder[];
@@ -63,7 +64,9 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
       dataIndex: 'status',
       key: 'status',
       render: (value) => {
-        return (<Tag>{value}</Tag>)
+        let text = STATUSES.find(status => status.value === value)?.label;
+        let color = STATUSES.find(status => status.value === value)?.color;
+        return (<Tag color={color}>{text?.toUpperCase()}</Tag>)
       }
     },
     {
