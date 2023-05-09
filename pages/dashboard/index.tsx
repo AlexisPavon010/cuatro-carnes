@@ -30,7 +30,7 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24} sm={12} lg={6} id="section-not-print">
           <Card
-            setDateFilter={() => setDateFilter('status=DELIVERED')}
+            setDateFilter={() => setDateFilter('status=DELIVERED&date=day')}
             total={orders?.metadata?.delivered}
             loading={isLoading}
             title='Pedidos Entregados'
