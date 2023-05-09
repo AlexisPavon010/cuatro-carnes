@@ -15,6 +15,8 @@ export default function handler(
   switch (req.method) {
     case 'GET':
       return getProductsById(req, res)
+    case 'POST':
+      return addOptionToProduct(req, res)
     case 'PUT':
       return updateProductsById(req, res)
     case 'DELETE':
@@ -70,6 +72,29 @@ const activateProduct = async (
   try {
     const data = await Product.findByIdAndUpdate(id, req.body)
     return res.status(200).json(data)
+  } catch (error: any) {
+    return res.status(400).json(error.details)
+  }
+}
+
+const addOptionToProduct = async (
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) => {
+  const { id } = req.query
+
+  console.log(req.body)
+
+  try {
+    const product = await Product.findById(id)
+
+    if (!product) {
+      return res.status(404).json({ message: 'Producto no encontrado' })
+    }
+
+    product.options = [...req.body]
+    await product.save()
+    return res.status(201).json(product)
   } catch (error: any) {
     return res.status(400).json(error.details)
   }
