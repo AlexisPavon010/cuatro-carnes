@@ -5,6 +5,7 @@ interface initialStateProps {
   isLoading: boolean,
   isMapVisible: boolean,
   userDirection: string,
+  pickUpTime?: string,
   userLocation?: [number, number]
 }
 
@@ -13,6 +14,7 @@ const initialState: initialStateProps = {
   isLoading: true,
   isMapVisible: false,
   userDirection: 'Av. Juan B. Justo 2085, B1648 Tigre, Provincia de Buenos Aires',
+  pickUpTime: 'Mañana (7:00am - 12:00pm)',
   userLocation: [-58.58349311794545, -34.445403398664254],
 };
 
@@ -28,6 +30,10 @@ export const placesSlice = createSlice({
       state.isLoading = false
       state.userLocation = payload
     },
+    setPickUpTime: (state, { payload }) => {
+      state.isLoading = false
+      state.pickUpTime = payload
+    },
     setLoadMap: (state, { payload }) => {
       state.isLoading = false
       state.map = payload
@@ -39,4 +45,4 @@ export const placesSlice = createSlice({
   },
 });
 
-export const { setUserLocation, setUserDirection, setShowMap } = placesSlice.actions;
+export const { setUserLocation, setUserDirection, setPickUpTime, setShowMap } = placesSlice.actions;

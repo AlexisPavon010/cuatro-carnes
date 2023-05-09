@@ -15,6 +15,7 @@ import { IProduct } from '@/interfaces/products'
 import { ICategories } from '@/interfaces/categories'
 import { LoadingItem } from '@/components/LoadingItem'
 import { setShippingMethod } from '@/store/cart/shoppingSlice'
+import { setPickUpTime } from '@/store/places/placesSlice'
 
 const NAV_LINKS = [
   { id: 'section-1', label: 'Section 1', isActive: false },
@@ -25,7 +26,7 @@ const NAV_LINKS = [
 const ProductsPage = () => {
   const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
   const { cart, pickup_or_delivery } = useSelector((state: any) => state.shopping)
-  const { userDirection } = useSelector((state: any) => state.places)
+  const { userDirection, pickUpTime } = useSelector((state: any) => state.places)
   const { data: categories, isLoading } = useSwrFetcher('/api/categories')
   const [navLinks, setNavLinks] = useState(NAV_LINKS);
   const { data: products } = useSwrFetcher('/api/products')
@@ -194,7 +195,7 @@ const ProductsPage = () => {
                           <div>
                             <Image src={item.image} alt='' height={50} width={70} style={{
                               height: '100%',
-                              objectFit: 'cover'
+                              objectFit: 'contain'
                             }} />
                           </div>
                         </div>
@@ -245,10 +246,11 @@ const ProductsPage = () => {
                   <p>Para</p>
                   <Select
                     className={styles.order__select}
-                    // onChange={(value) => dispatch(setPickUpTime(value))}
-                    style={{ width: 'calc(100% - 80px)', visibility: pickup_or_delivery === 'delivery' ? 'hidden' : 'visible' }}
+                    onChange={(value) => dispatch(setPickUpTime(value))}
+                    style={{ width: 'calc(100% - 80px)' }}
+                    value={pickUpTime}
                   >
-                    <option value="1">Mañana (7:00am - 12:00pm)</option>
+                    <option value="Mañana (7:00am - 12:00pm)">Mañana (7:00am - 12:00pm)</option>
                     <option value="2">Mediodia (12:00pm - 14:00pm)</option>
                     <option value="3">Tarde (16:00pm - 21:00pm)</option>
                   </Select>

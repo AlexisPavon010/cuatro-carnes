@@ -1,27 +1,27 @@
-import Head from "next/head";
-import { Button, Card, Form, Input, Result, Select } from "antd";
+import { Button, Card, Form, Input, Radio, Result, Select, Space } from "antd";
 import { useSession } from "next-auth/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react'
 import { parseCookies, setCookie } from "nookies";
 
 import { Layout } from "@/components/Layout";
 import styles from './styles.module.scss'
-import { getCartTotal } from "@/store/cart/shoppingSlice";
+import { emptyCart, getCartTotal } from "@/store/cart/shoppingSlice";
 import { createOrder } from "@/client";
 import { useRouter } from "next/router";
 
 const { Option } = Select;
 
 const CheckoutPage = () => {
-  const [form] = Form.useForm();
-  const [success, setSuccess] = useState(false)
-  const [orderID, setOrderID] = useState('000000')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const { data: session }: any = useSession()
-  const { cart } = useSelector((state: any) => state.shopping)
   const { userDirection, userLocation } = useSelector((state: any) => state.places)
+  const { cart } = useSelector((state: any) => state.shopping)
+  const [orderID, setOrderID] = useState('000000')
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const { data: session }: any = useSession()
+  const [form] = Form.useForm();
+  const router = useRouter()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!session) return
@@ -32,6 +32,7 @@ const CheckoutPage = () => {
   }, [session])
 
   const {
+    reference,
     address,
     phone,
     code
@@ -40,6 +41,7 @@ const CheckoutPage = () => {
   const onFinish = (values: any) => {
     setLoading(true)
     setCookie(null, 'address', values.address, { path: '/', })
+    setCookie(null, 'reference', values.reference, { path: '/', })
     setCookie(null, 'code', values.code, { path: '/', })
     setCookie(null, 'phone', values.phone, { path: '/', })
     console.log({
@@ -59,6 +61,7 @@ const CheckoutPage = () => {
         console.log(data)
         setSuccess(true)
         setOrderID(data.uniqueID)
+        dispatch(emptyCart())
       })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false))
@@ -92,7 +95,12 @@ const CheckoutPage = () => {
       {success ? (
         <div className={styles.checkout}>
           <div className={styles.checkout__container}>
-            <Card>
+            <Card
+              style={{ border: 'none' }}
+              bodyStyle={{
+                backgroundColor: '#f4e8e4'
+              }}
+            >
               <Result
                 status="success"
                 title="Su orden fue tomada con exito"
@@ -129,7 +137,7 @@ const CheckoutPage = () => {
                     <Form.Item
                       label="Tu nombre"
                       name="username"
-                      rules={[{ required: true, message: 'Please input your username!' }]}
+                      rules={[{ required: true, message: 'Escriba su nombre' }]}
                     >
                       <Input name="username" className={styles.checkout__input} />
                     </Form.Item>
@@ -137,7 +145,7 @@ const CheckoutPage = () => {
                     <Form.Item
                       label="Correo electronico"
                       name="email"
-                      rules={[{ required: true, message: 'Please input your password!' }]}
+                      rules={[{ required: true, message: 'Escriba su correo' }]}
                     >
                       <Input type="email" className={styles.checkout__input} />
                     </Form.Item>
@@ -160,13 +168,38 @@ const CheckoutPage = () => {
                     </Form.Item>
 
                     <Form.Item
-                      label="Direccion"
+                      label="Dirección"
                       name="address"
                       initialValue={userDirection || address}
-                      rules={[{ required: true, message: 'Please input your username!' }]}
+                      rules={[{ required: true, message: 'Escriba una dirección' }]}
                     >
                       <Input className={styles.checkout__input} />
                     </Form.Item>
+
+                    <Form.Item
+                      label="Piso / Timbre / Lote"
+                      initialValue={reference}
+                      name="reference"
+                    >
+                      <Input className={styles.checkout__input} />
+                    </Form.Item>
+
+                    <Space>
+                      <Form.Item
+                        label="Medios de Pago"
+                        name="paymentOption"
+                        initialValue='payment_market'
+                        rules={[{ required: true, message: 'Seleccione un metodo de pago' }]}
+                      >
+                        <Radio.Group>
+                          <Radio value='credit_card'>Tarjeta de Credito</Radio>
+                          <Radio value='debit_card'>Tarjeta de Debito</Radio>
+                          <Radio value='cash'>Efectivo</Radio>
+                          <Radio value='bank_transfer'>Transferencia</Radio>
+                          <Radio value='payment_market'>Mercado Pago</Radio>
+                        </Radio.Group>
+                      </Form.Item>
+                    </Space>
 
                     <Form.Item>
                       <Button loading={loading} block type="primary" htmlType="submit">
