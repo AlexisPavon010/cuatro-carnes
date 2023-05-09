@@ -28,7 +28,7 @@ export const CartItem = () => {
           <div className={styles.cart__end}>
             <span className={styles.cart__end_price}>${item.price.toFixed(2)}</span>
             <button onClick={() => removeItemToCart(item._id)} className={styles.cart__end_button}>
-              <AiOutlineClose color='#502314' />
+              <AiOutlineClose color='#a92b3c' />
             </button>
           </div>
         </div>
@@ -44,7 +44,7 @@ export const CartItem = () => {
       <button onClick={() => router.push('/checkout')} className={styles.cart__button}>
         <span className={styles.cart__button_content}>
           <div>${getCartTotal(cart)}</div>
-          <div>Pagar ahora</div>
+          <div>Pedir</div>
         </span>
       </button>
     </>
