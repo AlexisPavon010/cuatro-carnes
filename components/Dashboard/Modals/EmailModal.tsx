@@ -7,6 +7,7 @@ import axios from 'axios';
 export const EmailModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
+  const { email } = isModalOpen.order || {}
 
   const handleCancel = () => {
     setIsModalOpen({ visible: false, id: undefined });
@@ -17,6 +18,7 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: any) => {
     fileList.forEach((file) => {
       formData.append('file', file as RcFile);
     });
+    formData.append('email', email);
     setUploading(true);
     axios
       .post('/api/email', formData)
