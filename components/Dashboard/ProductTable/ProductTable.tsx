@@ -149,7 +149,6 @@ export const ProductTable = () => {
           <Col>
             <Space wrap>
               <Button onClick={() => setIsDrawerOpen({ visible: true, id: undefined })} type="primary">Ingresar Producto</Button>
-              <Button>Default Button</Button>
             </Space>
           </Col>
         </Row>
