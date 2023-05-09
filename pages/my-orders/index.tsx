@@ -1,4 +1,4 @@
-import { Badge, Card, List, Typography } from 'antd'
+import { Avatar, Badge, List, Space, Typography } from 'antd'
 import { getSession } from 'next-auth/react';
 import { GetServerSideProps } from 'next';
 
@@ -22,18 +22,24 @@ const OrderPage = ({ orders }: OrderPageProps) => {
             bordered
             dataSource={orders}
             renderItem={(order) => (
-              <List.Item
-                extra={[
-                  <Typography.Text >${order.total}</Typography.Text>
-                ]}
-              >
-                {order.items.map((item: IProduct) => (
-                  <Typography.Text>
-                    <Badge count={item.quantity} />
-                    {item.title}
-                  </Typography.Text>
-                ))}
-              </List.Item>
+              order.items.map((item: IProduct) => (
+                <List.Item
+                  key={item.title}
+                  extra={
+                    < Space >
+                      <Typography.Text>${item.price}</Typography.Text>
+                      <Typography.Text>${item.price * item.quantity}</Typography.Text>
+                      <Badge count={item.quantity} />
+                    </Space >
+                  }
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar shape='square' src={item.image} />}
+                    title={item.title}
+                    description={item.description}
+                  />
+                </List.Item >
+              ))
             )}
           />
         </div>
@@ -49,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!session) {
     return {
       redirect: {
-        destination: '/auth/signin?p=/order/history',
+        destination: '/auth/signin?p=/my-orders',
         permanent: false,
       }
     }
