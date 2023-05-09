@@ -29,6 +29,7 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
 
   useEffect(() => {
     form.resetFields()
+    setOptions([])
     if (!open.id) return
     getOptionById(open.id)
       .then(({ data }) => {
@@ -70,16 +71,16 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
               })
               .catch((error) => console.log(error))
               .finally(() => setLoading(false))
+          } else {
+            updateOptions(open.id!, values)
+              .then((response) => {
+                mutate(null)
+                form.resetFields()
+                onClose({ id: undefined, visible: false })
+              })
+              .catch((error) => console.log(error))
+              .finally(() => setLoading(false))
           }
-
-          updateOptions(open.id!, values)
-            .then((response) => {
-              mutate(null)
-              form.resetFields()
-              onClose({ id: undefined, visible: false })
-            })
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(false))
         }}
         autoComplete="off"
         requiredMark={false}
@@ -127,7 +128,7 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
                   </Tooltip>,
                 ]}
               >
-                <Typography.Text mark>{item.name}</Typography.Text>
+                <Typography.Text>{item.name}</Typography.Text>
               </List.Item>
             )}
           />
@@ -144,6 +145,11 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
 
 const NewItemModal = ({ id, open, setOpenModal, setOptions }: any) => {
   const [form] = Form.useForm()
+
+  useEffect(() => {
+    form.resetFields()
+  }, [open])
+
   return (
     <Modal
       title='Agregar un Item'
@@ -160,13 +166,14 @@ const NewItemModal = ({ id, open, setOpenModal, setOptions }: any) => {
           if (!id) {
             setOptions((prevState: any) => [...prevState, values])
             setOpenModal(false)
+          } else {
+            createItemOptions(id, values)
+              .then(({ data }) => {
+                setOptions(data.items);
+                setOpenModal(false)
+              })
+              .catch((error) => console.log(error))
           }
-          createItemOptions(id, values)
-            .then(({ data }) => {
-              setOptions(data.items);
-              setOpenModal(false)
-            })
-            .catch((error) => console.log(error))
         }}
         onFinishFailed={() => { }}
       >
@@ -194,19 +201,22 @@ const EditItemModal = ({ id, open, setOpenEditModal, setOptions }: any) => {
   const [form] = Form.useForm()
 
   useEffect(() => {
-    getItemOptionById(id, open.itemId)
-      .then(({ data }) => {
-        console.log(data)
-        form.setFieldsValue(data)
-      })
-      .catch((error) => console.log(error))
-  }, [open.itemId])
+    if (open.visible)
+      getItemOptionById(id, open.itemId)
+        .then(({ data }) => {
+          console.log(data)
+          form.setFieldsValue(data)
+        })
+        .catch((error) => console.log(error))
+  }, [open.visible])
 
 
   return (
     <Modal
       title='Editar item'
       open={open.visible}
+      okText='Actualizar'
+      cancelText='Cancelar'
       onOk={() => form.submit()}
       onCancel={() => setOpenEditModal({ visible: false, itemId: undefined })}
     >
@@ -217,7 +227,6 @@ const EditItemModal = ({ id, open, setOpenEditModal, setOptions }: any) => {
         onFinish={(values: any) => {
           updateItemOptions(id, open.itemId, values)
             .then(({ data }) => {
-              console.log(data.items)
               setOptions(data.items)
               setOpenEditModal({ visible: false, itemId: undefined })
             })
@@ -251,13 +260,17 @@ const DeletedItemModal = ({ id, open, setOptions, setOpenDeletedModal }: any) =>
       title='Eliminar Item'
       open={open.visible}
       onOk={() => {
-        deletedItemOptions(id, open.itemId)
-          .then(({ data }) => {
-            console.log(data)
-            setOptions(data.items)
-            setOpenDeletedModal({ visible: false, itemId: undefined })
-          })
-          .catch((error) => console.log(error))
+        if (!id) {
+          setOptions([])
+          setOpenDeletedModal({ visible: false, itemId: undefined })
+        } else {
+          deletedItemOptions(id, open.itemId)
+            .then(({ data }) => {
+              setOptions(data.items)
+              setOpenDeletedModal({ visible: false, itemId: undefined })
+            })
+            .catch((error) => console.log(error))
+        }
       }}
       onCancel={() => setOpenDeletedModal({ visible: false, itemId: undefined })}
     >
