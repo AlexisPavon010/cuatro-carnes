@@ -132,7 +132,7 @@ const CreateOrder = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { phoneNumber = '5493751307791' } = req.body
+  const { phone = '5493751307791' } = req.body
   const session: any = await getSession({ req })
 
   try {
@@ -142,7 +142,7 @@ const CreateOrder = async (
       userID: session.user.id
     })
     axios.post('http://54.209.160.199:8000/send-message', {
-      phoneNumber,
+      phoneNumber: phone,
       uniqueID: data.uniqueID
     })
 

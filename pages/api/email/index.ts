@@ -35,6 +35,7 @@ const parseFile = (req: NextApiRequest) => {
 }
 
 const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+  const { email = '' } = req.body;
   const CLIENT_ID = process.env.NEXT_PUBLIC_NODEMAILER_CLIENT_ID
   const CLIENT_SECRET = process.env.NODEMAILER_CLIENT_SECRET
   const REDIRECT_URI = process.env.NODEMAILER_REDIRECT_URL
@@ -70,7 +71,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
     const mailOptions = {
       from: 'themaster034@gmail.com',
-      to: 'themaster034@gmail.com',
+      to: email,
       subject: 'Hello from gmail using API',
       text: 'Hello from gmail email using API',
       attachments: [
