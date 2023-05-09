@@ -8,7 +8,7 @@ import styles from './styles.module.scss'
 
 export const Header = ({ openDrawer }: any) => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session }: any = useSession()
 
   const items: MenuProps['items'] = [
     {
@@ -52,11 +52,13 @@ export const Header = ({ openDrawer }: any) => {
               <div className={styles.header__nav_item}>
                 Cupones
               </div>
-              <div className={styles.header__nav_item}>
-                <Link href='/dashboard'>
-                  Dashboard
-                </Link>
-              </div>
+              {session?.user.role === 'admin' && (
+                <div className={styles.header__nav_item}>
+                  <Link href='/dashboard'>
+                    Dashboard
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.header__nav_end}>

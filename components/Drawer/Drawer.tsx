@@ -10,7 +10,7 @@ interface DrawerProps {
 }
 
 export const Drawer = ({ isDrawerOpen, closeDrawer }: DrawerProps) => {
-  const { data: session } = useSession()
+  const { data: session }: any = useSession()
 
   return (
     <AntdDrawer
@@ -29,15 +29,17 @@ export const Drawer = ({ isDrawerOpen, closeDrawer }: DrawerProps) => {
           <Link className={styles.drawer__item} href="/">
             Configuración de la cuenta
           </Link>
-          <Link className={styles.drawer__item} href="/">
+          <Link className={styles.drawer__item} href="/my-orders">
             Mis pedidos
           </Link>
           <Link className={styles.drawer__item} href="/">
             Métodos de pago
           </Link>
-          <Link className={styles.drawer__item} href="/dashboard">
-            Dashboard
-          </Link>
+          {session?.user.role === 'admin' && (
+            <Link className={styles.drawer__item} href="/dashboard">
+              Dashboard
+            </Link>
+          )}
           <Link onClick={() => signOut()} className={styles.drawer__item} href="#">
             Cerrar Sesión
           </Link>
