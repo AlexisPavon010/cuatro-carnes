@@ -1,9 +1,12 @@
+import { IOption } from "./options";
+
 export interface IProduct {
   _id: string;
   title: string;
   price: number;
   image: string;
   status: boolean;
+  options?: IOption[];
   quantity?: number;
   category: string;
   q_stock: number;
