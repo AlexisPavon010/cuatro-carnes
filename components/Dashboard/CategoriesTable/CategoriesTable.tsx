@@ -67,7 +67,7 @@ export const CategoriesTable = () => {
   return (
     <>
       <Card>
-        <Row>
+        <Row gutter={[0, 12]}>
           <Col xs={24} md={6} lg={6}>
             <Search
               onChange={({ target }) => {
@@ -83,7 +83,6 @@ export const CategoriesTable = () => {
           <Col>
             <Space wrap>
               <Button onClick={() => setIsDrawerOpen({ visible: true, id: undefined })} type="primary">Ingresar Categoría</Button>
-              <Button>Default Button</Button>
             </Space>
           </Col>
         </Row>
