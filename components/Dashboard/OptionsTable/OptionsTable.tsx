@@ -1,15 +1,16 @@
 import { Button, Card, Col, Dropdown, MenuProps, Row, Space, Table, Tag } from "antd"
 import { ColumnsType } from "antd/es/table";
-import { useState } from 'react'
+import { BiPencil } from "react-icons/bi";
+import { BsTrash } from "react-icons/bs";
+import { useState } from 'react';
 
 import { AddOption } from "../Drawers/AddOption";
 import { useSwrFetcher } from "@/hooks/useSwrFetcher";
-import { BiPencil } from "react-icons/bi";
-import { AiOutlineLock, AiOutlineMenu, AiOutlineUnlock } from "react-icons/ai";
-import { MdOutlineComputer } from "react-icons/md";
+import { DeleteOption } from "../Modals/DeleteOption";
 
 export const OptionsTable = () => {
   const [openOption, setOpenOption] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined })
+  const [openDeletedOption, setDeletedOption] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined })
   const [selectedRecord, setSelectedRecord] = useState<any | undefined>(undefined);
   const { data, error, isLoading, mutate } = useSwrFetcher('/api/options')
 
@@ -21,22 +22,10 @@ export const OptionsTable = () => {
       onClick: () => setOpenOption({ visible: true, id: record?._id! })
     },
     {
-      key: '3',
-      icon: <AiOutlineMenu size={14} />,
-      label: 'Opciones',
-      onClick: () => console.log({ visible: true, id: record?._id! })
-    },
-    {
-      key: '4',
-      icon: record?.status ? <AiOutlineLock size={14} /> : <AiOutlineUnlock size={14} />,
-      label: record?.status ? 'Desactivar' : 'Activar',
-      onClick: () => console.log(record?._id!, record?.status!)
-    },
-    {
       key: '5',
-      icon: <MdOutlineComputer size={14} />,
+      icon: <BsTrash size={14} />,
       label: 'Eliminar',
-      onClick: () => console.log({ visible: true, id: record?._id! })
+      onClick: () => setDeletedOption({ visible: true, id: record?._id! })
     }
   ];
 
@@ -107,6 +96,11 @@ export const OptionsTable = () => {
         mutate={mutate}
         onClose={setOpenOption}
         open={openOption}
+      />
+      <DeleteOption
+        mutate={mutate}
+        onClose={setDeletedOption}
+        open={openDeletedOption}
       />
     </>
   )
