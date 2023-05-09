@@ -4,6 +4,7 @@ import Joi from 'joi'
 
 import Order from '@/models/Order'
 import '../../../database/db'
+import { getSession, useSession } from 'next-auth/react'
 
 type Data = {
   message: string
@@ -100,13 +101,18 @@ const getOrders = async (
       createdAt: {
         $gte: startOfDay,
         $lt: endOfDay
-      }
+      },
     }).count(),
     Order.find({ status: 'CANCELLED' }).count(),
-    Order.find({ status: 'DELIVERED' }).count(),
+    Order.find({
+      status: 'DELIVERED',
+      createdAt: {
+        $gte: startOfDay,
+        $lt: endOfDay
+      }
+    }).count(),
     Order.find({ status: 'PENDING' }).count(),
   ])
-
 
   return res.status(200).json({
     metadata: {
@@ -127,9 +133,14 @@ const CreateOrder = async (
   res: NextApiResponse<any>
 ) => {
   const { phoneNumber = '5493751307791' } = req.body
+  const session: any = await getSession({ req })
+
   try {
     // await schema.validateAsync(req.body);
-    const data = await Order.create(req.body)
+    const data = await Order.create({
+      ...req.body,
+      userID: session.user.id
+    })
     axios.post('http://54.209.160.199:8000/send-message', {
       phoneNumber,
       uniqueID: data.uniqueID
