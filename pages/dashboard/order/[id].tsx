@@ -1,4 +1,4 @@
-import { Button, Card, Col, Descriptions, List, Row, Tag, Typography } from 'antd';
+import { Avatar, Badge, Button, Card, Col, Descriptions, List, Row, Space, Tag, Typography } from 'antd';
 import mapboxgl, { Map, Marker, LngLatBounds, AnySourceData } from 'mapbox-gl'
 import { useRouter } from 'next/router';
 import { useRef, useEffect } from 'react'
@@ -10,6 +10,9 @@ import { Layout } from '@/components/Dashboard/Layout';
 import { directionsApi } from '@/client/Direction';
 import { IOrder } from '@/interfaces/order';
 import { getOrdersById } from '@/database/dbOrders';
+import { IProduct } from '@/interfaces/products';
+import { IItem } from '@/interfaces/options';
+import { STATUSES } from '@/constants/status';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 
@@ -23,11 +26,10 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
   const mapRef = useRef<Map>()
   const router = useRouter()
 
-  console.log(order.cords)
 
   const getRoutesBetweenPoints = async () => {
     if (!order.cords) return;
-    const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.826729%2C-27.469368`)
+    const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.5834884218762%2C-34.445437599619716`)
     const { geometry } = data.routes[0]
 
     const bounds = new LngLatBounds(order.cords, order.cords)
@@ -78,7 +80,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     })
 
     new Marker()
-      .setLngLat([-58.826729, -27.469368])
+      .setLngLat([-58.5834884218762, -34.445437599619716])
       .addTo(mapRef.current!)
   }
 
@@ -125,32 +127,57 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         </Row>
       </Card>
       <Card style={{ marginBottom: '20px' }}>
-        <Descriptions column={{ xs: 1, sm: 1, lg: 2 }} title={`Pedido Nro. #${order.uniqueID}`} size='small' extra={<Tag>{order.status}</Tag>}>
+        <Descriptions column={{ xs: 1, sm: 1, lg: 1 }} title={`Pedido Nro. #${order.uniqueID}`} size='small' extra={<Tag color={STATUSES.find(status => status.value === order.status)?.color}>{STATUSES.find(status => status.value === order.status)?.label}</Tag>}>
           <Descriptions.Item label="Nombre">{order.username}</Descriptions.Item>
           <Descriptions.Item label="Email">{order.email}</Descriptions.Item>
           <Descriptions.Item label="Domicilio">{order.address || '--------'}</Descriptions.Item>
-          <Descriptions.Item label="Celular">{order.phone ? order.phone : '0000000'}</Descriptions.Item>
+          <Descriptions.Item label="Celular">+{order.phone ? order.phone : '0000000'}</Descriptions.Item>
           <Descriptions.Item label="Fecha alta">{moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</Descriptions.Item>
-          <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
+          <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' || 'DELIVERED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
         </Descriptions>
       </Card>
       <List
-        header={<Descriptions title="Items del pedido" size='small' extra={`(${order.items ? order.items.length : 0}) items`} />}
+        header={<Descriptions title="Detalles del pedido" size='small' extra={`(${order.items ? order.items.length : 0}) items`} />}
         footer={
           <Descriptions column={{ xs: 1, sm: 2, lg: 4 }}>
             <Descriptions.Item label="Subtotal">${order.total && order.total.toFixed(2)}</Descriptions.Item>
-            <Descriptions.Item label="Descuentos ">$80.00</Descriptions.Item>
-            <Descriptions.Item label="Envío">$60.00</Descriptions.Item>
+            <Descriptions.Item label="Descuentos ">$0.00</Descriptions.Item>
+            <Descriptions.Item label="Envío">$0.00</Descriptions.Item>
             <Descriptions.Item label="Total">${order.total && order.total.toFixed(2)}</Descriptions.Item>
           </Descriptions>
         }
-        renderItem={(item: any) => (
-          <List.Item>
-            <Typography.Text>{item.title}</Typography.Text>
-          </List.Item>
-        )}
+        renderItem={(item: IProduct) => (
+          <List.Item
+            key={item.title}
+            actions={[
+              <Space direction='vertical'>
+                {
+                  item.options?.map((item) => (
+                    <Typography style={{ textAlign: 'start' }}>{item.name}: {item?.item?.name}</Typography>
+                  ))
+                }
+              </Space>
+            ]}
+            extra={
+              < Space >
+                <Typography.Text>${item.price}</Typography.Text>
+                <Typography.Text>${item.price * item.quantity}</Typography.Text>
+                <Badge count={item.quantity} />
+              </Space >
+            }
+          >
+            <List.Item.Meta
+              avatar={<Avatar shape='square' src={item.image} />}
+              title={item.title}
+              description={item.description}
+            />
+            {/* {item.content} */}
+          </List.Item >
+        )
+        }
         style={{ marginBottom: '20px' }}
         dataSource={order.items}
+        itemLayout="vertical"
         bordered
       />
       <Card id="section-not-print">
