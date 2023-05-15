@@ -28,10 +28,6 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
   const mapRef = useRef<Map>()
   const router = useRouter()
 
-
-  console.log(order)
-
-
   const getRoutesBetweenPoints = async () => {
     if (!order.cords) return;
     const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.5834884218762%2C-34.445437599619716`)
