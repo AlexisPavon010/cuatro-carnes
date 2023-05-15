@@ -17,6 +17,7 @@ import { LoadingItem } from '@/components/LoadingItem';
 import { setPickUpTime } from '@/store/places/placesSlice';
 import { getCartTotal, setShippingMethod } from '@/store/cart/shoppingSlice';
 import { CartItemMobile } from '@/components/CartItemMobile'
+import { OfferItem } from '@/components/OfferItem'
 
 const ProductsPage = () => {
   const [openCartMobile, setOpenCartMobile] = useState(false)
@@ -79,15 +80,7 @@ const ProductsPage = () => {
               {
                 filterProductsByOffers(products).map((product, i) => (
                   <SwiperSlide key={i}>
-                    <div className={styles.slider__list_item} >
-                      <div className={styles.slider__list_item_image}>
-                        <Image src={product.image} width={150} height={120} alt='' />
-                        <div className={styles.slider__list_item_price}>
-                          ${product.offert_price.toFixed(2)}
-                        </div>
-                      </div>
-                      <h3 className={styles.slider__list_item_text}>{product.title}</h3>
-                    </div>
+                    <OfferItem product={product} />
                   </SwiperSlide>
                 ))
               }

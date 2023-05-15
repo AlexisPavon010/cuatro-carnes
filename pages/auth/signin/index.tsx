@@ -39,6 +39,7 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
     } catch (error: any) {
       console.log(error)
       setShowError(true)
+      setLoading(true)
       setErrorMessage(error.response.data.message)
       setTimeout(() => {
         setShowError(false)

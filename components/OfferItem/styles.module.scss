@@ -1,0 +1,35 @@
+.slider__list_item {
+  padding: 16px 0;
+  font-size: 17px;
+}
+
+.slider__list_item_price {
+  color: white;
+  background-color: #c94f64;
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.slider__list_item_image {
+  position: relative;
+  height: 240px;
+  background-image: url('/assets/ofertas_cuatro_carnes.jpg');
+  border-radius: 16px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider__list_item_text {
+  padding: 16px 0;
+  font-size: 17px;
+}

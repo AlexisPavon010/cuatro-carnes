@@ -112,9 +112,10 @@ const CheckoutPage = () => {
         <div className={styles.checkout}>
           <div className={styles.checkout__container}>
             <Card
-              style={{ border: 'none' }}
+              style={{ border: 'none', padding: 0 }}
               bodyStyle={{
-                backgroundColor: '#f4e8e4'
+                backgroundColor: '#f4e8e4',
+                padding: 0
               }}
             >
               <Result

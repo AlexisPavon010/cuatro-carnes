@@ -4,9 +4,15 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link'
 import 'swiper/css';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
+import { IProduct } from '@/interfaces/products';
+import { OfferItem } from '../OfferItem';
 
-export const Slider = () => {
+interface SliderProps {
+  products: IProduct[]
+}
+
+export const Slider = ({ products }: SliderProps) => {
   const swiperRef = useRef<any>(null);
   const swiper = useRef<any>(null);
 
@@ -54,20 +60,9 @@ export const Slider = () => {
                 }
               }}
             >
-              {['https://cdn.discordapp.com/attachments/1064025760932823051/1087746422360776714/Oferta1.jpg',
-                'https://cdn.discordapp.com/attachments/1064025760932823051/1087746422360776714/Oferta1.jpg',
-                'https://cdn.discordapp.com/attachments/1064025760932823051/1087746422360776714/Oferta1.jpg',
-                'https://cdn.discordapp.com/attachments/1064025760932823051/1087746422360776714/Oferta1.jpg',
-              ].map((_, i) => (
+              {products.map((product, i) => (
                 <SwiperSlide key={i}>
-                  <div className={styles.slider__list_item}>
-                    <div className={styles.slider__list_item_image} style={{ backgroundImage: `url(${_})` }}>
-                      <div className={styles.slider__list_item_price}>
-                        $ 2600.00
-                      </div>
-                    </div>
-                    <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
-                  </div>
+                  <OfferItem product={product} />
                 </SwiperSlide>
               ))}
             </Swiper>
