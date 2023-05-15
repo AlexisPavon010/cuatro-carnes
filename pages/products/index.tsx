@@ -17,8 +17,10 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingItem } from '@/components/LoadingItem';
 import { setPickUpTime } from '@/store/places/placesSlice';
 import { getCartTotal, setShippingMethod } from '@/store/cart/shoppingSlice';
+import { CartItemMobile } from '@/components/CartItemMobile'
 
 const ProductsPage = () => {
+  const [openCartMobile, setOpenCartMobile] = useState(false)
   const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
   const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
   const { userDirection, pickUpTime } = useSelector((state: any) => state.places)
@@ -190,12 +192,15 @@ const ProductsPage = () => {
               }
               {cart.length > 0 && (
                 <div className={styles.list__mobile_content}>
-                  <button onClick={() => router.push('/checkout')} className={styles.list__mobile_button}>
+                  <button onClick={() => setOpenCartMobile(true)} className={styles.list__mobile_button}>
                     <span className={styles.list__mobile_button_content}>
-                      <div>${calculateDiscountedPrice()}</div>
-                      <div>Pedir</div>
+                      <div>Ver la orden</div>
                     </span>
                   </button>
+                  <CartItemMobile
+                    open={openCartMobile}
+                    close={setOpenCartMobile}
+                  />
                 </div>
               )}
             </div>

@@ -1,0 +1,145 @@
+.cart {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  min-width: 0;
+  margin-bottom: 24px;
+}
+
+.cart__start {
+  flex-grow: 0 !important;
+  flex-shrink: 1 !important;
+}
+
+.cart__start_span {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: #ABABAD;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -.34px;
+  color: white;
+}
+
+.cart__center {
+  flex-grow: 0 !important;
+  flex-shrink: 1 !important;
+}
+
+.cart__center_title {
+  text-align: left;
+  width: 100%;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.41;
+  letter-spacing: -.41px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.cart__center_description {
+  color: gray;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  letter-spacing: -.34px;
+}
+
+.cart__end {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -.34px;
+  display: flex;
+  margin-left: 12px;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-shrink: 0 !important;
+  flex-grow: 1 !important;
+  flex: 1 1 auto;
+  max-width: 100%;
+  flex-wrap: nowrap;
+  min-width: 0;
+  height: 100%;
+}
+
+.cart__end_price {}
+
+.cart__end_button {
+  margin-left: 12px;
+  display: flex;
+  height: auto;
+  width: auto;
+  min-width: auto;
+  padding: 0;
+  background: 0 0;
+  border-radius: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-style: normal;
+  letter-spacing: -.48px;
+  box-shadow: none;
+  border: none;
+}
+
+.cart__subtotal {
+  border-top: 1px solid #2c2c3133;
+  padding: 19px 0 17px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart__subtotal_text {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 32px;
+  letter-spacing: -.53px;
+}
+
+.cart__subtotal_price {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 32px;
+  letter-spacing: -.53px;
+}
+
+.list__mobile_content {
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 0;
+  padding: 12px;
+}
+
+.list__mobile_button {
+
+  cursor: pointer;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 24px;
+  border: none;
+  background-color: #a92b3c;
+  border-radius: 32px;
+  color: white;
+
+  width: calc(100% - 20px);
+  margin: 12px 12px;
+}
+
+.list__mobile_button_content {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 20px;
+}
