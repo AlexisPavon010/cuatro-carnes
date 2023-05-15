@@ -1,5 +1,6 @@
 export interface IOption {
-  item?: IItem;
+  price: string;
+  title: string;
   _id: string,
   name: string,
   quantity: number,

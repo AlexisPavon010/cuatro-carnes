@@ -1,6 +1,7 @@
 import { IOption } from "./options";
 
 export interface IProduct {
+  stock: string;
   _id: string;
   title: string;
   price: number;
@@ -12,4 +13,5 @@ export interface IProduct {
   q_stock: number;
   kg_stock: number;
   description: string;
+  offert_price: number;
 }
