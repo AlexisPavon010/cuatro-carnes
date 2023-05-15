@@ -14,9 +14,7 @@ export const Footer = () => {
             <h5 className={styles.footer__menu_info_text}>Links Rápidos</h5>
             <p className={styles.footer__menu_info_subtitle}>Menú</p>
             <p className={styles.footer__menu_info_subtitle}>Locales</p>
-            <p className={styles.footer__menu_info_subtitle}>Ofertas</p>
             <p className={styles.footer__menu_info_subtitle}>Nosotros</p>
-            <p className={styles.footer__menu_info_subtitle}>Cupones</p>
           </div>
           <div className={styles.footer__menu_info_center}>
             <h5 className={styles.footer__menu_info_text}>Información</h5>
@@ -25,10 +23,7 @@ export const Footer = () => {
           <div className={styles.footer__menu_info_end}>
             <h5 className={styles.footer__menu_info_text}>Compañía</h5>
             <p className={styles.footer__menu_info_subtitle}>Contáctanos</p>
-            <p className={styles.footer__menu_info_subtitle}>Empleo</p>
-            <p className={styles.footer__menu_info_subtitle}>Delivery</p>
             <p className={styles.footer__menu_info_subtitle}>Política de privacidad</p>
-            <p className={styles.footer__menu_info_subtitle}>Defensa de las y los consumidores</p>
           </div>
         </div>
         <div className={styles.footer__bottom}>
