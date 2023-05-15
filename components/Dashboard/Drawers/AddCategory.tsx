@@ -1,8 +1,8 @@
-import { Button, Drawer, Form, Input } from "antd"
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Button, Drawer, Form, Input } from "antd";
 import { KeyedMutator } from "swr";
 
-import { createCategory } from "@/client";
+import { createCategory, getCategoryById, updateCategoryById } from "@/client";
 
 const { TextArea } = Input;
 
@@ -22,6 +22,17 @@ interface AddCategoryProps {
 export const AddCategory = ({ open, onClose, mutate }: AddCategoryProps) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    form.resetFields()
+    if (!open.id) return
+    getCategoryById(open.id)
+      .then(({ data }) => {
+        form.setFieldsValue(data)
+      })
+      .catch((error) => console.log(error))
+      .finally()
+  }, [open.id])
 
   return (
     <Drawer
@@ -45,14 +56,25 @@ export const AddCategory = ({ open, onClose, mutate }: AddCategoryProps) => {
         }}
         onFinish={(values) => {
           setLoading(true)
-          createCategory(values)
-            .then((response) => {
-              mutate(null)
-              form.resetFields()
-              onClose({ id: undefined, visible: false })
-            })
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(false))
+          if (!open.id) {
+            createCategory(values)
+              .then((response) => {
+                mutate(null)
+                form.resetFields()
+                onClose({ id: undefined, visible: false })
+              })
+              .catch((error) => console.log(error))
+              .finally(() => setLoading(false))
+          } else {
+            updateCategoryById(open.id, values)
+              .then((response) => {
+                mutate(null)
+                form.resetFields()
+                onClose({ id: undefined, visible: false })
+              })
+              .catch((error) => console.log(error))
+              .finally(() => setLoading(false))
+          }
         }}
         autoComplete="off"
         requiredMark={false}
