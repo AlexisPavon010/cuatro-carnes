@@ -8,6 +8,7 @@ import Image from "next/image";
 import styles from './styles.module.scss'
 import { IProduct } from "@/interfaces/products"
 import { addToCart } from "@/store/cart/shoppingSlice"
+import { IItem } from "@/interfaces/options";
 
 interface OrderModalProps {
   open: { visible: boolean, product: undefined | IProduct };
@@ -19,6 +20,9 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
   const [selectedOptions, setSelectedOptions] = useState<any>([])
   const dispatch = useDispatch()
   const { image, title, price, description } = open.product || {}
+
+  const productsWithItem = selectedOptions.filter((item: IItem) => item.item);
+  const options = productsWithItem.map((item: IItem) => ({ title: item.name, name: item.item.name, price: item.item.price }));
 
   const handleOptionChange = (optionName: string, item: any) => {
     setSelectedOptions((prevSelectedOptions: any) => {
@@ -37,6 +41,7 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
   };
 
   useEffect(() => {
+    setCount(1)
     setSelectedOptions(
       open.product?.options?.map(option => ({
         name: option.name,
@@ -49,7 +54,7 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
     dispatch(addToCart({
       quantity: count,
       ...open.product,
-      options: selectedOptions
+      options: options
     }))
     close({ visible: false, product: undefined })
   }
@@ -69,6 +74,9 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
             alt={title!}
             width={300}
             height={270}
+            style={{
+              objectFit: 'contain'
+            }}
           />
         </div>
         <div className={styles.modal__content}>
@@ -83,10 +91,10 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
               <div className={styles.modal__quantity_actions}>
                 <h3>Cantidad: {count}</h3>
                 <div className={styles.modal__quantity_buttons}>
-                  <Button onClick={() => setCount((value) => value < 1 ? 0 : value - 1)} size="large" shape="circle">
+                  <Button onClick={() => setCount((value) => value === 1 ? 1 : value - 1)} size="middle" shape="circle">
                     <AiOutlineMinus size={24} color='grey' />
                   </Button>
-                  <Button onClick={() => setCount(count + 1)} size="large" shape="circle" >
+                  <Button onClick={() => setCount(count + 1)} size="middle" shape="circle" >
                     <AiOutlinePlus size={24} color='grey' />
                   </Button>
                 </div>
@@ -99,8 +107,19 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
               <>
                 <div className={styles.modal_options_header}>
                   <h2 className={styles.modal_options_text}>{option.name}</h2>
+                  <h2 className={styles.modal_options_text}>Seleccione una opción</h2>
                 </div>
                 <div className={styles.modal_options_list}>
+                  <Button
+                    type="text"
+                    onClick={() => handleOptionChange(option.name, null)}
+                    disabled={!selectedOptions.some(
+                      (opt: any) =>
+                        opt.name === option.name
+                    )}
+                  >
+                    Quitar opciones
+                  </Button>
                   {option.items.map((item) => (
                     <div className={styles.modal_options_list_item}>
                       <Radio
@@ -116,6 +135,7 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
                         }
                       />
                       <span>{item.name}</span>
+                      <span>${item.price}</span>
                     </div>
                   ))}
                 </div>
