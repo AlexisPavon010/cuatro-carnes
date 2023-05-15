@@ -1,13 +1,15 @@
-import { Button, Modal, Upload, UploadFile, UploadProps, message } from "antd"
+import { Button, Modal, Upload, UploadFile, UploadProps, message } from "antd";
 import { BiUpload } from 'react-icons/bi';
 import { RcFile } from 'antd/es/upload';
 import { useState } from 'react';
 import axios from 'axios';
 
+import { updateOrder } from "@/client/Order";
+
 export const EmailModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
-  const { email } = isModalOpen.order || {}
+  const { uniqueID, email, _id } = isModalOpen.order || {}
 
   const handleCancel = () => {
     setIsModalOpen({ visible: false, id: undefined });
@@ -19,15 +21,20 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: any) => {
       formData.append('file', file as RcFile);
     });
     formData.append('email', email);
+    formData.append('uniqueID', uniqueID);
     setUploading(true);
     axios
       .post('/api/email', formData)
       .then((response) => {
         setFileList([]);
-        message.success('upload successfully.');
+        handleCancel()
+        message.success('Correo enviado con exito!.');
+        updateOrder(_id!, {
+          status: 'COMPLETED'
+        })
       })
       .catch((error) => {
-        message.error('upload failed.');
+        message.error('Error al enviar el correo.');
         console.log(error);
       })
       .finally(() => setUploading(false))
