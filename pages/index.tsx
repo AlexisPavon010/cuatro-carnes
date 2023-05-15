@@ -1,8 +1,17 @@
+import { GetServerSideProps } from 'next';
+
 import { Slider } from '@/components/Slider'
 import { Main } from '@/components/Main'
 import { Layout } from '@/components/Layout';
+import { getProductsOffers } from '@/database/dbOffers';
+import { IProduct } from '@/interfaces/products';
 
-export default function Home() {
+interface HomeProps {
+  products: IProduct[]
+}
+
+export default function Home({ products }: HomeProps) {
+
   return (
     <Layout
       title='Cuatro Carnes'
@@ -10,8 +19,19 @@ export default function Home() {
     >
       <main>
         <Main />
-        <Slider />
+        <Slider products={products} />
       </main>
     </Layout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+  const data = await getProductsOffers()
+
+  return {
+    props: {
+      products: data
+    }
+  }
 }
