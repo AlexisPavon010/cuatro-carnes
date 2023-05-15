@@ -13,14 +13,18 @@ interface OrderPageProps {
 }
 
 const OrderPage = ({ orders }: OrderPageProps) => {
+
   return (
     <Layout title='Mis Ordenes - Cuatro Carnes'>
       <div className={styles.orders}>
         <div className={styles.orders__container}>
           <List
-            header={<div>Mis Ordenes</div>}
+            header={<div>Total Pedidos</div>}
             bordered
             dataSource={orders}
+            pagination={{
+              pageSize: 5,
+            }}
             renderItem={(order) => (
               order.items.map((item: IProduct) => (
                 <List.Item
@@ -36,7 +40,7 @@ const OrderPage = ({ orders }: OrderPageProps) => {
                   <List.Item.Meta
                     avatar={<Avatar shape='square' src={item.image} />}
                     title={item.title}
-                    description={item.description}
+                    // description={item.description}
                   />
                 </List.Item >
               ))
