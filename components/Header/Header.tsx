@@ -1,14 +1,22 @@
 import { Dropdown, MenuProps, Skeleton } from 'antd';
 import { useSession, signOut } from 'next-auth/react';
+import { LoadingOutlined } from '@ant-design/icons';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import Link from 'next/link';
 
 import styles from './styles.module.scss'
 
 export const Header = ({ openDrawer }: any) => {
-  const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const { data: session }: any = useSession()
+  const router = useRouter()
+
+  const handleNavigate = () => {
+    router.push('/auth/signin')
+    setLoading(true)
+  }
 
   const items: MenuProps['items'] = [
     {
@@ -41,17 +49,17 @@ export const Header = ({ openDrawer }: any) => {
           </div>
           <div className={styles.header__nav_list}>
             <div className={styles.header__nav_links}>
-              <div className={styles.header__nav_item}>
+              {/* <div className={styles.header__nav_item}>
                 <Link href='/offers'>
                   Ofertas
                 </Link>
-              </div>
+              </div> */}
               <div className={styles.header__nav_item}>
                 Nosotros
               </div>
-              <div className={styles.header__nav_item}>
+              {/* <div className={styles.header__nav_item}>
                 Cupones
-              </div>
+              </div> */}
               {session?.user.role === 'admin' && (
                 <div className={styles.header__nav_item}>
                   <Link href='/dashboard'>
@@ -97,12 +105,28 @@ export const Header = ({ openDrawer }: any) => {
                     </strong>
                   </div>
                 </button>
-                <button onClick={() => router.push('/auth/signin')} aria-label="boton registrarse" className={styles.header__button_login}>
-                  Registrarse
-                </button>
+                {loading ? (
+                  <button onClick={handleNavigate} aria-label="boton registrarse" className={styles.header__button_loading}>
+                    <LoadingOutlined style={{
+                      margin: '8px 36px',
+                      fontSize: '24px',
+                      color: 'white'
+                    }} />
+                  </button>
+                )
+                  : (
+                    <button onClick={handleNavigate} aria-label="boton registrarse" className={styles.header__button_login}>
+                      Registrarse
+                    </button>
+                  )
+                }
               </>
             )}
-            <button onClick={() => openDrawer()} aria-label="boton menu" className={styles.header__button_menu}>
+            <button
+              onClick={() => openDrawer()}
+              aria-label="boton menu"
+              className={styles.header__button_menu}
+            >
               <RxHamburgerMenu size={24} />
             </button>
           </div>

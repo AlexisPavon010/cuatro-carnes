@@ -116,6 +116,20 @@
   }
 }
 
+.header__button_loading {
+  font-weight: 700;
+  cursor: pointer;
+  color: white;
+  border-radius: 32px;
+  border: none;
+  background-color: #a92b3c;
+  padding: 1px;
+
+  &:hover {
+    background-color: #c94f64;
+  }
+}
+
 .header__button_menu {
   display: none;
   margin: 0 5px;
