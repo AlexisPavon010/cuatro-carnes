@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
 import { Swiper, SwiperSlide, } from 'swiper/react';
-import { useRouter } from 'next/router'
 import 'swiper/css';
 
 import styles from './styles.module.scss';
@@ -28,13 +27,6 @@ const ProductsPage = () => {
   const { data: products } = useSwrFetcher('/api/products')
   const targetRefs = useRef<any>([]);
   const dispatch = useDispatch()
-  const router = useRouter()
-
-  function calculateDiscountedPrice() {
-    const discountValue = getCartTotal(cart) * discount;
-    const priceWithDiscount = getCartTotal(cart) - discountValue;
-    return priceWithDiscount;
-  }
 
   function filterProductsByCategory(products: IProduct[], categories: ICategories[]) {
     const filteredProductsByCategory = {};
@@ -99,36 +91,6 @@ const ProductsPage = () => {
                   </SwiperSlide>
                 ))
               }
-              <SwiperSlide>
-                < div className={styles.slider__list_item} >
-                  <div className={styles.slider__list_item_image}>
-                    <div className={styles.slider__list_item_price}>
-                      $ 2600.00
-                    </div>
-                  </div>
-                  <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                < div className={styles.slider__list_item} >
-                  <div className={styles.slider__list_item_image}>
-                    <div className={styles.slider__list_item_price}>
-                      $ 2600.00
-                    </div>
-                  </div>
-                  <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                < div className={styles.slider__list_item} >
-                  <div className={styles.slider__list_item_image}>
-                    <div className={styles.slider__list_item_price}>
-                      $ 2600.00
-                    </div>
-                  </div>
-                  <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
-                </div>
-              </SwiperSlide>
             </Swiper>
           </div>
         </div >
