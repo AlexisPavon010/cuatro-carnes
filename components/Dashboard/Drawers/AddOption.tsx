@@ -129,6 +129,7 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
                 ]}
               >
                 <Typography.Text>{item.name}</Typography.Text>
+                <Typography.Text>${item.price}</Typography.Text>
               </List.Item>
             )}
           />
