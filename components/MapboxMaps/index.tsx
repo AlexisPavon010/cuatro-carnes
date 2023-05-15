@@ -74,7 +74,17 @@ export const MapboxMaps = () => {
   useEffect(() => {
     getUserLocation()
       .then((location) => {
+        const [lng, lat] = location
         dispatch(setUserLocation(location))
+        searchApi
+          .get(`${lng},${lat}.json/`, {
+            params: {
+              proximity: userLocation.join(","),
+            },
+          })
+          .then(({ data }) => {
+            setSelectedPlaces(data.features[0].place_name)
+          })
       })
   }, [])
 
@@ -152,7 +162,17 @@ const CustomSearch = ({ setSelectedPlaces, selectedPlaces }: any) => {
   const getCurrentPosition = async () => {
     getUserLocation()
       .then((location) => {
+        const [lng, lat] = location
         dispatch(setUserLocation(location))
+        searchApi
+          .get(`${lng},${lat}.json/`, {
+            params: {
+              proximity: userLocation.join(","),
+            },
+          })
+          .then(({ data }) => {
+            setSelectedPlaces(data.features[0].place_name)
+          })
       })
       .catch(() =>
         notification.error({
