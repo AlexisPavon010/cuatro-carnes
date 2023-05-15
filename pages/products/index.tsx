@@ -4,35 +4,35 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
 import { Swiper, SwiperSlide, } from 'swiper/react';
+import { useRouter } from 'next/router'
 import 'swiper/css';
 
-import { Layout } from '@/components/Layout'
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
+import { Layout } from '@/components/Layout';
+import { IProduct } from '@/interfaces/products';
 import { OrderModal } from '@/components/Modals';
-import { CartItem } from '@/components/CartItem'
-import { useSwrFetcher } from '@/hooks/useSwrFetcher'
-import { IProduct } from '@/interfaces/products'
-import { ICategories } from '@/interfaces/categories'
-import { LoadingItem } from '@/components/LoadingItem'
-import { setShippingMethod } from '@/store/cart/shoppingSlice'
-import { setPickUpTime } from '@/store/places/placesSlice'
-
-const NAV_LINKS = [
-  { id: 'section-1', label: 'Section 1', isActive: false },
-  { id: 'section-2', label: 'Section 2', isActive: false },
-  { id: 'section-3', label: 'Section 3', isActive: false },
-];
+import { CartItem } from '@/components/CartItem';
+import { ICategories } from '@/interfaces/categories';
+import { useSwrFetcher } from '@/hooks/useSwrFetcher';
+import { LoadingItem } from '@/components/LoadingItem';
+import { setPickUpTime } from '@/store/places/placesSlice';
+import { getCartTotal, setShippingMethod } from '@/store/cart/shoppingSlice';
 
 const ProductsPage = () => {
   const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
-  const { cart, pickup_or_delivery } = useSelector((state: any) => state.shopping)
+  const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
   const { userDirection, pickUpTime } = useSelector((state: any) => state.places)
   const { data: categories, isLoading } = useSwrFetcher('/api/categories')
-  const [navLinks, setNavLinks] = useState(NAV_LINKS);
   const { data: products } = useSwrFetcher('/api/products')
   const targetRefs = useRef<any>([]);
   const dispatch = useDispatch()
+  const router = useRouter()
 
+  function calculateDiscountedPrice() {
+    const discountValue = getCartTotal(cart) * discount;
+    const priceWithDiscount = getCartTotal(cart) - discountValue;
+    return priceWithDiscount;
+  }
 
   function filterProductsByCategory(products: IProduct[], categories: ICategories[]) {
     const filteredProductsByCategory = {};
@@ -54,56 +54,10 @@ const ProductsPage = () => {
     return Object.values(filteredProductsByCategory);
   }
 
-  const scrollToSection = (sectionId: string) => {
-    const section: any = document.getElementById(sectionId);
-    section.scrollIntoView({ block: 'start', inline: 'nearest', behavior: "smooth" });
-  };
+  function filterProductsByOffers(products: IProduct[]) {
+    return products.filter(p => p.category === 'Ofertas')
+  }
 
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '100px',
-      threshold: 0.75 // Change this value to adjust when the element should be considered visible
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          console.log(`Element with id "${entry.target.id}" is visible!`);
-          // Update the corresponding nav link object in state
-          setNavLinks(prevNavLinks => {
-            const currentNavLink: any = prevNavLinks.find(navLink => navLink.id === entry.target.id);
-            // Deactivate any other navLinks that are active
-            return prevNavLinks.map(navLink => {
-              if (navLink.isActive && navLink.id !== currentNavLink.id) {
-                return { ...navLink, isActive: false };
-              }
-              return navLink;
-            }).map(navLink => {
-              if (navLink.id === currentNavLink.id) {
-                return { ...navLink, isActive: true };
-              }
-              return navLink;
-            });
-          });
-        }
-      });
-    }, options);
-
-    targetRefs.current.forEach((targetRef: any) => {
-      if (targetRef) {
-        observer.observe(targetRef);
-      }
-    });
-
-    return () => {
-      targetRefs.current.forEach((targetRef: any) => {
-        if (targetRef) {
-          observer.unobserve(targetRef);
-        }
-      });
-    };
-  }, []);
 
   return (
     <Layout title='Productos - Cuatro Carnes'>
@@ -127,18 +81,52 @@ const ProductsPage = () => {
                 }
               }}
             >
-              {Array(8).fill('').map((_, i) => (
-                <SwiperSlide key={i}>
-                  < div className={styles.slider__list_item} >
-                    <div className={styles.slider__list_item_image}>
-                      <div className={styles.slider__list_item_price}>
-                        $ 2600.00
+
+              {
+                filterProductsByOffers(products).map((product, i) => (
+                  <SwiperSlide key={i}>
+                    <div className={styles.slider__list_item} >
+                      <div className={styles.slider__list_item_image}>
+                        <Image src={product.image} width={150} height={120} alt='' />
+                        <div className={styles.slider__list_item_price}>
+                          ${product.offert_price.toFixed(2)}
+                        </div>
                       </div>
+                      <h3 className={styles.slider__list_item_text}>{product.title}</h3>
                     </div>
-                    <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
+                  </SwiperSlide>
+                ))
+              }
+              <SwiperSlide>
+                < div className={styles.slider__list_item} >
+                  <div className={styles.slider__list_item_image}>
+                    <div className={styles.slider__list_item_price}>
+                      $ 2600.00
+                    </div>
                   </div>
-                </SwiperSlide>
-              ))}
+                  <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                < div className={styles.slider__list_item} >
+                  <div className={styles.slider__list_item_image}>
+                    <div className={styles.slider__list_item_price}>
+                      $ 2600.00
+                    </div>
+                  </div>
+                  <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                < div className={styles.slider__list_item} >
+                  <div className={styles.slider__list_item_image}>
+                    <div className={styles.slider__list_item_price}>
+                      $ 2600.00
+                    </div>
+                  </div>
+                  <h3 className={styles.slider__list_item_text}>Matambre vacuno entero (1,5kg).</h3>
+                </div>
+              </SwiperSlide>
             </Swiper>
           </div>
         </div >
@@ -148,21 +136,11 @@ const ProductsPage = () => {
           <div className={styles.categories__wrapper}>
             <div className={styles.categories__start}>
               <button
-                className={navLinks[0].isActive ? styles.categories__button_active : styles.categories__button}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('section-1');
-                }}
-              >
+                className={styles.categories__button}>
                 Ofertas de la Semana
               </button>
               <button
-                className={navLinks[1].isActive ? styles.categories__button_active : styles.categories__button}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('section-2');
-                }}
-              >
+                className={styles.categories__button}>
                 Vacuno x Pieza
               </button>
             </div>
@@ -193,10 +171,16 @@ const ProductsPage = () => {
                             <div className={styles.list__products_price}>{`$${item.price}`}</div>
                           </div>
                           <div>
-                            <Image src={item.image} alt='' height={50} width={70} style={{
-                              height: '100%',
-                              objectFit: 'contain'
-                            }} />
+                            <Image
+                              src={item.image}
+                              height={50}
+                              width={70}
+                              style={{
+                                height: '100%',
+                                objectFit: 'contain'
+                              }}
+                              alt=''
+                            />
                           </div>
                         </div>
                       ))}
@@ -204,6 +188,16 @@ const ProductsPage = () => {
                   </div>
                 ))
               }
+              {cart.length > 0 && (
+                <div className={styles.list__mobile_content}>
+                  <button onClick={() => router.push('/checkout')} className={styles.list__mobile_button}>
+                    <span className={styles.list__mobile_button_content}>
+                      <div>${calculateDiscountedPrice()}</div>
+                      <div>Pedir</div>
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.list__menu_configuration}>
@@ -229,16 +223,16 @@ const ProductsPage = () => {
               </div>
               <div className={styles.order__card}>
                 <div className={styles.order__card_wrapper}>
-                  <p>{pickup_or_delivery === 'delivery' ? 'Donde' : 'Orden'}</p>
+                  <p>{pickup_or_delivery === 'DELIVERY' ? 'Donde' : 'Orden'}</p>
                   <Select
                     className={styles.order__select}
                     style={{ width: 'calc(100% - 80px)' }}
-                    defaultValue={pickup_or_delivery === 'delivery' ? userDirection : 'Para retirar'}
+                    // defaultValue={pickup_or_delivery === 'delivery' ? userDirection + '...' : 'Para retirar'}
                     onChange={(value) => dispatch(setShippingMethod(value))}
                     disabled
                   >
-                    <option value="delivery">Delivery</option>
-                    <option value="pickup">Retirar</option>
+                    <option value="DELIVERY">Delivery</option>
+                    <option value="PICKUP">Retirar</option>
                   </Select>
                 </div>
                 <hr className={styles.order__card_divider}></hr>
@@ -251,8 +245,8 @@ const ProductsPage = () => {
                     value={pickUpTime}
                   >
                     <option value="Mañana (7:00am - 12:00pm)">Mañana (7:00am - 12:00pm)</option>
-                    <option value="2">Mediodia (12:00pm - 14:00pm)</option>
-                    <option value="3">Tarde (16:00pm - 21:00pm)</option>
+                    <option value="Mediodia (12:00pm - 14:00pm)">Mediodia (12:00pm - 14:00pm)</option>
+                    <option value="Tarde (16:00pm - 21:00pm)">Tarde (16:00pm - 21:00pm)</option>
                   </Select>
                 </div>
               </div>

@@ -3,10 +3,10 @@ import { FaStoreAlt } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
-import styles from './styles.module.scss'
-import { setShippingMethod } from '@/store/cart/shoppingSlice';
-import { MapboxMaps } from '../MapboxMaps';
+import { setShippingMethod, setDiscountPercentage } from '@/store/cart/shoppingSlice';
 import { setShowMap } from '@/store/places/placesSlice';
+import { MapboxMaps } from '../MapboxMaps';
+import styles from './styles.module.scss';
 
 export const Main = () => {
   const dispatch = useDispatch()
@@ -14,10 +14,12 @@ export const Main = () => {
 
   const handleNavigate = (method: string) => {
     dispatch(setShippingMethod(method))
-    if (method === 'delivery') {
+    if (method === 'DELIVERY') {
       dispatch(setShowMap(true))
       dispatch(setShippingMethod(method))
+      dispatch(setDiscountPercentage(0.00))
     } else {
+      dispatch(setDiscountPercentage(0.07))
       router.push('/products')
     }
   }
@@ -32,7 +34,7 @@ export const Main = () => {
                 ¿Qué le gustaría?
               </h1>
             </div>
-            <div className={styles.hero__card_item} onClick={() => handleNavigate('pickup')}>
+            <div className={styles.hero__card_item} onClick={() => handleNavigate('PICKUP')}>
               <div className={styles.hero__card_item_content}>
                 <div className={styles.hero__card_item_image}>
                   <FaStoreAlt color='white' size={24} />
@@ -47,7 +49,7 @@ export const Main = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.hero__card_item} onClick={() => handleNavigate('delivery')}>
+            <div className={styles.hero__card_item} onClick={() => handleNavigate('DELIVERY')}>
               <div className={styles.hero__card_item_content}>
                 <div className={styles.hero__card_item_image}>
                   <MdDeliveryDining color='white' size={24} />

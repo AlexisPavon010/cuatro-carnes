@@ -1,20 +1,21 @@
 import { Button, Card, Form, Input, Radio, Result, Select, Space } from "antd";
-import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from 'react'
 import { parseCookies, setCookie } from "nookies";
-
-import { Layout } from "@/components/Layout";
-import styles from './styles.module.scss'
-import { emptyCart, getCartTotal } from "@/store/cart/shoppingSlice";
-import { createOrder } from "@/client";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
+
+import { emptyCart, getCartTotal } from "@/store/cart/shoppingSlice";
+import { Layout } from "@/components/Layout";
+import styles from './styles.module.scss';
+import { createOrder } from "@/client";
+import { sendSucces } from "@/client/Email";
 
 const { Option } = Select;
 
 const CheckoutPage = () => {
   const { userDirection, userLocation } = useSelector((state: any) => state.places)
-  const { cart } = useSelector((state: any) => state.shopping)
+  const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
   const [orderID, setOrderID] = useState('000000')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -22,6 +23,12 @@ const CheckoutPage = () => {
   const [form] = Form.useForm();
   const router = useRouter()
   const dispatch = useDispatch()
+
+  function calculateDiscountedPrice() {
+    const discountValue = getCartTotal(cart) * discount;
+    const priceWithDiscount = getCartTotal(cart) - discountValue;
+    return priceWithDiscount;
+  }
 
   useEffect(() => {
     if (!session) return
@@ -39,12 +46,19 @@ const CheckoutPage = () => {
   } = parseCookies()
 
   const onFinish = (values: any) => {
+    if (cart.length === 0) return router.push('/')
     setLoading(true)
     setCookie(null, 'address', values.address, { path: '/', })
-    setCookie(null, 'reference', values.reference, { path: '/', })
+    setCookie(null, 'reference', values.reference ? values.reference : '', { path: '/', })
     setCookie(null, 'code', values.code, { path: '/', })
     setCookie(null, 'phone', values.phone, { path: '/', })
     console.log({
+      ...values,
+      items: cart,
+      total: getCartTotal(cart),
+      phone: values.code + values.phone
+    })
+    sendSucces({
       ...values,
       items: cart,
       total: getCartTotal(cart),
@@ -54,8 +68,10 @@ const CheckoutPage = () => {
       ...values,
       items: cart,
       total: getCartTotal(cart),
+      sub_total: calculateDiscountedPrice(),
       phone: values.code + values.phone,
-      cords: userLocation
+      cords: userLocation,
+      shipping: pickup_or_delivery,
     })
       .then(({ data }) => {
         console.log(data)
@@ -177,8 +193,8 @@ const CheckoutPage = () => {
                     </Form.Item>
 
                     <Form.Item
-                      label="Piso / Timbre / Lote"
-                      initialValue={reference}
+                      label="Depto / Piso / Timbre / Lote"
+                      initialValue={'' || reference}
                       name="reference"
                     >
                       <Input className={styles.checkout__input} />
@@ -187,16 +203,15 @@ const CheckoutPage = () => {
                     <Space>
                       <Form.Item
                         label="Medios de Pago"
-                        name="paymentOption"
-                        initialValue='payment_market'
+                        name="payment_option"
                         rules={[{ required: true, message: 'Seleccione un metodo de pago' }]}
                       >
                         <Radio.Group>
                           <Radio value='credit_card'>Tarjeta de Credito</Radio>
-                          <Radio value='debit_card'>Tarjeta de Debito</Radio>
                           <Radio value='cash'>Efectivo</Radio>
+                          <Radio value='debit_card'>Tarjeta de Debito</Radio>
                           <Radio value='bank_transfer'>Transferencia</Radio>
-                          <Radio value='payment_market'>Mercado Pago</Radio>
+                          {/* <Radio value='payment_market'>Mercado Pago</Radio> */}
                         </Radio.Group>
                       </Form.Item>
                     </Space>
@@ -213,7 +228,7 @@ const CheckoutPage = () => {
                 <h2 className={styles.checkout_subtitle}>Resumen de la orden</h2>
                 <div className={styles.checkout__content_summary_card}>
                   <div>
-                    <h2 className={styles.checkout__content_summary_card_title}>Av. Crisólogo Larralde 2306, Troncos del Talar.</h2>
+                    <h2 className={styles.checkout__content_summary_card_title}>{userDirection}</h2>
                     <p>En el local para aproximadamente 13:46</p>
                   </div>
                 </div>
@@ -227,7 +242,7 @@ const CheckoutPage = () => {
                       </div>
                       <div className={styles.checkout__content_summary_card_span}>
                         <h3 className={styles.checkout__content_summary_card_order_title}>
-                          {item.name}
+                          {item.title}
                         </h3>
                         <p>{item.description}</p>
                       </div>
