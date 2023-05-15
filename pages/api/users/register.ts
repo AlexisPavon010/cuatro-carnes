@@ -15,7 +15,11 @@ type Data =
   }
 
 const schema = Joi.object({
-  email: Joi.string().email().required(),
+  email: Joi.string().email().required().messages({
+    'string.email': 'Por favor, ingrese un correo electrónico válido',
+    'string.empty': 'El correo electrónico es obligatorio',
+    'any.required': 'El correo electrónico es obligatorio',
+  }),
   username: Joi.string().required(),
   phone: Joi.string(),
   password: Joi.string()
@@ -42,7 +46,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
 
     const user = await User.findOne({ email })
 
-    if (user) return res.status(400).json({ message: 'User exist' })
+    if (user) return res.status(400).json({ message: 'El correo esta ocupado' })
 
     const newUser = new User({
       email: email.toLowerCase(),
@@ -67,6 +71,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
     })
 
   } catch (error: any) {
-    return res.status(400).json({ message: error.details })
+    console.log(error)
+    return res.status(400).json({ message: error.details[0].message })
   }
 }

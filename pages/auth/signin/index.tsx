@@ -16,10 +16,12 @@ import { registerUser } from '@/client';
 
 interface SigninPageProps {
   providers: Awaited<ReturnType<typeof getProviders>>;
-  error: any;
+  error: string;
 }
 
 const SigninPage = ({ providers, error }: SigninPageProps) => {
+  const [errorMessage, setErrorMessage] = useState('')
+  const [showError, setShowError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showRecovery, setShowRecovery] = useState(false)
   const [showRegister, setSehowRegister] = useState(false)
@@ -36,11 +38,11 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
       await LoginWhitProviders('credentials', { email, password })
     } catch (error: any) {
       console.log(error)
-      // setShowError(true)
-      // setErrorMessage(error.response.data.message)
-      // setTimeout(() => {
-      //   setShowError(false)
-      // }, 3000);
+      setShowError(true)
+      setErrorMessage(error.response.data.message)
+      setTimeout(() => {
+        setShowError(false)
+      }, 3500);
     }
   }
 
@@ -103,6 +105,11 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
               Datos de acceso incorrectos
             </div>
           )}
+          {showError && (
+            <div className={styles.login__error_message}>
+              {errorMessage}
+            </div>
+          )}
           <div className={styles.login__container_rigth_form}>
             {
               showRegister ? (
@@ -134,7 +141,13 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
                   >
                     <input className={styles.login__container_rigth_form_input} type="password" placeholder='Contraseña' />
                   </Form.Item>
-                  <button type='submit' className={styles.login__container_rigth_button}>REGISTRARSE</button>
+                  <button type='submit' className={styles.login__container_rigth_button}>
+                    {
+                      loading
+                        ? <LoadingOutlined className={styles.login__button_loading} />
+                        : 'ACCEDER'
+                    }
+                  </button>
                 </Form>
               ) : (
                 <Form
