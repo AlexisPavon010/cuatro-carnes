@@ -12,6 +12,9 @@ export const OrderSchema = new Schema({
   reference: { type: String },
   paymentOption: { type: String },
   userID: { type: String },
+  shipping: { type: String },
+  sub_total: { type: Number },
+  payment_option: { type: String },
   fleet: { type: String, default: 'default' },
   cords: [Number, Number],
   items: [],
@@ -39,6 +42,7 @@ OrderSchema.pre('findOneAndUpdate', async function (next) {
   // Si el estado de la orden es completado, actualiza el stock del producto
   //  @ts-ignore 
   if (this._update.status === 'COMPLETED') {
+    console.log(order)
     order.items.forEach(async (item: IProduct) => {
       const product = await Product.findById({ _id: item._id });
 
@@ -47,10 +51,10 @@ OrderSchema.pre('findOneAndUpdate', async function (next) {
       }
 
       // Actualiza el stock del producto
-      if (item.kg_stock) {
-        product.kg_stock -= item.kg_stock;
+      if (item.stock === 'KILOGRAM') {
+        product.kg_stock -= item.quantity!;
       } else {
-        product.q_stock -= item.q_stock;
+        product.q_stock -= item.quantity!;
       }
 
       await product.save();
