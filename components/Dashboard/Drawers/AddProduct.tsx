@@ -46,6 +46,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
       createProduct({
         ...values,
         price: Number(values.price),
+        stock: stockChange ? 'QUANTITY' : 'KILOGRAM',
         [stockChange ? 'q_stock' : 'kg_stock']: Number(stock),
         image: imageUrl
       })
@@ -59,7 +60,9 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
     } else {
       updateProductById(open.id, {
         ...values,
-        image: imageUrl
+        image: imageUrl,
+        stock: stockChange ? 'QUANTITY' : 'KILOGRAM',
+        [stockChange ? 'q_stock' : 'kg_stock']: Number(stock)
       })
         .then(() => {
           form.resetFields()
@@ -121,9 +124,6 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         form={form}
         layout='vertical'
         name="basic"
-        initialValues={{
-          stock
-        }}
         onFinish={handleSubmit}
         autoComplete="off"
         requiredMark={false}
@@ -134,6 +134,14 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input placeholder='Escribe el nombre del producto' size='large' />
+        </Form.Item>
+
+        <Form.Item
+          label="Codigo de producto"
+          name="product_code"
+        // rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <InputNumber style={{ width: '100%' }} size='large' addonBefore="#" placeholder='000000' />
         </Form.Item>
 
         <Form.Item
