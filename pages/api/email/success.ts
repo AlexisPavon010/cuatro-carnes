@@ -1,14 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
 import nodemailer from 'nodemailer'
-import formidable from "formidable";
-import { readFileSync } from 'fs';
+import handlebars from 'handlebars'
 
-export const config = {
-  api: {
-    bodyParser: false
-  }
-};
+import templateHtml from '../../../emails/template.html'
 
 export default function handler(
   req: NextApiRequest,
@@ -22,30 +17,16 @@ export default function handler(
   }
 }
 
-const parseFile = (req: NextApiRequest) => {
-  return new Promise((resolve, reject) => {
-    const form = new formidable.IncomingForm()
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        reject(err)
-      }
-      const { email, uniqueID } = fields;
-      resolve({ files, email, uniqueID })
-    })
-  })
-}
-
 const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+
+  const { email } = req.body
+
   const CLIENT_ID = process.env.NEXT_PUBLIC_NODEMAILER_CLIENT_ID
   const CLIENT_SECRET = process.env.NODEMAILER_CLIENT_SECRET
   const REDIRECT_URI = process.env.NODEMAILER_REDIRECT_URL
   const REFRESH_TOKEN = process.env.NODEMAILER_REFRESH_TOKEN
 
   try {
-    const { files, email, uniqueID = '00000' }: any = await parseFile(req);
-    const file = files.file;
-    const fileContent = readFileSync(file.filepath);
-
     const oAuth2Client = new google.auth.OAuth2(
       CLIENT_ID,
       CLIENT_SECRET,
@@ -55,6 +36,10 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     oAuth2Client.setCredentials({
       refresh_token: REFRESH_TOKEN
     })
+
+    const template = handlebars.compile(templateHtml);
+    const replacements = {};
+    const htmlToSend = template(replacements);
     const accessToken: any = await oAuth2Client.getAccessToken();
 
     const transport = nodemailer.createTransport({
@@ -72,13 +57,8 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const mailOptions = {
       from: 'themaster034@gmail.com',
       to: email,
-      subject: `Aqui esta la factura del pedido #${uniqueID}`,
-      attachments: [
-        {
-          filename: file.originalFilename,
-          content: fileContent
-        }
-      ]
+      subject: 'Hola, tu pedido en Cuatro carnes fue tomado con exito',
+      html: htmlToSend,
     };
 
     const response = await transport.sendMail(mailOptions);
