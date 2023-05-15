@@ -137,7 +137,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
 
   useEffect(() => {
 
-    if (!order.cords) return
+    if (order.shipping === 'PICKUP') return
 
     if (!mapRef.current) {
       mapRef.current = new Map({
