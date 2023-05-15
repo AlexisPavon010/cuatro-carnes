@@ -21,6 +21,7 @@
     "bcrypt": "^5.1.0",
     "formidable": "^2.1.1",
     "googleapis": "^118.0.0",
+    "handlebars": "^4.7.7",
     "joi": "^17.9.1",
     "jsonwebtoken": "^9.0.0",
     "mapbox-gl": "^2.14.1",
@@ -53,6 +54,7 @@
     "@types/nodemailer": "^6.4.7",
     "@types/react-currency-format": "^1.0.0",
     "@types/styled-components": "^5.1.26",
+    "html-loader": "^4.2.0",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0"
   }
