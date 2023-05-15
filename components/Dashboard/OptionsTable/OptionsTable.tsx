@@ -37,25 +37,6 @@ export const OptionsTable = () => {
     },
     {
       width: 60,
-      align: 'center',
-      title: 'Cantidad',
-      dataIndex: 'quantity',
-      key: 'quantity',
-    },
-    {
-      width: 60,
-      align: 'center',
-      title: 'Estado',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => {
-        let text = status ? 'Activo' : 'Inactivo';
-        let color = status ? '#87d068' : 'default';
-        return (<Tag color={color}>{text}</Tag>)
-      }
-    },
-    {
-      width: 60,
       title: 'Acciones',
       dataIndex: 'actions',
       key: 'actions',
