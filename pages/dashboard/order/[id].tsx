@@ -1,5 +1,7 @@
-import { Avatar, Badge, Button, Card, Col, Descriptions, List, Row, Space, Tag, Typography } from 'antd';
+import { Avatar, Badge, Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
 import mapboxgl, { Map, Marker, LngLatBounds, AnySourceData } from 'mapbox-gl'
+import { BsCash, BsCreditCard2Back } from 'react-icons/bs';
+import { AiOutlineBank } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useRef, useEffect } from 'react'
 import moment from 'moment';
@@ -11,8 +13,8 @@ import { directionsApi } from '@/client/Direction';
 import { IOrder } from '@/interfaces/order';
 import { getOrdersById } from '@/database/dbOrders';
 import { IProduct } from '@/interfaces/products';
-import { IItem } from '@/interfaces/options';
 import { STATUSES } from '@/constants/status';
+import { FLEETS } from '@/constants/fleets';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 
@@ -25,6 +27,9 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
   const markerRef = useRef<Marker | any>(null)
   const mapRef = useRef<Map>()
   const router = useRouter()
+
+
+  console.log(order)
 
 
   const getRoutesBetweenPoints = async () => {
@@ -84,6 +89,55 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
       .addTo(mapRef.current!)
   }
 
+  const renderPaymentMethod = (method: string) => {
+    let icon
+    let text
+    let color
+
+    switch (method) {
+      case 'credit_card':
+        icon = <BsCreditCard2Back size={16} />
+        text = 'Tarjeta de Credito'
+        color = 'cyan'
+        break;
+
+      case 'cash':
+        icon = <BsCash size={16} />
+        text = 'Efectivo'
+        color = 'green'
+        break;
+
+      case 'debit_card':
+        icon = <BsCreditCard2Back size={16} />
+        text = 'Tarjeta de Debito'
+        color = 'blue'
+        break;
+
+      case 'bank_transfer':
+        icon = <AiOutlineBank size={16} />
+        text = 'Transferencia Bancaria'
+        color = 'geekblue'
+        break;
+
+    }
+
+    return (
+      <Tooltip title={text}>
+        <Tag
+          color={color}
+          icon={icon}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
+          }}
+        >
+          {text}
+        </Tag>
+      </Tooltip >
+    )
+  }
+
 
   useEffect(() => {
 
@@ -126,12 +180,18 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           </Col>
         </Row>
       </Card>
-      <Card style={{ marginBottom: '20px' }}>
+      <Card style={{ marginBottom: '20px', borderTop: `8px solid ${FLEETS.find((f) => f.value === order.fleet)?.color} ` }}>
         <Descriptions column={{ xs: 1, sm: 1, lg: 1 }} title={`Pedido Nro. #${order.uniqueID}`} size='small' extra={<Tag color={STATUSES.find(status => status.value === order.status)?.color}>{STATUSES.find(status => status.value === order.status)?.label}</Tag>}>
           <Descriptions.Item label="Nombre">{order.username}</Descriptions.Item>
           <Descriptions.Item label="Email">{order.email}</Descriptions.Item>
-          <Descriptions.Item label="Domicilio">{order.address || '--------'}</Descriptions.Item>
+          <Descriptions.Item label="Domicilio">{`${order.address}, ${order.reference || ''} ` || '--------'}</Descriptions.Item>
           <Descriptions.Item label="Celular">+{order.phone ? order.phone : '0000000'}</Descriptions.Item>
+          <Descriptions.Item label="Para">
+            <Tag color='blue'>{order.shipping === 'delivery' ? 'DELIVERY' : 'RETIRAR'}</Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="Metodo de Pago">
+            {renderPaymentMethod(order.payment_option)}
+          </Descriptions.Item>
           <Descriptions.Item label="Fecha alta">{moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</Descriptions.Item>
           <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' || 'DELIVERED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
         </Descriptions>
@@ -153,7 +213,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
               <Space direction='vertical'>
                 {
                   item.options?.map((item) => (
-                    <Typography style={{ textAlign: 'start' }}>{item.name}: {item?.item?.name}</Typography>
+                    <Typography style={{ textAlign: 'start' }}>{item.title}: {item?.name} ${item?.price}</Typography>
                   ))
                 }
               </Space>
@@ -169,7 +229,6 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
             <List.Item.Meta
               avatar={<Avatar shape='square' src={item.image} />}
               title={item.title}
-              description={item.description}
             />
             {/* {item.content} */}
           </List.Item >
@@ -180,12 +239,14 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         itemLayout="vertical"
         bordered
       />
-      <Card id="section-not-print">
-        <div style={{
-          height: '600px',
-          width: '100%',
-        }} ref={mapDiv} />
-      </Card>
+      {order.shipping === 'DELIVERY' ? (
+        <Card id="section-not-print">
+          <div style={{
+            height: '600px',
+            width: '100%',
+          }} ref={mapDiv} />
+        </Card>
+      ) : (<div />)}
     </Layout >
   )
 }
