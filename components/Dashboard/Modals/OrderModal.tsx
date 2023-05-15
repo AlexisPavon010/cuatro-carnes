@@ -1,5 +1,5 @@
 import { Col, Form, FormInstance, Modal, Row, Select, Tag, notification } from "antd"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { STATUSES } from '@/constants/status';
 import { updateOrder } from '@/client/Order';
@@ -17,6 +17,7 @@ interface OrderModal {
 export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
+  const [fleet, setFleet] = useState('')
 
   const onFinish = (values: any) => {
     setLoading(true)
@@ -36,6 +37,11 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
     setIsModalOpen({ visible: false, order: {} });
   };
 
+  useEffect(() => {
+    if (!isModalOpen.order.status) return
+    setFleet(isModalOpen.order.fleet)
+    form.setFieldValue('status', isModalOpen.order.status)
+  }, [isModalOpen])
 
   return (
     <Modal
@@ -52,10 +58,6 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
         layout='vertical'
         form={form}
         requiredMark={false}
-        initialValues={{
-          status: isModalOpen.order.status,
-          fleet: isModalOpen.order.fleet
-        }}
       >
         <Row gutter={[12, 12]}>
           <Col>
@@ -76,7 +78,7 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
               label="Color"
               name="fleet"
             >
-              <CustomSelect form={form} />
+              <CustomSelect form={form} fleet={fleet} />
             </Form.Item>
           </Col>
         </Row>
@@ -85,8 +87,8 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
   )
 }
 
-const CustomSelect = ({ form }: { form: FormInstance<any> }) => {
-  const [selectedValue, setSelectedValue] = useState(undefined);
+const CustomSelect = ({ form, fleet }: { form: FormInstance<any>, fleet: string }) => {
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined);
 
   const onTagClose = () => {
     setSelectedValue(undefined);
@@ -107,6 +109,10 @@ const CustomSelect = ({ form }: { form: FormInstance<any> }) => {
     setSelectedValue(value);
     form.setFieldValue('fleet', value)
   };
+
+  useEffect(() => {
+    setSelectedValue(fleet)
+  }, [fleet])
 
   return (
     <Select
