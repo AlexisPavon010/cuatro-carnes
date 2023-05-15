@@ -6,12 +6,14 @@ const { cart } = parseCookies()
 
 interface initialStateProps {
   cart: any,
-  pickup_or_delivery: 'delivery' | 'pickup'
+  pickup_or_delivery: 'DELIVERY' | 'PICKUP',
+  discount: number
 }
 
 const initialState: initialStateProps = {
   cart: cart ? JSON.parse(cart) : [],
-  pickup_or_delivery: 'delivery'
+  pickup_or_delivery: 'DELIVERY',
+  discount: 0.00
 };
 
 const getCartTotal = (cart: any) =>
@@ -77,6 +79,10 @@ export const shoppingSlice = createSlice({
 
     setShippingMethod: (state, action) => {
       state.pickup_or_delivery = action.payload;
+    },
+
+    setDiscountPercentage: (state, action) => {
+      state.discount = action.payload;
     }
 
   },
@@ -88,7 +94,8 @@ export const {
   removeAllItems,
   restoreCart,
   emptyCart,
-  setShippingMethod
+  setShippingMethod,
+  setDiscountPercentage
 } = shoppingSlice.actions;
 
 export { getCartTotal, getTotalItems };
