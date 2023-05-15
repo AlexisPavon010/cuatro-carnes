@@ -183,7 +183,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           <Descriptions.Item label="Domicilio">{`${order.address}, ${order.reference || ''} ` || '--------'}</Descriptions.Item>
           <Descriptions.Item label="Celular">+{order.phone ? order.phone : '0000000'}</Descriptions.Item>
           <Descriptions.Item label="Para">
-            <Tag color='blue'>{order.shipping === 'delivery' ? 'DELIVERY' : 'RETIRAR'}</Tag>
+            <Tag color='blue'>{order.shipping === 'DELIVERY' ? 'DELIVERY' : 'RETIRAR'}</Tag>
           </Descriptions.Item>
           <Descriptions.Item label="Metodo de Pago">
             {renderPaymentMethod(order.payment_option)}
