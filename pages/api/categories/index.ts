@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
 
-import '../../../database/db'
-import Category from '@/models/Category'
+import Category from '@/models/Category';
+import '../../../database/db';
 
 const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
-  description: Joi.string().required(),
+  description: Joi.string()
 });
 
 type Data = {
@@ -50,8 +50,6 @@ const createCategory = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-
-  console.log(req.body)
 
   try {
     await schema.validateAsync(req.body);
