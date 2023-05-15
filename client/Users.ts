@@ -10,7 +10,7 @@ export const registerUser = ({ username, email, phone, password }: { email: stri
 }
 
 export const updateUser = (role: string, id: string) => {
-  return axios.put('/api/users/users', {
+  return axios.put('/api/users', {
     role,
     id
   })

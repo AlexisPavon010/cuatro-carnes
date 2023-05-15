@@ -1,43 +1,32 @@
+import { Button, Dropdown, MenuProps, Table, Tag } from "antd";
 import { useSwrFetcher } from "@/hooks/useSwrFetcher";
-import { Button, Card, Col, Dropdown, MenuProps, Row, Space, Table, Tag } from "antd"
+import { BiPencil, BiTrash } from "react-icons/bi";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
-import { AiOutlineLock, AiOutlineMenu, AiOutlineUnlock } from "react-icons/ai";
-import { BiPencil } from "react-icons/bi";
-import { MdOutlineComputer } from "react-icons/md";
 
-const getMenuItems = (record: any | undefined): MenuProps['items'] => [
-  {
-    key: '1',
-    icon: <BiPencil size={14} />,
-    label: 'Modificar',
-    onClick: () => console.log({ visible: true, id: record?._id! })
-  },
-  {
-    key: '3',
-    icon: <AiOutlineMenu size={14} />,
-    label: 'Opciones',
-    onClick: () => console.log({ visible: true, id: record?._id! })
-  },
-  {
-    key: '4',
-    icon: record?.status ? <AiOutlineLock size={14} /> : <AiOutlineUnlock size={14} />,
-    label: record?.status ? 'Desactivar' : 'Activar',
-    onClick: () => console.log(record?._id!, record?.status!)
-  },
-  {
-    key: '5',
-    icon: <MdOutlineComputer size={14} />,
-    label: 'Eliminar',
-    onClick: () => console.log({ visible: true, id: record?._id! })
-  }
-];
-
-
+import { UserModal } from "../Modals/UserModal";
+import { IUser } from "@/interfaces/user";
 
 export const UsersTable = () => {
-  const { data, isLoading } = useSwrFetcher('/api/users')
+  const { data, isLoading, mutate } = useSwrFetcher('/api/users')
+  const [openModal, setOpenModal] = useState<{ visible: boolean, user: undefined | IUser }>({ visible: false, user: undefined })
   const [selectedRecord, setSelectedRecord] = useState<any | undefined>(undefined);
+
+
+  const getMenuItems = (record: IUser | undefined): MenuProps['items'] => [
+    {
+      key: '1',
+      icon: <BiPencil size={14} />,
+      label: 'Modificar',
+      onClick: () => setOpenModal({ visible: true, user: record })
+    },
+    {
+      key: '5',
+      icon: <BiTrash size={14} />,
+      label: 'Eliminar',
+      onClick: () => console.log({ visible: true, id: record?._id! })
+    }
+  ];
 
   const columns: ColumnsType<any> = [
     {
@@ -56,22 +45,12 @@ export const UsersTable = () => {
       key: 'phone',
     },
     {
-      title: 'Estado',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => {
-        let text = status ? 'Activo' : 'Inactivo';
-        let color = text === 'active' ? '#87d068' : 'volcano';
-        return (<Tag color={color}>{text}</Tag>)
-      }
-    },
-    {
-      title: 'Rol',
+      title: 'Roles',
       dataIndex: 'role',
       key: 'role',
       render: (role) => {
-        let text = role === 'admin' ? 'Administrado' : 'Cliente';
-        let color = text === 'Administrado' ? '#87d068' : 'cyan';
+        let text = role === 'admin' ? 'Administrador' : 'Cliente';
+        let color = text === 'Administrador' ? '#87d068' : 'cyan';
         return (<Tag color={color} >{text}</Tag>)
       }
     },
@@ -94,25 +73,16 @@ export const UsersTable = () => {
 
   return (
     <>
-      {/* <Card>
-        <Row gutter={[0, 12]}>
-          <Col xs={24} md={6} lg={6}>
-          </Col>
-          <Col flex={1}>
-          </Col>
-          <Col>
-            <Space wrap>
-              <Button onClick={() => console.log({ visible: true, id: undefined })} type="primary">Ingresar Producto</Button>
-            </Space>
-          </Col>
-        </Row>
-      </Card> */}
       <Table
         scroll={{ x: 1000 }}
         loading={isLoading}
         columns={columns}
         dataSource={data}
       />
+      <UserModal
+        mutate={mutate}
+        openModal={openModal}
+        setOpenModal={setOpenModal} />
     </>
   )
 }
