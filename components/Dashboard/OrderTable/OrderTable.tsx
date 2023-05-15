@@ -30,6 +30,7 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
       title: 'Nro',
       dataIndex: 'uniqueID',
       key: 'uniqueID',
+      width: 90,
     },
     {
       title: 'Fecha y Hora',
@@ -43,6 +44,7 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
       title: 'Monto',
       dataIndex: 'total',
       key: 'total',
+      width: 120,
       render: (total: number) => (
         <div>${total}</div>
       )
@@ -57,6 +59,14 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
       title: 'Correo',
       dataIndex: 'email',
       key: 'email',
+      ellipsis: true,
+      width: 200,
+    },
+    {
+      title: 'Dirección',
+      dataIndex: 'address',
+      key: 'address',
+      ellipsis: true
     },
     {
       align: 'center',
