@@ -54,12 +54,14 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
           <BsArrowLeft color='white' size={26} />
         </Link>
         <div className={styles.login__container_left}>
-          <Image
-            src='/assets/grilled-beef-steaks.jpg'
-            alt='image login'
-            layout='fill'
-            objectFit='cover'
-          />
+          <div className={styles.login__container_left_content}>
+            <Image
+              src='/assets/logo-frigorifico.svg'
+              alt='image login'
+              width={300}
+              height={300}
+            />
+          </div>
         </div>
         <div className={styles.login__container_rigth}>
           <h1 className={styles.login__container_rigth_title}>Bienvenido</h1>

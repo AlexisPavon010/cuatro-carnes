@@ -21,9 +21,20 @@
   max-width: 50vw;
   display: unset;
 
+  background-repeat: no-repeat;
+  background-image: url('/assets/grilled-beef-steaks.jpg');
+  background-position: 50%;
+  background-size: cover;
   // &>img {
   //   height: auto !important;
   // }
+}
+
+.login__container_left_content {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login__container_rigth {
