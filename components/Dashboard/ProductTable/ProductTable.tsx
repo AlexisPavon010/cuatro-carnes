@@ -3,7 +3,6 @@ import { Button, Card, Col, Dropdown, MenuProps, Row, Select, Space, Table, Tag 
 import { ColumnsType } from "antd/es/table";
 import { AiOutlineLock, AiOutlineMenu, AiOutlineUnlock } from "react-icons/ai";
 import { BiPencil } from "react-icons/bi";
-import { BsImage } from "react-icons/bs";
 import { MdOutlineComputer } from "react-icons/md";
 
 import { AddProduct } from "../Drawers";
@@ -12,7 +11,6 @@ import { DeleteModal } from '../Modals/DeleteModal';
 import { IProduct } from '@/interfaces/products';
 import { activateProductById } from '@/client';
 import { OptionsModal } from '../Modals/OptionsModal';
-
 
 export const ProductTable = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined });
@@ -27,7 +25,6 @@ export const ProductTable = () => {
     activateProductById(id, { status: !status })
       .then(({ data }) => {
         mutate(null)
-        console.log(data)
       })
       .catch((error) => console.log(error))
   }
@@ -39,12 +36,6 @@ export const ProductTable = () => {
       icon: <BiPencil size={14} />,
       label: 'Modificar',
       onClick: () => setIsDrawerOpen({ visible: true, id: record?._id! })
-    },
-    {
-      key: '2',
-      icon: <BsImage size={14} />,
-      label: 'Galeria',
-      onClick: () => console.log('Galeria', record?._id)
     },
     {
       key: '3',
@@ -95,8 +86,8 @@ export const ProductTable = () => {
       )
     },
     {
-      align: 'center',
-      title: 'Precio oferta',
+      align: 'center',  
+      title: 'Precio Oferta',
       dataIndex: 'offert_price',
       key: 'offert_price',
       render: (total) => (
