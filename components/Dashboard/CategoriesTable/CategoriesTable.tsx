@@ -3,7 +3,6 @@ import { Button, Card, Col, Dropdown, Input, MenuProps, Row, Space, Table } from
 import { ColumnsType } from 'antd/es/table';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { BiPencil } from 'react-icons/bi';
-import { AiOutlineLock } from 'react-icons/ai';
 import { MdOutlineComputer } from 'react-icons/md';
 
 import { AddCategory } from '../Drawers';
@@ -23,16 +22,10 @@ export const CategoriesTable = () => {
       key: '1',
       icon: <BiPencil size={14} />,
       label: 'Modificar',
-      onClick: () => console.log('first')
+      onClick: () => setIsDrawerOpen({ visible: true, id: selectedItemId })
     },
     {
-      key: '4',
-      icon: <AiOutlineLock size={14} />,
-      label: 'Activar',
-      onClick: () => console.log('first')
-    },
-    {
-      key: '5',
+      key: '2',
       icon: <MdOutlineComputer size={14} />,
       label: 'Eliminar',
       onClick: () => setIsModalOpen({ visible: true, id: selectedItemId })
