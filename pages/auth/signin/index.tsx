@@ -157,13 +157,13 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
                 >
                   <Form.Item
                     name="email"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[{ required: true, message: 'Por favor inserte su correo.' }]}
                   >
                     <input className={styles.login__container_rigth_form_input} type="text" placeholder='Correo electronico' />
                   </Form.Item>
                   <Form.Item
                     name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: 'Por favor inserte una contraseña.' }]}
                   >
                     <input className={styles.login__container_rigth_form_input} type="password" placeholder='Contraseña' />
                   </Form.Item>
