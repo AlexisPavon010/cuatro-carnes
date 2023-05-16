@@ -3,6 +3,21 @@
   font-size: 17px;
 }
 
+.slider__list_item_plus {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 50%;
+  background-color: #a92b3c;
+
+  position: absolute;
+  top: 30px;
+  right: 12px;
+  z-index: 4;
+}
+
 .slider__list_item_price {
   color: white;
   background-color: #c94f64;
