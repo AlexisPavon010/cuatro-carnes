@@ -43,12 +43,28 @@ export const CartItem = () => {
           </div>
         </div>
       ))}
-      <div className={styles.cart__subtotal}>
-        <div className={styles.cart__subtotal_text}>
+      <div className={styles.cart__total}>
+        <div className={styles.cart__total_text}>
+          Descuento (%{discount})
+        </div>
+        <div className={styles.cart__total_price}>
+          ${Math.round(getCartTotal(cart) * discount)}
+        </div>
+      </div>
+      <div className={styles.cart__total}>
+        <div className={styles.cart__total_text}>
           Total
         </div>
+        <div className={styles.cart__total_price}>
+          <CurrencyFormat value={getCartTotal(cart)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+        </div>
+      </div>
+      <div className={styles.cart__subtotal}>
+        <div className={styles.cart__subtotal_text}>
+          Subtotal
+        </div>
         <div className={styles.cart__subtotal_price}>
-          ${getCartTotal(cart)}
+          <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
         </div>
       </div>
       <button onClick={() => router.push('/checkout')} className={styles.cart__button}>
