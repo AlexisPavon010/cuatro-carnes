@@ -1,5 +1,6 @@
 import { Button, Card, Form, Input, Radio, Result, Select, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import CurrencyFormat from 'react-currency-format';
 import { parseCookies, setCookie } from "nookies";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from 'react';
@@ -114,6 +115,8 @@ const CheckoutPage = () => {
             <Card
               style={{ border: 'none', padding: 0 }}
               bodyStyle={{
+                minHeight: '400px',
+                height: 'calc(100vh - 500px)',
                 backgroundColor: '#f4e8e4',
                 padding: 0
               }}
@@ -245,7 +248,7 @@ const CheckoutPage = () => {
                         <h3 className={styles.checkout__content_summary_card_order_title}>
                           {item.title}
                         </h3>
-                        <p>{item.description}</p>
+                        {/* <p>{item.description}</p> */}
                       </div>
                       <div>
                         <span>
@@ -260,7 +263,7 @@ const CheckoutPage = () => {
                       Total
                     </span>
                     <span className={styles.checkout__title}>
-                      $ {getCartTotal(cart)}
+                      <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                     </span>
                   </div>
                 </div>
