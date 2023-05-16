@@ -15,9 +15,10 @@ import { ICategories } from '@/interfaces/categories';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingItem } from '@/components/LoadingItem';
 import { setPickUpTime } from '@/store/places/placesSlice';
-import { getCartTotal, setShippingMethod } from '@/store/cart/shoppingSlice';
+import { setShippingMethod } from '@/store/cart/shoppingSlice';
 import { CartItemMobile } from '@/components/CartItemMobile'
 import { OfferItem } from '@/components/OfferItem'
+import { NavbarCategories } from '@/components/NavbarCategories'
 
 const ProductsPage = () => {
   const [openCartMobile, setOpenCartMobile] = useState(false)
@@ -90,39 +91,22 @@ const ProductsPage = () => {
       </section >
       <section className={styles.categories}>
         <div className={styles.categories__container}>
-          <div className={styles.categories__wrapper}>
-            <div className={styles.categories__start}>
-              <button
-                className={styles.categories__button}>
-                Ofertas de la Semana
-              </button>
-              <button
-                className={styles.categories__button}>
-                Vacuno x Pieza
-              </button>
-            </div>
-            {/* <div className={styles.categories__end}>
-              <h5 className={styles.categories__subcategorie}>
-                Mas
-              </h5>
-              <BsChevronUp />
-            </div> */}
-          </div>
+          <NavbarCategories categories={categories} />
         </div>
         <div className={styles.list}>
           <div className={styles.list__menu}>
             <div className={styles.list__menu_wrapper}>
-              {isLoading
+              {filterProductsByCategory(products, categories).length === 0
                 ? <LoadingItem />
                 : filterProductsByCategory(products, categories).map(({ name, products }: any, i: number) => (
-                  <div id={`section-${i + 1}`} ref={el => targetRefs.current[i + 1] = el} className={styles.list__menu_subcategory}>
+                  <aside key={i} id={name} className={styles.list__menu_subcategory}>
                     <div>
                       <h2 className={styles.list__menu_subcategory_title}>{name}</h2>
                       <p className={styles.list__menu_subcategory_description}>Todos los precios son por kg.</p>
                     </div>
                     <div className={styles.list__products}>
                       {products.map((item: IProduct) => (
-                        <div onClick={() => setOpenModal({ visible: true, product: item })} className={styles.list__products_item}>
+                        <div key={item._id} onClick={() => setOpenModal({ visible: true, product: item })} className={styles.list__products_item}>
                           <div>
                             <h3 className={styles.list__products_title}>{item.title}</h3>
                             <div className={styles.list__products_price}>{`$${item.price}`}</div>
@@ -142,7 +126,7 @@ const ProductsPage = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </aside>
                 ))
               }
               {cart.length > 0 && (
