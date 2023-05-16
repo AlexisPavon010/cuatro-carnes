@@ -27,10 +27,6 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
     dispatch(removeFromCart(id))
   }
 
-  const showDrawer = () => {
-    close(true);
-  };
-
   const onClose = () => {
     close(false);
   };
@@ -42,8 +38,8 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
       onClose={onClose}
       open={open}
     >
-      {cart.map((item: any) => (
-        <div className={styles.cart}>
+      {cart.map((item: any, i: number) => (
+        <div key={i} className={styles.cart}>
           <div className={styles.cart__start}>
             <span className={styles.cart__start_span}>{item.quantity}</span>
           </div>
