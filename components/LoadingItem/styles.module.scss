@@ -19,3 +19,9 @@
   border-radius: 12px;
   background-color: #f4e8e4;
 }
+
+@media (max-width: 1024px) {
+  .skeleton__item {
+    max-width: 100%;
+  }
+}
