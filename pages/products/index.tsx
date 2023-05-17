@@ -51,7 +51,7 @@ const ProductsPage = () => {
   }
 
   function filterProductsByOffers(products: IProduct[]) {
-    return products.filter(p => p.category === 'Ofertas')
+    return products.filter(p => p.category === 'Ofertas semanales')
   }
 
 
