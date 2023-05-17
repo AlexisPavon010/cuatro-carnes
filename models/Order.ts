@@ -31,38 +31,38 @@ export const OrderSchema = new Schema({
   timestamps: true
 })
 
-OrderSchema.pre('findOneAndUpdate', async function (next) {
-  // Obtenemos la orden actualizada
-  const order = await Order.findOne({ _id: this.getQuery()._id }).exec();
+// OrderSchema.pre('findOneAndUpdate', async function (next) {
+//   // Obtenemos la orden actualizada
+//   const order = await Order.findOne({ _id: this.getQuery()._id }).exec();
 
-  if (!order) {
-    throw new Error('No se encontró la orden');
-  }
+//   if (!order) {
+//     throw new Error('No se encontró la orden');
+//   }
 
-  // Si el estado de la orden es completado, actualiza el stock del producto
-  //  @ts-ignore 
-  if (this._update.status === 'COMPLETED') {
-    console.log(order)
-    order.items.forEach(async (item: IProduct) => {
-      const product = await Product.findById({ _id: item._id });
+//   // Si el estado de la orden es completado, actualiza el stock del producto
+//   //  @ts-ignore 
+//   if (this._update.status === 'COMPLETED') {
+//     console.log(order)
+//     order.items.forEach(async (item: IProduct) => {
+//       const product = await Product.findById({ _id: item._id });
 
-      if (!product) {
-        throw new Error(`No se encontró el producto con el ID: ${item._id}`);
-      }
+//       if (!product) {
+//         throw new Error(`No se encontró el producto con el ID: ${item._id}`);
+//       }
 
-      // Actualiza el stock del producto
-      if (item.stock === 'KILOGRAM') {
-        product.kg_stock -= item.quantity!;
-      } else {
-        product.q_stock -= item.quantity!;
-      }
+//       // Actualiza el stock del producto
+//       if (item.stock === 'KILOGRAM') {
+//         product.kg_stock -= item.quantity!;
+//       } else {
+//         product.q_stock -= item.quantity!;
+//       }
 
-      await product.save();
-    });
-  }
+//       await product.save();
+//     });
+//   }
 
-  next();
-});
+//   next();
+// });
 
 OrderSchema.pre('save', async function (next) {
   const doc = this;
