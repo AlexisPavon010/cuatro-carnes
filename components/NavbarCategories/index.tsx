@@ -69,26 +69,23 @@ export const NavbarCategories = ({ categories }: any) => {
               slidesPerView: 3,
             },
             480: {
-              slidesPerView: 4,
+              slidesPerView: 3,
             },
             768: {
-              slidesPerView: 5,
+              slidesPerView: 4,
             },
             808: {
-              slidesPerView: 6,
-            },
-            900: {
-              slidesPerView: 7,
+              slidesPerView: 4,
             },
             1024: {
-              slidesPerView: 9,
+              slidesPerView: 5,
             }
           }}
         >
           {categories.map(({ name }: any, i: number) => {
             const truncatedName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
             return (
-              <SwiperSlide style={{ textAlign: 'center' }} key={i}>
+              <SwiperSlide key={i}>
                 <button
                   key={i}
                   className={styles.categories__button}
@@ -101,7 +98,7 @@ export const NavbarCategories = ({ categories }: any) => {
                     setActive(i)
                   }}
                 >
-                  {truncatedName}
+                  {name}
                 </button>
               </SwiperSlide>
             )

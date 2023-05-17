@@ -1,15 +1,7 @@
-.categories__wrapper {
-  display: flex;
-  justify-content: space-between;
-}
+.categories__wrapper {}
 
 .categories__start {
-  align-items: center;
-  display: flex;
-  gap: 24px;
   position: relative;
-  flex-direction: row;
-  flex-wrap: wrap;
   max-height: 64px;
   padding: 16px 0;
   transition: all 175ms ease-in;
@@ -24,10 +16,13 @@
   font-weight: 700;
   border-radius: 15px;
   color: #3C3C3B;
+  font-size: 12px;
+  white-space: nowrap;
 
-  // &:hover {
-  //   background-color: #f4e8e4;
-  // }
+  &:hover {
+    background-color: #efe2cf;
+    color: #3C3C3B;
+  }
 }
 
 .categories__button_active {
