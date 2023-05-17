@@ -9,7 +9,11 @@ export const NavbarCategories = ({ categories }: any) => {
 
   const scrollToSection = (sectionId: string) => {
     const section: any = document.getElementById(sectionId);
-    section.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+    if (section) {
+      section.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+    } else {
+      console.log(`La sección ${sectionId} no existe`);
+    }
   };
 
   const buttonRefs = useRef<Array<HTMLButtonElement | any>>([]);
@@ -43,7 +47,6 @@ export const NavbarCategories = ({ categories }: any) => {
           observer.observe(section);
         });
       } else {
-        // El NodeList está vacío, esperar un poco y volver a intentar
         setTimeout(observeSections, 100);
       }
     };
@@ -82,25 +85,27 @@ export const NavbarCategories = ({ categories }: any) => {
             }
           }}
         >
-          {categories.map(({ name }: any, i: number) => (
-            <SwiperSlide key={i}>
-              <button
-                key={i}
-                className={styles.categories__button}
-                data-category={name}
-                ref={(button) => {
-                  buttonRefs.current[i] = button;
-                }}
-                onClick={() => {
-                  scrollToSection(name);
-                  setActive(i)
-                }}
-              >
-                {name}
-              </button>
-            </SwiperSlide>
-          ))
-          }
+          {categories.map(({ name }: any, i: number) => {
+            const truncatedName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
+            return (
+              <SwiperSlide style={{ textAlign: 'center' }} key={i}>
+                <button
+                  key={i}
+                  className={styles.categories__button}
+                  data-category={name}
+                  ref={(button) => {
+                    buttonRefs.current[i] = button;
+                  }}
+                  onClick={() => {
+                    scrollToSection(name);
+                    setActive(i)
+                  }}
+                >
+                  {truncatedName}
+                </button>
+              </SwiperSlide>
+            )
+          })}
         </Swiper>
       </div >
     </div>
