@@ -67,6 +67,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         .then(() => {
           form.resetFields()
           onClose(false)
+          mutate(null);
         })
         .catch((error) => console.log(error))
         .finally(() => setLoading(false))
