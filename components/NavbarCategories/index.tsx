@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide, } from 'swiper/react';
+import { Navigation } from "swiper";
+import "swiper/css/navigation";
 import 'swiper/css';
 
 import styles from './styles.module.scss';
@@ -59,52 +61,56 @@ export const NavbarCategories = ({ categories }: any) => {
   }, [categories, active]);
 
   return (
-    <div className={styles.categories__wrapper}>
-      <div className={styles.categories__start}>
-        <Swiper
-          spaceBetween={0}
-          slidesPerView={3}
-          breakpoints={{
-            360: {
-              slidesPerView: 3,
-            },
-            480: {
-              slidesPerView: 3,
-            },
-            768: {
-              slidesPerView: 4,
-            },
-            808: {
-              slidesPerView: 4,
-            },
-            1024: {
-              slidesPerView: 5,
-            }
-          }}
-        >
-          {categories.map(({ name }: any, i: number) => {
-            const truncatedName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
-            return (
-              <SwiperSlide key={i}>
-                <button
-                  key={i}
-                  className={styles.categories__button}
-                  data-category={name}
-                  ref={(button) => {
-                    buttonRefs.current[i] = button;
-                  }}
-                  onClick={() => {
-                    scrollToSection(name);
-                    setActive(i)
-                  }}
-                >
-                  {name}
-                </button>
-              </SwiperSlide>
-            )
-          })}
-        </Swiper>
-      </div >
+    <div className={styles.categories__container}>
+      <div className={styles.categories__wrapper}>
+        <div className={styles.categories__start}>
+          <Swiper
+            modules={[Navigation]}
+            navigation={true}
+            spaceBetween={0}
+            slidesPerView={3}
+            breakpoints={{
+              360: {
+                slidesPerView: 3,
+              },
+              480: {
+                slidesPerView: 3,
+              },
+              768: {
+                slidesPerView: 4,
+              },
+              808: {
+                slidesPerView: 4,
+              },
+              1024: {
+                slidesPerView: 5,
+              }
+            }}
+          >
+            {categories.map(({ name }: any, i: number) => {
+              const truncatedName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
+              return (
+                <SwiperSlide style={{ textAlign: 'center' }} key={i}>
+                  <button
+                    key={i}
+                    className={styles.categories__button}
+                    data-category={name}
+                    ref={(button) => {
+                      buttonRefs.current[i] = button;
+                    }}
+                    onClick={() => {
+                      scrollToSection(name);
+                      setActive(i)
+                    }}
+                  >
+                    {name}
+                  </button>
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>
+        </div >
+      </div>
     </div>
   );
 };

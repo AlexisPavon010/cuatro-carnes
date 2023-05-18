@@ -90,9 +90,7 @@ const ProductsPage = () => {
         </div >
       </section >
       <section className={styles.categories}>
-        <div className={styles.categories__container}>
-          <NavbarCategories categories={categories} />
-        </div>
+        <NavbarCategories categories={categories} />
         <div className={styles.list}>
           <div className={styles.list__menu}>
             <div className={styles.list__menu_wrapper}>

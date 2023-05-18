@@ -84,3 +84,13 @@ a {
 .swiper-wrapper {
   align-items: center;
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #a92b3c !important;
+  height: 20px;
+
+  &::after {
+    font-size: 20px !important;
+  }
+}

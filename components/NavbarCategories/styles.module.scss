@@ -1,3 +1,13 @@
+.categories__container {
+  max-width: 1176px;
+  padding: 0 24px;
+  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background-color: #f4e8e4;
+}
+
 .categories__wrapper {}
 
 .categories__start {
@@ -49,5 +59,11 @@
 
   &:hover {
     background-color: #efe2cf;
+  }
+}
+
+@media (max-width: 768px) {
+  .categories__container {
+    padding: 0px
   }
 }
