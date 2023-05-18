@@ -31,9 +31,9 @@ export const Slider = ({ products }: SliderProps) => {
               Ofertas
             </h2>
             <div className={styles.slider__nav_actions}>
-              <Link href='/' className={styles.slider__nav_actions_links}>
+              {/* <Link href='/' className={styles.slider__nav_actions_links}>
                 Ver todo
-              </Link>
+              </Link> */}
               <button aria-label="boton anterior slider" className={styles.slider__nav_actions_button}>
                 <BsChevronLeft onClick={() => swiper.current.slidePrev()} size={16} />
               </button>
