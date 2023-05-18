@@ -81,7 +81,7 @@ const ProductsPage = () => {
               {
                 filterProductsByOffers(products).map((product, i) => (
                   <SwiperSlide key={i}>
-                    <OfferItem product={product} />
+                    <OfferItem product={product} setOpenModal={setOpenModal} />
                   </SwiperSlide>
                 ))
               }
