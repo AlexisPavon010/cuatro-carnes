@@ -12,11 +12,13 @@ const schema = Joi.object({
   title: Joi.string().min(3).required(),
   description: Joi.string().min(3).required(),
   price: Joi.number().required(),
-  offert_price:Joi.number(),
+  offert_price: Joi.number(),
+  product_code: Joi.number(),
   category: Joi.string().min(3).required(),
   image: Joi.string().required(),
   q_stock: Joi.number(),
   kg_stock: Joi.number(),
+  stock: Joi.string(),
 });
 
 export default function handler(
@@ -59,6 +61,7 @@ const CreateProduct = async (
     const data = await Product.create(req.body)
     return res.status(200).json(data)
   } catch (error: any) {
+    console.log(error)
     return res.status(400).json(error.details)
   }
 }
