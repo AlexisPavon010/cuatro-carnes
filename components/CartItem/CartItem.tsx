@@ -45,7 +45,7 @@ export const CartItem = () => {
       ))}
       <div className={styles.cart__total}>
         <div className={styles.cart__total_text}>
-          Descuento (%{discount})
+          Descuento (%7)
         </div>
         <div className={styles.cart__total_price}>
           ${Math.round(getCartTotal(cart) * discount)}
@@ -53,7 +53,7 @@ export const CartItem = () => {
       </div>
       <div className={styles.cart__total}>
         <div className={styles.cart__total_text}>
-          Total
+          Subtotal
         </div>
         <div className={styles.cart__total_price}>
           <CurrencyFormat value={getCartTotal(cart)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
@@ -61,7 +61,7 @@ export const CartItem = () => {
       </div>
       <div className={styles.cart__subtotal}>
         <div className={styles.cart__subtotal_text}>
-          Subtotal
+          Total
         </div>
         <div className={styles.cart__subtotal_price}>
           <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
