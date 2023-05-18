@@ -5,7 +5,7 @@ export const getProductsOffers = async () => {
 
   const data = await Product.find()
 
-  const products = data.filter(p => p.category === 'Ofertas')
+  const products = data.filter(p => p.category === 'Ofertas semanales')
 
   return JSON.parse(JSON.stringify(products))
 }
