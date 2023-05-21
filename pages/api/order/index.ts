@@ -141,10 +141,10 @@ const CreateOrder = async (
       ...req.body,
       userID: session.user.id
     })
-    axios.post('http://54.209.160.199:8000/send-message', {
-      phoneNumber: phone,
-      uniqueID: data.uniqueID
-    })
+    // axios.post('http://54.209.160.199:8000/send-message', {
+    //   phoneNumber: phone,
+    //   uniqueID: data.uniqueID
+    // })
 
     return res.status(200).json(data)
 

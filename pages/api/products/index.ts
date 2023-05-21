@@ -48,7 +48,7 @@ const getProducts = async (
     condition = { category }
   }
 
-  const data = await Product.find(condition).exec();
+  const data = await Product.find(condition).lean();
   return res.status(200).json(data)
 }
 

@@ -42,7 +42,7 @@ const getCategories = async (
     }
   }
 
-  const data = await Category.find(condition)
+  const data = await Category.find(condition).lean()
   return res.status(200).json(data)
 }
 
