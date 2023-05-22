@@ -66,7 +66,12 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: any) => {
       cancelText='Cancelar'
     >
       <Upload  {...props}>
-        <Button icon={<BiUpload />}>Subir Archivo</Button>
+        <Button
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          icon={<BiUpload size={18} />}
+        >
+          Subir Archivo
+        </Button>
       </Upload>
     </Modal>
   )
