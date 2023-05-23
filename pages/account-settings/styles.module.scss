@@ -1,0 +1,55 @@
+.settings {
+  padding-top: 90px;
+}
+
+.settings__container {
+  padding: 24px;
+  max-width: 1114px;
+  margin: 0 auto;
+}
+
+.settings__content {
+  max-width: 552px;
+  margin: 0 auto 20px;
+}
+
+.settings__account_title {
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -.68px;
+  margin: 40px 0 33px;
+  position: relative;
+  left: 2px;
+  word-break: break-word;
+}
+
+.settings__card {
+  background-color: transparent !important;
+  margin-top: 20px !important;
+  border: 1px solid #e4dede !important;
+  box-shadow: 0px 3px 3px 1px rgba(71, 71, 71, 0.185);
+}
+
+.settings__card_input {
+  background-color: transparent !important;
+}
+
+.settings__button {
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 24px;
+  background-color: #A92B3C;
+  border-radius: 32px;
+  color: #F5EBDC;
+  transition: filter 0.4s;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.settings__button_loading {
+  font-size: 24px;
+  color: white;
+}
