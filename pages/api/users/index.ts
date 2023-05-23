@@ -28,14 +28,17 @@ const getUsers = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 const updateUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { id = '', role = '' } = req.body;
 
-  const data = await User.findById(id)
+  try {
+    const data = await User.findByIdAndUpdate(id, req.body, { new: true })
 
-  if (!data) {
-    return res.status(404).json({ message: 'User by id not found' })
+    if (!data) {
+      return res.status(404).json({ message: 'User by id not found' })
+    }
+
+
+    return res.status(200).json(data)
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ message: 'Error al actualizar el usuario.' })
   }
-
-  data.role = role;
-  await data.save()
-
-  return res.status(200).json(data)
 };
