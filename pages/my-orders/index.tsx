@@ -1,6 +1,7 @@
-import { Avatar, Badge, List, Space, Typography } from 'antd'
+import { Avatar, Badge, List, Space, Typography } from 'antd';
 import { getSession } from 'next-auth/react';
 import { GetServerSideProps } from 'next';
+import { useState } from 'react';
 
 import { getOrdersByUser } from '@/database/dbOrders';
 import { Layout } from '@/components/Layout'
@@ -13,37 +14,48 @@ interface OrderPageProps {
 }
 
 const OrderPage = ({ orders }: OrderPageProps) => {
+  const [limit, setLimit] = useState(10)
+
+  const onPageSizeChange = (current: any, size: number) => {
+    setLimit(size)
+  }
 
   return (
     <Layout title='Mis Ordenes - Cuatro Carnes'>
       <div className={styles.orders}>
         <div className={styles.orders__container}>
           <List
-            header={<div>Total Pedidos</div>}
-            bordered
+            itemLayout="horizontal"
             dataSource={orders}
             pagination={{
-              pageSize: 5,
+              pageSize: limit,
+              onShowSizeChange: onPageSizeChange
             }}
-            renderItem={(order) => (
-              order.items.map((item: IProduct) => (
-                <List.Item
-                  key={item.title}
-                  extra={
-                    < Space >
-                      <Typography.Text>${item.price}</Typography.Text>
-                      <Typography.Text>${item.price * item.quantity!}</Typography.Text>
-                      <Badge count={item.quantity} />
-                    </Space >
-                  }
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar shape='square' src={item.image} />}
-                    title={item.title}
+            renderItem={(order, index) => (
+              <List
+                header={<div>{`Detalles del pedido. #${order.uniqueID}`}</div>}
+                renderItem={(item: IProduct, i) => (
+                  < List.Item
+                    key={i}
+                    extra={
+                      < Space >
+                        <Typography.Text>${item.price}</Typography.Text>
+                        <Typography.Text>${item.price * item.quantity!}</Typography.Text>
+                        <Badge color='#A92B3C' count={item.quantity} />
+                      </Space >
+                    }
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar shape='square' src={item.image} />}
+                      title={item.title}
                     // description={item.description}
-                  />
-                </List.Item >
-              ))
+                    />
+                  </List.Item >
+                )}
+                style={{ marginBottom: '20px' }}
+                dataSource={order.items}
+                bordered
+              />
             )}
           />
         </div>
