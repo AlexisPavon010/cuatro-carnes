@@ -16,7 +16,7 @@ export const UserModal = ({ mutate, openModal, setOpenModal }: OptionsModalProps
 
   const onFinish = (values: any) => {
     setLoading(true)
-    updateUser(values.rol, openModal.user?._id!)
+    updateUser({ role: values.rol, id: openModal.user?._id! })
       .then(({ data }) => {
         mutate(null)
         message.success('Rol cambiado con exito')

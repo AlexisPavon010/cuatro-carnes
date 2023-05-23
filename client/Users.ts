@@ -9,11 +9,8 @@ export const registerUser = ({ username, email, phone, password }: { email: stri
   })
 }
 
-export const updateUser = (role: string, id: string) => {
-  return axios.put('/api/users', {
-    role,
-    id
-  })
+export const updateUser = (payload: any) => {
+  return axios.put('/api/users', payload)
 }
 
 export const recoveryPassword = (email: string) => {
