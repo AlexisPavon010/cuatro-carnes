@@ -21,6 +21,7 @@ export const Header = ({ openDrawer }: any) => {
   const items: MenuProps['items'] = [
     {
       label: 'Configuración de la cuenta',
+      onClick: () => router.push('/account-settings'),
       key: '0',
     },
     {
