@@ -1,4 +1,5 @@
 import { FaFacebookF, FaInstagram, FaYoutube, FaTwitter } from 'react-icons/fa';
+import Link from 'next/link';
 
 import styles from './styles.module.scss'
 
@@ -23,7 +24,9 @@ export const Footer = () => {
           <div className={styles.footer__menu_info_end}>
             <h5 className={styles.footer__menu_info_text}>Compañía</h5>
             <p className={styles.footer__menu_info_subtitle}>Contáctanos</p>
-            <p className={styles.footer__menu_info_subtitle}>Política de privacidad</p>
+            <Link href='/politica-de-privacidad' className={styles.footer__menu_info_subtitle}>
+              Política de privacidad
+            </Link>
           </div>
         </div>
         <div className={styles.footer__bottom}>

@@ -26,7 +26,7 @@ export const Drawer = ({ isDrawerOpen, closeDrawer }: DrawerProps) => {
 
       {session && (
         <>
-          <Link className={styles.drawer__item} href="/">
+          <Link className={styles.drawer__item} href="/account-settings">
             Configuración de la cuenta
           </Link>
           <Link className={styles.drawer__item} href="/my-orders">
@@ -40,7 +40,7 @@ export const Drawer = ({ isDrawerOpen, closeDrawer }: DrawerProps) => {
               Dashboard
             </Link>
           )}
-          <Link onClick={() => signOut()} className={styles.drawer__item} href="#">
+          <Link onClick={() => signOut()} className={styles.drawer__item} href="/#">
             Cerrar Sesión
           </Link>
           <Divider />
