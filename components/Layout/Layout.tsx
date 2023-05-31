@@ -29,6 +29,10 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         {description && (
           <meta name="description" content={description} />
         )}
+        <meta property="og:site_name" content="Bienvenidos a Cuatro Carnes" />
+        <meta property="og:image" content="https://cuatro-carnes.vercel.app/assets/logo-side.svg" />
+        <meta property="og:image:height" content="813" />
+        <meta property="og:image:width" content="813" />
       </Head>
       <Header openDrawer={openDrawer} />
       {children}
