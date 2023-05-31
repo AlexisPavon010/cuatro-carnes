@@ -43,18 +43,13 @@ const getOrders = async (
   let condition: any = {}
 
   const day = new Date();
-  // Calculas las fechas de inicio y fin del día correspondiente a la fecha recibida
-  const startOfDay = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-  const endOfDay = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1);
-
-  // Calculas las fechas de inicio y fin de la semana correspondiente a la fecha recibida
-  const startOfWeek = new Date(day.getFullYear(), day.getMonth(), day.getDate() - day.getDay());
-  const endOfWeek = new Date(day.getFullYear(), day.getMonth(), day.getDate() - day.getDay() + 7);
-
-  // Calculas las fechas de inicio y fin del mes correspondiente a la fecha recibida
-  const startOfMonth = new Date(day.getFullYear(), day.getMonth(), 1);
-  const endOfMonth = new Date(day.getFullYear(), day.getMonth() + 1, 1);
-
+  const nowArgentina = new Date(day.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
+  const startOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate());
+  const endOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() + 1);
+  const startOfWeek = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() - nowArgentina.getDay());
+  const endOfWeek = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() - nowArgentina.getDay() + 7);
+  const startOfMonth = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), 1);
+  const endOfMonth = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth() + 1, 0);
 
   if (date === 'day') {
     condition = {
