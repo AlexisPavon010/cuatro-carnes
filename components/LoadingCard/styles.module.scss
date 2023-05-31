@@ -1,0 +1,19 @@
+.slider__list_item {
+  padding: 16px 0;
+  font-size: 17px;
+}
+
+.slider__list_item_skeleton {
+  display: flex !important;
+  flex: 1;
+
+  &>:nth-child(1) {
+    display: flex !important;
+    height: 240px !important;
+    flex: 1;
+  }
+}
+
+.slider__list_item_text {
+  padding-top: 16px;
+}

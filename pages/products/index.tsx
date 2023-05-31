@@ -19,6 +19,8 @@ import { setShippingMethod } from '@/store/cart/shoppingSlice';
 import { CartItemMobile } from '@/components/CartItemMobile'
 import { OfferItem } from '@/components/OfferItem'
 import { NavbarCategories } from '@/components/NavbarCategories'
+import { LoadingCard } from '@/components/LoadingCard'
+import { LoadingCategories } from '@/components/LoadingCategories'
 
 const ProductsPage = () => {
   const [openCartMobile, setOpenCartMobile] = useState(false)
@@ -77,24 +79,33 @@ const ProductsPage = () => {
                 }
               }}
             >
-
               {
-                filterProductsByOffers(products).map((product, i) => (
-                  <SwiperSlide key={i}>
-                    <OfferItem product={product} setOpenModal={setOpenModal} />
-                  </SwiperSlide>
-                ))
+                filterProductsByOffers(products).length === 0
+                  ? Array(3).fill('').map((_: any, i: number) => (
+                    <SwiperSlide key={i}>
+                      <LoadingCard />
+                    </SwiperSlide>
+                  ))
+                  : filterProductsByOffers(products).map((product, i) => (
+                    <SwiperSlide key={i}>
+                      <OfferItem product={product} setOpenModal={setOpenModal} />
+                    </SwiperSlide>
+                  ))
               }
             </Swiper>
           </div>
         </div >
       </section >
       <section className={styles.categories}>
-        <NavbarCategories categories={categories} />
+        {
+          categories.length === 0
+            ? <LoadingCategories />
+            : <NavbarCategories categories={categories} />
+        }
         <div className={styles.list}>
           <div className={styles.list__menu}>
             <div className={styles.list__menu_wrapper}>
-              {filterProductsByCategory(products, categories).length === 0
+              {filterProductsByOffers(products).length === 0
                 ? <LoadingItem />
                 : filterProductsByCategory(products, categories).map(({ name, products }: any, i: number) => (
                   <aside key={i} id={name} className={styles.list__menu_subcategory}>
