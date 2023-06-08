@@ -87,7 +87,7 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
       render: (_, record) => (
         <Space>
           <Tooltip title="Chatear por consulta">
-            <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="default" shape="circle" icon={<BsWhatsapp size={18} />} />
+            <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="default" shape="circle" icon={<BsWhatsapp size={18} />} onClick={() => window.open(`https://api.whatsapp.com/send/?phone=%2B${record.phone}`)} />
           </Tooltip>
           <Tooltip title="Editar">
             <Button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="text" shape="circle" icon={<BsPencil size={18} />} onClick={() => setModalOpen({ visible: true, order: record })} />
