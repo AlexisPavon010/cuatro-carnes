@@ -69,7 +69,7 @@ export const MapboxMaps = () => {
         mapRef.current = undefined
       }
     }
-  }, [userLocation])
+  }, [userLocation, isMapVisible])
 
   useEffect(() => {
     getUserLocation()
