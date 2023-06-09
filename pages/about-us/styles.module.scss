@@ -1,0 +1,52 @@
+.hero {
+  background-image: url('/assets/grilled-beef-steaks.jpg');
+  background-size: cover;
+  background-position: 50%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.hero__overlay {
+  background-color: #000000;
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  color: white;
+}
+
+.hero__container {
+  max-width: 1176px;
+  margin: 0 auto;
+  padding: 0 24px;
+  background: none;
+}
+
+.hero__home {
+  min-height: calc(100vh - 176px);
+  width: 100%;
+  background: none;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  position: relative;
+}
+
+.hero__home_title {
+  text-align: center;
+  color: white;
+  font-size: 32px;
+  margin: 40px 0 33px;
+}
+
+.hero__home_description {
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  // letter-spacing: 2.5px;
+}
