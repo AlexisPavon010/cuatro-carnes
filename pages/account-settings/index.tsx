@@ -1,13 +1,13 @@
-import { LoadingOutlined } from '@ant-design/icons';
 import { Button, Card, DatePicker, Form, Input, message } from 'antd';
-import { signOut, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
 import es_ES from "antd/lib/date-picker/locale/es_ES";
+import { signOut, useSession } from 'next-auth/react';
+import { LoadingOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
 
 import { Layout } from '@/components/Layout';
 import styles from './styles.module.scss';
 import { updateUser } from '@/client';
-import moment from 'moment';
 
 const AccountSettings = () => {
   const [loading, setLoading] = useState(false)
@@ -16,14 +16,16 @@ const AccountSettings = () => {
 
   useEffect(() => {
     if (!session) return
-    // form.setFieldValue('date', moment(session.expires))
-    form.setFieldsValue(session?.user)
+    form.setFieldValue('name', session.user.name)
+    form.setFieldValue('email', session.user.email)
+    form.setFieldValue('birthday_date', moment(session.user.birthday_date))
+    form.setFieldValue('phone', session.user.phone)
   }, [session])
 
-  const handleUpdateUser = ({ name, phone, email, date }: any) => {
-    const formattedDate = moment(date).toISOString()
-
+  const handleUpdateUser = ({ name, phone, email, birthday_date }: any) => {
+    setLoading(true)
     updateUser({
+      birthday_date: moment(birthday_date.toISOString()),
       id: session?.user.id,
       username: name,
       phone,
@@ -63,17 +65,21 @@ const AccountSettings = () => {
                 <Form.Item
                   label='Correo'
                   name="email"
-                  rules={[{ required: true }]}
                 >
-                  <Input rootClassName={styles.settings__card_input} placeholder="Inserte un correo valido" />
+                  <Input rootClassName={styles.settings__card_input} placeholder="Inserte un correo valido" disabled />
                 </Form.Item>
 
                 <Form.Item
                   label='Fecha de cumpleaños'
-                  name="date"
+                  name="birthday_date"
                   rules={[{ required: true }]}
                 >
-                  <DatePicker locale={es_ES} style={{ width: '100%' }} rootClassName={styles.settings__card_input} />
+                  <DatePicker
+                    locale={es_ES}
+                    format="YYYY-MM-DD"
+                    style={{ width: '100%' }}
+                    rootClassName={styles.settings__card_input}
+                  />
                 </Form.Item>
 
                 <Form.Item
