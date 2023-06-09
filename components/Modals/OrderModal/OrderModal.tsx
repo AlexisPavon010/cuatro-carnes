@@ -19,7 +19,7 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
   const [count, setCount] = useState(1)
   const [selectedOptions, setSelectedOptions] = useState<any>([])
   const dispatch = useDispatch()
-  const { image, title, price, description } = open.product || {}
+  const { image, title, price, offert_price, description } = open.product || {}
 
   const productsWithItem = selectedOptions.filter((item: IItem) => item.item);
   const options = productsWithItem.map((item: IItem) => ({ title: item.name, name: item.item.name, price: item.item.price }));
@@ -149,7 +149,16 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
           <button onClick={addItemToCart} className={styles.button}>
             <span className={styles.button__content}>
               <div>
-                <CurrencyFormat value={price! * count} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                <CurrencyFormat
+                  value={
+                    count > 2
+                      ? offert_price ? offert_price : price! * count
+                      : price! * count
+                  }
+                  displayType={'text'}
+                  thousandSeparator={true}
+                  prefix={'$'}
+                />
               </div>
               <div>Añadir</div>
             </span>
