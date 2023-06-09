@@ -33,7 +33,7 @@ const OrderPage = ({ orders }: OrderPageProps) => {
             }}
             renderItem={(order, index) => (
               <List
-                header={<div>{`Detalles del pedido. #${order.uniqueID}`}</div>}
+                header={<strong>{`Detalles del pedido. #${order.uniqueID}`}</strong>}
                 renderItem={(item: IProduct, i) => (
                   < List.Item
                     key={i}
@@ -47,7 +47,7 @@ const OrderPage = ({ orders }: OrderPageProps) => {
                   >
                     <List.Item.Meta
                       avatar={<Avatar shape='square' src={item.image} />}
-                      title={item.title}
+                      description={item.title}
                     // description={item.description}
                     />
                   </List.Item >
