@@ -56,7 +56,9 @@ export const Header = ({ openDrawer }: any) => {
                 </Link>
               </div> */}
               <div className={styles.header__nav_item}>
-                Nosotros
+                <Link href='/about-us'>
+                  Nosotros
+                </Link>
               </div>
               {/* <div className={styles.header__nav_item}>
                 Cupones
