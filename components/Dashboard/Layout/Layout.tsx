@@ -6,10 +6,11 @@ import { SideMenu } from './SideMenu';
 const { Sider, Content } = AntLAyout;
 
 interface LayoutProps {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[];
+  items: any;
 }
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children, items }: LayoutProps) => {
   const [collapsed, setCollapsed] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const openMenu = () => setIsMenuOpen(true)
@@ -33,7 +34,7 @@ export const Layout = ({ children }: LayoutProps) => {
         <SideMenu collapsed={collapsed} />
       </Drawer>
       <AntLAyout>
-        <Navbar openMenu={openMenu} />
+        <Navbar openMenu={openMenu} items={items} />
         <Content
           style={{
             padding: 24,

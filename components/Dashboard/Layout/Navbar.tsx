@@ -1,14 +1,16 @@
-import { Button, Col, Row, Space } from "antd"
+import { Breadcrumb, Button, Col, Row, Space } from "antd"
 import { AiOutlineMenu } from 'react-icons/ai';
 import { signOut, useSession } from 'next-auth/react'
 
 import styles from './styles.module.scss'
+import Link from "next/link";
 
 interface NavbarProps {
   openMenu: () => void;
+  items: any;
 }
 
-export const Navbar = ({ openMenu }: NavbarProps) => {
+export const Navbar = ({ openMenu, items }: NavbarProps) => {
   const { data: session } = useSession()
 
   return (
@@ -18,7 +20,9 @@ export const Navbar = ({ openMenu }: NavbarProps) => {
           <Button type="link" onClick={openMenu} icon={<AiOutlineMenu size={24} color="#525F7F" />} />
         </Col>
         <Col flex={1}>
-          Tablero Operativo
+          <Breadcrumb
+            items={items}
+          />
         </Col>
         <Col>
           <Space size='large'>

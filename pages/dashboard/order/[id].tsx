@@ -1,12 +1,14 @@
 import { Avatar, Badge, Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
-import mapboxgl, { Map, Marker, LngLatBounds, AnySourceData } from 'mapbox-gl'
+import mapboxgl, { Map, Marker, LngLatBounds, AnySourceData } from 'mapbox-gl';
 import { BsCash, BsCreditCard2Back } from 'react-icons/bs';
 import { AiOutlineBank } from 'react-icons/ai';
-import { useRouter } from 'next/router';
-import { useRef, useEffect } from 'react'
-import moment from 'moment';
 import { BiArrowBack } from 'react-icons/bi';
 import { GetServerSideProps } from 'next';
+import { useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import moment from 'moment';
 
 import { Layout } from '@/components/Dashboard/Layout';
 import { directionsApi } from '@/client/Direction';
@@ -156,7 +158,22 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
 
 
   return (
-    <Layout>
+    <Layout
+      items={[
+        {
+          title: 'Dashboard',
+        },
+        {
+          title: <Link href="/dashboard">Orden</Link>,
+        },
+        {
+          title: `#${order.uniqueID}`,
+        }
+      ]}
+    >
+      <Head>
+        <title>Cuatro Carnes | Dashboard</title>
+      </Head>
       <Card style={{ marginBottom: '20px' }} id="section-not-print">
         <Row>
           <Col flex={1}>

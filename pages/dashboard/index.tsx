@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd'
 import { useState } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import { Layout } from '@/components/Dashboard/Layout/Layout'
 import { Card } from '@/components/Dashboard/Card/Card';
@@ -14,7 +15,16 @@ const DashboardPage = () => {
   })
 
   return (
-    <Layout>
+    <Layout
+      items={[
+        {
+          title: 'Dashboard',
+        },
+        {
+          title: <Link href="/dashboard">Tablero Operativo</Link>,
+        }
+      ]}
+    >
       <Head>
         <title>Cuatro Carnes | Dashboard</title>
       </Head>
