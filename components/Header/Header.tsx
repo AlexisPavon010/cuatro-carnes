@@ -56,7 +56,7 @@ export const Header = ({ openDrawer }: any) => {
                 </Link>
               </div> */}
               <div className={styles.header__nav_item}>
-                <Link href='/about-us'>
+                <Link href='/nosotros'>
                   Nosotros
                 </Link>
               </div>

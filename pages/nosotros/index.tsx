@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BsWhatsapp } from "react-icons/bs";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { FaRegCreditCard, FaShoppingCart, FaStoreAlt } from "react-icons/fa";
+import { FaRegCreditCard, FaStoreAlt } from "react-icons/fa";
 
 import { Layout } from "@/components/Layout";
 import styles from './styles.module.scss';
@@ -73,7 +73,7 @@ const AboutUsPage = () => {
             ))}
           </div>
         </div>
-      </section >
+      </section>
       <section className={styles.hero__dis}>
         <div className={styles.hero__container_dis}>
           <div className={styles.hero__container_rigth}>
@@ -87,7 +87,7 @@ const AboutUsPage = () => {
           <div className={styles.hero__container_left}>
             <Image src='/assets/distribution.png' alt='Distribution Image' height={380} width={570} style={{ width: '100%', objectFit: 'contain' }} />
           </div>
-        </div >
+        </div>
       </section>
       <section className={styles.hero__location}>
         <div className={styles.hero__maps_container}>
@@ -104,7 +104,7 @@ const AboutUsPage = () => {
             </div>
             <div className={styles.hero__container_maps_wrapper}>
               <p className={styles.hero__container_maps_text}>
-                Av. Juan B. Justo 2085, Troncos del Talar.
+                Av. Crisólogo Larralde 2306, Troncos del Talar.
               </p>
               <iframe src="https://maps.google.com/maps?q=Av%20Cris%C3%B3logo%20Larralde%202306%2C%20Troncos%20del%20Talar&t=m&z=14&output=embed&iwloc=near" height="600" style={{ border: 0 }} allowFullScreen></iframe>
               <p className={styles.hero__container_maps_description}>
@@ -112,9 +112,9 @@ const AboutUsPage = () => {
               </p>
             </div>
           </div>
-        </div >
+        </div>
       </section>
-      <section>
+      <section id="contact">
         <div className={styles.hero__container}>
           <div className={styles.hero__contact}>
             <div className={styles.hero__contact_wrapper}>
@@ -130,12 +130,26 @@ const AboutUsPage = () => {
                 layout="vertical"
               >
                 <Form.Item
-                  label='Tu nombre'
+                  label='Nombre'
+                  name='name'
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label='Asunto'
+                  label='Empresa'
+                  name='company'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label='Teléfono'
+                  name='phone'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label='Correo'
+                  name='email'
                 >
                   <Input />
                 </Form.Item>
@@ -148,7 +162,7 @@ const AboutUsPage = () => {
                     }}
                   />
                 </Form.Item>
-                <Form.Item>
+                <Form.Item wrapperCol={{ span: 24, offset: 10 }}>
                   <Button type="primary">
                     Enviar
                   </Button>
