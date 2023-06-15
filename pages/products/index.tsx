@@ -1,10 +1,9 @@
+import 'swiper/css';
 import { Select } from 'antd'
 import Image from 'next/image'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
-import { Swiper, SwiperSlide, } from 'swiper/react';
-import 'swiper/css';
+import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './styles.module.scss';
 import { Layout } from '@/components/Layout';
@@ -14,13 +13,12 @@ import { CartItem } from '@/components/CartItem';
 import { ICategories } from '@/interfaces/categories';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingItem } from '@/components/LoadingItem';
+import { OfferSlider } from '@/components/OfferSlider';
 import { setPickUpTime } from '@/store/places/placesSlice';
 import { setShippingMethod } from '@/store/cart/shoppingSlice';
-import { CartItemMobile } from '@/components/CartItemMobile'
-import { OfferItem } from '@/components/OfferItem'
-import { NavbarCategories } from '@/components/NavbarCategories'
-import { LoadingCard } from '@/components/LoadingCard'
-import { LoadingCategories } from '@/components/LoadingCategories'
+import { CartItemMobile } from '@/components/CartItemMobile';
+import { NavbarCategories } from '@/components/NavbarCategories';
+import { LoadingCategories } from '@/components/LoadingCategories';
 
 const ProductsPage = () => {
   const [openCartMobile, setOpenCartMobile] = useState(false)
@@ -63,36 +61,7 @@ const ProductsPage = () => {
         <div className={styles.hero__container}>
           {/* <Slider /> */}
           <div className={styles.slider__list}>
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={3}
-              breakpoints={{
-                20: {
-                  slidesPerView: 1,
-                },
-                480: {
-                  slidesPerView: 2,
-                  spaceBetween: 20
-                },
-                768: {
-                  slidesPerView: 3,
-                }
-              }}
-            >
-              {
-                filterProductsByOffers(products).length === 0
-                  ? Array(3).fill('').map((_: any, i: number) => (
-                    <SwiperSlide key={i}>
-                      <LoadingCard />
-                    </SwiperSlide>
-                  ))
-                  : filterProductsByOffers(products).map((product, i) => (
-                    <SwiperSlide key={i}>
-                      <OfferItem product={product} setOpenModal={setOpenModal} />
-                    </SwiperSlide>
-                  ))
-              }
-            </Swiper>
+            <OfferSlider products={products} setOpenModal={setOpenModal} />
           </div>
         </div >
       </section >
