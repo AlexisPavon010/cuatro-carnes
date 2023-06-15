@@ -39,7 +39,7 @@ const AboutUsPage = () => {
               Somos una empresa de origen y tradición familiar.
             </h1>
             <p className={styles.hero__home_description}>
-              Además de distribuidores somos productores directos. En la estancia Don Pancho ubicada en Relmo, provincia de La Pampa, nos dedicamos al engorde de novillitos y vaquillonas  AnGus, conocida por su carne de primera calidad (veteada, tierna, jugosa y sabrosa). A través de técnicas sustentables de vanguardia y utilizando una alimentación a base de pastura y alimento balanceado logramos un producto final premium. Por eso podemos garantizar la calidad de la carne y conocer la trazabilidad del recorrido que hizo desde el campo a su mesa.
+              Además de distribuidores somos productores directos. En la estancia Don Pancho ubicada en Relmo, provincia de La Pampa, nos dedicamos al engorde de novillitos y vaquillonas  Angus, conocida por su carne de primera calidad (veteada, tierna, jugosa y sabrosa). A través de técnicas sustentables de vanguardia y utilizando una alimentación a base de pastura y alimento balanceado logramos un producto final premium. Por eso podemos garantizar la calidad de la carne y conocer la trazabilidad del recorrido que hizo desde el campo a su mesa.
             </p>
             <br />
             <br />
