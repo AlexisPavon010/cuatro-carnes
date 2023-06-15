@@ -15,7 +15,7 @@ import { sendSucces } from "@/client/Email";
 const { Option } = Select;
 
 const CheckoutPage = () => {
-  const { userDirection, userLocation } = useSelector((state: any) => state.places)
+  const { pickUpTime, userDirection, userLocation } = useSelector((state: any) => state.places)
   const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
   const [orderID, setOrderID] = useState('000000')
   const [success, setSuccess] = useState(false)
@@ -65,6 +65,9 @@ const CheckoutPage = () => {
       total: getCartTotal(cart),
       phone: values.code + values.phone
     })
+      .then(({ data }) => { console.log(data) })
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false))
     createOrder({
       ...values,
       items: cart,
@@ -233,7 +236,7 @@ const CheckoutPage = () => {
                 <div className={styles.checkout__content_summary_card}>
                   <div>
                     <h2 className={styles.checkout__content_summary_card_title}>{userDirection}</h2>
-                    <p>En el local para aproximadamente 13:46</p>
+                    <p>En el local para aproximadamente {pickUpTime}</p>
                   </div>
                 </div>
                 <div className={styles.checkout__content_summary_card}>
