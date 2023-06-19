@@ -143,7 +143,7 @@ const CheckoutPage = () => {
         <div className={styles.checkout}>
           <div className={styles.checkout__container}>
             <div>
-              <h1 className={styles.checkout_title}>Pagar ahora</h1>
+              <h1 className={styles.checkout_title}>Ordenar ahora</h1>
             </div>
             <div className={styles.checkout__content}>
               <div className={styles.checkout__content_form}>
@@ -236,7 +236,13 @@ const CheckoutPage = () => {
                 <div className={styles.checkout__content_summary_card}>
                   <div>
                     <h2 className={styles.checkout__content_summary_card_title}>{userDirection}</h2>
-                    <p>En el local para aproximadamente {pickUpTime}</p>
+                    <p>
+                      {
+                        pickup_or_delivery === 'DELIVERY'
+                          ? `Delivery para aproximadamente ${pickUpTime}`
+                          : `En el local para aproximadamente ${pickUpTime}`
+                      }
+                    </p>
                   </div>
                 </div>
                 <div className={styles.checkout__content_summary_card}>
