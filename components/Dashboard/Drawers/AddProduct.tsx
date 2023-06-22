@@ -1,12 +1,14 @@
-import { Button, Col, Drawer, Form, Input, InputNumber, Radio, Row, Select, Space, Spin, Upload, } from 'antd'
+import { Button, Col, Drawer, Form, Input, InputNumber, Radio, Row, Select, Space, Spin, Tooltip, Upload, } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload';
-import { BiPlus } from 'react-icons/bi';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
+import { BiPlus } from 'react-icons/bi';
 import axios from 'axios';
 
 import { createProduct, getProductById, updateProductById } from '@/client';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { ICategories } from '@/interfaces/categories';
+import { CropModal } from '../CropModal';
 
 const { TextArea } = Input;
 
@@ -19,26 +21,42 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [stockChange, setChangeStock] = useState(false)
   const [stock, setStock] = useState(1)
 
+  const [showCropper, setShowCropper] = useState(false);
+  const [cropIsLoading, setCropIsLoading] = useState(false);
+  const [src, setSrc] = useState<string | ArrayBuffer | null>(null);
+
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
-      setLoadingImage(true);
-      // Get this url from response in real world.
-      const formData = new FormData();
-      formData.append("file", info.file.originFileObj as RcFile);
-      formData.append("upload_preset", "prueba");
-
-      axios
-        .post('https://api.cloudinary.com/v1_1/alexispavon010/image/upload', formData)
-        .then((response) => {
-          setLoadingImage(false);
-          setImageUrl(response.data.secure_url);
-        })
-        .catch((error) => {
-          setLoadingImage(false);
-          console.log(error);
-        });
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        console.log(reader.result)
+        setSrc(reader.result);
+        setShowCropper(true);
+      });
+      reader.readAsDataURL(info.file.originFileObj as RcFile);
     }
   };
+
+  const handleUploadIamge = (file: File) => {
+    setCropIsLoading(true)
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "prueba");
+
+    axios
+      .post('https://api.cloudinary.com/v1_1/alexispavon010/image/upload', formData)
+      .then((response) => {
+        setSrc(null);
+        setShowCropper(false);
+        setLoadingImage(false);
+        setImageUrl(response.data.secure_url);
+      })
+      .catch((error) => {
+        setLoadingImage(false);
+        console.log(error);
+      })
+      .finally(() => setCropIsLoading(false))
+  }
 
   const handleSubmit = (values: any) => {
     setLoading(true)
@@ -132,7 +150,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         <Form.Item
           label="Nombre del Producto"
           name="title"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: 'El nombre del producto es requerido.' }]}
         >
           <Input placeholder='Escribe el nombre del producto' size='large' />
         </Form.Item>
@@ -178,15 +196,23 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         <Form.Item
           label="Precio"
           name="price"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: 'El precio es requerido.' }]}
         >
           <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
         </Form.Item>
 
         <Form.Item
-          label="Precio oferta (superior a 2Kg. o 2 piezas)"
+          label={
+            <span>
+              Precio Oferta Semanal
+              {' '}
+              <Tooltip title='Cuando un producto pertenece a la categoría Ofertas Semanales.'>
+                <AiOutlineQuestionCircle size='16' />
+              </Tooltip>
+            </span>
+          }
           name="offert_price"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: 'El precio oferta es requerido.' }]}
         >
           <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
         </Form.Item>
@@ -194,7 +220,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         <Form.Item
           label="Categoría"
           name="category"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: 'La categoría es requerida' }]}
         >
           <Select
             placeholder='Seleccione una categoría'
@@ -208,7 +234,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         <Form.Item
           label="Descripción"
           name="description"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: 'La descripcíon es requerida.' }]}
         >
           <TextArea
             size='large'
@@ -216,7 +242,8 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
             placeholder='Escribe una descripción del producto'
           />
         </Form.Item>
-      </Form>
+      </Form >
+      <CropModal visible={showCropper} loading={cropIsLoading} image={src} save={handleUploadIamge} />
     </Drawer >
   )
 }
