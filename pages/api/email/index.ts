@@ -61,7 +61,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: 'themaster034@gmail.com',
+        user: 'frigorifico4carnes@gmail.com',
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
@@ -70,7 +70,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     });
 
     const mailOptions = {
-      from: 'themaster034@gmail.com',
+      from: 'ventas@cuatrocarnes.com',
       to: email,
       subject: `Aqui esta la factura del pedido #${uniqueID}`,
       attachments: [
