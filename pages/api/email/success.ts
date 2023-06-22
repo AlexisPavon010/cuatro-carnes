@@ -55,7 +55,10 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     });
 
     const mailOptions = {
-      from: 'ventas@cuatrocarnes.com',
+      from: {
+        name: 'Ventas Cuatro Carnes',
+        address: 'ventas@cuatrocarnes.com'
+      },
       to: email,
       subject: 'Hola, tu pedido en Cuatro carnes fue tomado con exito',
       html: htmlToSend,

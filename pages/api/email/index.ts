@@ -70,7 +70,10 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     });
 
     const mailOptions = {
-      from: 'ventas@cuatrocarnes.com',
+      from: {
+        name: 'Ventas Cuatro Carnes',
+        address: 'ventas@cuatrocarnes.com'
+      },
       to: email,
       subject: `Aqui esta la factura del pedido #${uniqueID}`,
       attachments: [
