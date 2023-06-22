@@ -1,7 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { useEffect, useRef } from 'react';
-import Link from 'next/link'
 import 'swiper/css';
 
 import styles from './styles.module.scss';
@@ -31,9 +30,6 @@ export const Slider = ({ products }: SliderProps) => {
               Ofertas
             </h2>
             <div className={styles.slider__nav_actions}>
-              {/* <Link href='/' className={styles.slider__nav_actions_links}>
-                Ver todo
-              </Link> */}
               <button aria-label="boton anterior slider" className={styles.slider__nav_actions_button}>
                 <BsChevronLeft onClick={() => swiper.current.slidePrev()} size={16} />
               </button>
