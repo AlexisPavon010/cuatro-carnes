@@ -44,7 +44,7 @@
   text-align: center;
   color: white;
   font-size: 32px;
-  margin: 40px 0 33px;
+  margin: 50px 0 33px;
 }
 
 .hero__home_subtitle {
@@ -57,7 +57,7 @@
   text-align: center;
   color: white;
   font-size: 20px;
-  // letter-spacing: 2.5px;
+  padding-bottom: 50px;
 }
 
 .hero__home_list {
@@ -231,5 +231,17 @@
 
   .hero__container_maps {
     flex-direction: column;
+  }
+
+  .hero__home_title {
+    font-size: 24px;
+  }
+
+  .hero__home_subtitle {
+    font-size: 16px;
+  }
+
+  .hero__home_description {
+    font-size: 16px;
   }
 }
