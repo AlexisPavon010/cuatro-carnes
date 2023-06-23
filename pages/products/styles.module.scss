@@ -256,6 +256,7 @@
 
 .order__select {
   :global(.ant-select-selector) {
+    padding: 0 !important;
     border: none !important;
     border-color: none !important;
     background-color: transparent !important;
@@ -266,8 +267,6 @@
   gap: 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
 }
 
 .order__card_divider {

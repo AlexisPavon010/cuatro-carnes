@@ -1,6 +1,6 @@
 import 'swiper/css';
-import { Select } from 'antd'
 import Image from 'next/image'
+import { Select, Tooltip } from 'antd'
 import { useRef, useState } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,7 +15,6 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingItem } from '@/components/LoadingItem';
 import { OfferSlider } from '@/components/OfferSlider';
 import { setPickUpTime } from '@/store/places/placesSlice';
-import { setShippingMethod } from '@/store/cart/shoppingSlice';
 import { CartItemMobile } from '@/components/CartItemMobile';
 import { NavbarCategories } from '@/components/NavbarCategories';
 import { LoadingCategories } from '@/components/LoadingCategories';
@@ -145,21 +144,15 @@ const ProductsPage = () => {
               </div>
               <div className={styles.order__card}>
                 <div className={styles.order__card_wrapper}>
-                  <p>{pickup_or_delivery === 'DELIVERY' ? 'Donde' : 'Orden'}</p>
-                  <Select
-                    className={styles.order__select}
-                    style={{ width: 'calc(100% - 80px)' }}
-                    // defaultValue={pickup_or_delivery === 'delivery' ? userDirection + '...' : 'Para retirar'}
-                    onChange={(value) => dispatch(setShippingMethod(value))}
-                    disabled
-                  >
-                    <option value="DELIVERY">Delivery</option>
-                    <option value="PICKUP">Retirar</option>
-                  </Select>
+                  <p>Para</p>
+                  {/* <Tag>{userDirection}</Tag> */}
+                  <Tooltip title={pickup_or_delivery === 'DELIVERY' ? userDirection : ''}>
+                    {pickup_or_delivery === 'DELIVERY' ? userDirection.slice(0, 30) + '...' : 'Para retirar en el local.'}
+                  </Tooltip>
                 </div>
                 <hr className={styles.order__card_divider}></hr>
                 <div className={styles.order__card_wrapper}>
-                  <p>Para</p>
+                  <p>Hora</p>
                   <Select
                     className={styles.order__select}
                     onChange={(value) => dispatch(setPickUpTime(value))}
@@ -167,7 +160,6 @@ const ProductsPage = () => {
                     value={pickUpTime}
                   >
                     <option value="Mañana (8:00am - 13:30pm)">Mañana (8:00am - 13:30pm)</option>
-                    <option value="Mediodia (12:00pm - 14:00pm)">Mediodia (12:00pm - 14:00pm)</option>
                     <option value="Tarde (14:30pm - 17:00pm)">Tarde (14:30pm - 17:00pm)</option>
                   </Select>
                 </div>
