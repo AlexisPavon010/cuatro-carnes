@@ -235,15 +235,15 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
               < Space >
                 <Typography.Text>${item.price}</Typography.Text>
                 <Typography.Text>${item.price * item.quantity!}</Typography.Text>
-                <Badge count={item.quantity} />
               </Space >
             }
           >
             <List.Item.Meta
               avatar={<Avatar shape='square' src={item.image} />}
               title={item.title}
+              description={`Cantidad: ${item.quantity}`}
             />
-            {/* {item.content} */}
+            {/* {item.description} */}
           </List.Item >
         )
         }
