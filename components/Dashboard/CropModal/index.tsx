@@ -5,11 +5,11 @@ import { Modal, Select } from "antd";
 import getCroppedImg from "../../../utils/cropImage";
 
 const aspectRatios: IAspectRatios[] = [
-  { name: '4:3', value: 4 / 3, },
-  { name: '3:2', value: 3 / 2, },
+  // { name: '4:3', value: 4 / 3, },
+  // { name: '3:2', value: 3 / 2, },
   { name: '1:1', value: 1 / 1, },
-  { name: '2:3', value: 2 / 3, },
-  { name: '3:4', value: 3 / 4, },
+  // { name: '2:3', value: 2 / 3, },
+  // { name: '3:4', value: 3 / 4, },
 ];
 
 interface IAspectRatios {
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export const CropModal = ({ close, image, save, visible, loading }: Props) => {
-  const [aspectRatioSelected, setAspectRatioSelected] = useState<IAspectRatios>(aspectRatios[4]);
+  const [aspectRatioSelected, setAspectRatioSelected] = useState<IAspectRatios>(aspectRatios[0]);
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
@@ -55,13 +55,17 @@ export const CropModal = ({ close, image, save, visible, loading }: Props) => {
       onCancel={close}
       confirmLoading={loading}
       onOk={() => saveCroppedImage()}
+      cancelText='Cancelar'
+      okText='Confirmar'
       title='Crop Image'
     >
-      <div style={{
-        position: 'relative',
-        height: 'calc(90vh - 300px)',
-        width: '100%',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+          height: 'calc(90vh - 300px)',
+          width: '100%',
+        }}
+      >
         <Cropper
           image={image}
           crop={crop}
@@ -72,15 +76,6 @@ export const CropModal = ({ close, image, save, visible, loading }: Props) => {
           onZoomChange={setZoom}
         />
       </div>
-
-      <Select
-        onChange={(value: string) => setAspectRatioSelected(aspectRatios.find(aspect => aspect.name === value) as IAspectRatios)}
-        value={aspectRatioSelected.name}
-      >
-        {aspectRatios.map(({ name, value }, i) => (
-          <option key={name} value={name}>{name}</option>
-        ))}
-      </Select>
     </Modal >
   )
 }
