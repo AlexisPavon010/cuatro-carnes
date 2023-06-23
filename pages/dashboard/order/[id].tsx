@@ -239,7 +239,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
             }
           >
             <List.Item.Meta
-              avatar={<Avatar shape='square' src={item.image} />}
+              // avatar={<Avatar shape='square' src={item.image} />}
               title={item.title}
               description={`Cantidad: ${item.quantity}`}
             />
