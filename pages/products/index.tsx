@@ -166,9 +166,9 @@ const ProductsPage = () => {
                     style={{ width: 'calc(100% - 80px)' }}
                     value={pickUpTime}
                   >
-                    <option value="Mañana (7:00am - 12:00pm)">Mañana (7:00am - 12:00pm)</option>
+                    <option value="Mañana (8:00am - 13:30pm)">Mañana (8:00am - 13:30pm)</option>
                     <option value="Mediodia (12:00pm - 14:00pm)">Mediodia (12:00pm - 14:00pm)</option>
-                    <option value="Tarde (16:00pm - 21:00pm)">Tarde (16:00pm - 21:00pm)</option>
+                    <option value="Tarde (14:30pm - 17:00pm)">Tarde (14:30pm - 17:00pm)</option>
                   </Select>
                 </div>
               </div>

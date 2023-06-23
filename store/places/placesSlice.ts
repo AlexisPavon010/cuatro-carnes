@@ -13,9 +13,9 @@ const initialState: initialStateProps = {
   map: undefined,
   isLoading: true,
   isMapVisible: false,
-  userDirection: 'Av. Juan B. Justo 2085, B1648 Tigre, Provincia de Buenos Aires',
-  pickUpTime: 'Mañana (7:00am - 12:00pm)',
-  userLocation: [-58.58349311794545, -34.445403398664254],
+  userDirection: 'Av. Crisólogo Larralde 2306, B1648 Tigre, Provincia de Buenos Aires',
+  pickUpTime: 'Mañana (8:00am - 13:30pm)',
+  userLocation: [-58.587295973638355, -34.442304238763754],
 };
 
 export const placesSlice = createSlice({
