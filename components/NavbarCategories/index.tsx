@@ -12,7 +12,8 @@ export const NavbarCategories = ({ categories }: any) => {
   const scrollToSection = (sectionId: string) => {
     const section: any = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+      const topPos = section.offsetTop - 100;
+      window.scrollTo({ top: topPos, behavior: 'smooth' });
     } else {
       console.log(`La sección ${sectionId} no existe`);
     }
@@ -103,7 +104,7 @@ export const NavbarCategories = ({ categories }: any) => {
                       setActive(i)
                     }}
                   >
-                    {name}
+                    {name.toUpperCase()}
                   </button>
                 </SwiperSlide>
               )
