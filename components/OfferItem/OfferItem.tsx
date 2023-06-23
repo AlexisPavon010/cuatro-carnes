@@ -23,7 +23,7 @@ export const OfferItem = ({ product, setOpenModal }: OfferItemProps) => {
       <div className={styles.slider__list_item_image}>
         <Image src={product.image} width={150} height={120} alt='' />
         <div className={styles.slider__list_item_price}>
-          ${product.offert_price ? product.offert_price.toFixed(2) : '00.00'}
+          ${product.offert_price ? product.offert_price.toFixed(2) : '00.00'} x Kg.
         </div>
       </div>
       <h3 className={styles.slider__list_item_text}>{product.title}</h3>
