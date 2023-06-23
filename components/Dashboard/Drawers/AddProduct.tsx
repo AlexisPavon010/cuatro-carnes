@@ -25,6 +25,11 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [cropIsLoading, setCropIsLoading] = useState(false);
   const [src, setSrc] = useState<string | ArrayBuffer | null>(null);
 
+  const handleCancel = () => {
+    setSrc(null);
+    setShowCropper(false);
+  }
+
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
       const reader = new FileReader();
@@ -243,7 +248,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           />
         </Form.Item>
       </Form >
-      <CropModal visible={showCropper} loading={cropIsLoading} image={src} save={handleUploadIamge} />
+      <CropModal visible={showCropper} loading={cropIsLoading} image={src} close={handleCancel} save={handleUploadIamge} />
     </Drawer >
   )
 }
