@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Navbar } from './Navbar';
 import { SideMenu } from './SideMenu';
 
-const { Sider, Content } = AntLAyout;
+const { Sider, Content, Footer } = AntLAyout;
 
 interface LayoutProps {
   children: JSX.Element | JSX.Element[];
@@ -42,6 +42,7 @@ export const Layout = ({ children, items }: LayoutProps) => {
         >
           {children}
         </Content>
+        <Footer style={{ textAlign: 'center' }}>Cuatro Carnes ® Version Alpha v1.0.1</Footer>
       </AntLAyout>
     </AntLAyout>
   )
