@@ -6,7 +6,7 @@
 
 .recovery__text {
   text-align: center;
-  color: #ff8732;
+  color: #a92b3c;
 }
 
 .recovery__description {
@@ -18,8 +18,8 @@
   border: 1px solid;
   border: none;
   border-radius: 12px;
-  border-color: #ff8732;
-  background-color: #ff8732;
+  border-color: #a92b3c;
+  background-color: #a92b3c;
   cursor: pointer;
   color: #fff;
   font-weight: 600;
@@ -32,10 +32,10 @@
 .recovery__button:hover {
   border: 1px solid;
   background-color: #fff;
-  color: #ff8732;
+  color: #a92b3c;
 
   .recovery__button_loading {
-    color: #ff8732;
+    color: #a92b3c;
   }
 }
 

@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { google } from 'googleapis'
 import nodemailer from 'nodemailer'
-// import handlebars from 'handlebars'
+import handlebars from 'handlebars'
 import jwt from "jsonwebtoken";
 
 import '../../../database/db'
 import User from "@/models/User";
-// import templateHtml from '../../../emails/recovery-password.html'
+import templateHtml from '../../../emails/recovery-password.html'
 
 export default function handlerRecoveryPassword(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -50,19 +50,19 @@ async function sendEmail(req: NextApiRequest, res: NextApiResponse<any>) {
       refresh_token: REFRESH_TOKEN
     })
 
-    // const template = handlebars.compile(templateHtml);
+    const template = handlebars.compile(templateHtml);
     const replacements = {
       username: user.name,
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/?token=${token}`
     };
-    // const htmlToSend = template(replacements);
+    const htmlToSend = template(replacements);
     const accessToken: any = await oAuth2Client.getAccessToken();
 
     const transport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: 'themaster034@gmail.com',
+        user: 'frigorifico4carnes@gmail.com',
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
@@ -71,15 +71,14 @@ async function sendEmail(req: NextApiRequest, res: NextApiResponse<any>) {
     });
 
     const mailOptions = {
-      // from: {
-      //   name: 'Cuatro Carnes',
-      //   address: 'aneuswimwearteam@gmail.com'
-      // },
-      from: 'themaster034@gmail.com',
+      from: {
+        name: 'Recuperacion de cuenta - Cuatro Carnes',
+        address: 'frigorifico4carnes@gmail.com'
+      },
       to: email,
       subject: 'Solicitud recuperacion de contraseña',
       text: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/?token=${token}`,
-      // html: htmlToSend,
+      html: htmlToSend,
     };
 
     const response = await transport.sendMail(mailOptions);
