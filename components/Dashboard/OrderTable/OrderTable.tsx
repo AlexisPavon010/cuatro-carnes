@@ -1,10 +1,12 @@
 import { Button, Card, Col, Dropdown, MenuProps, Radio, Row, Space, Table, Tag, Tooltip } from "antd"
-import { ColumnsType } from "antd/es/table";
-import moment from "moment";
-import { useState } from "react";
 import { AiOutlineMail, AiOutlineProfile } from "react-icons/ai";
 import { BsPencil, BsWhatsapp } from "react-icons/bs";
+import { MdDeliveryDining } from "react-icons/md";
+import { ColumnsType } from "antd/es/table";
 import { useRouter } from "next/router";
+import { FaStore } from "react-icons/fa";
+import { useState } from "react";
+import moment from "moment";
 
 import { OrderModal } from "../Modals/OrderModal";
 import { orderToXLS } from "@/utils/reports";
@@ -32,6 +34,23 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
       dataIndex: 'uniqueID',
       key: 'uniqueID',
       width: 90,
+    },
+    {
+      width: 85,
+      align: 'center',
+      title: 'Metodo',
+      key: 'shipping',
+      dataIndex: 'shipping',
+      render: (value) => {
+        let text = value === 'DELIVERY' ? 'Delivery' : 'Retiro';
+        let color = value === 'DELIVERY' ? '#87d068' : '#2db7f5';
+        let icon = value === 'DELIVERY' ? <MdDeliveryDining color={color} size={24} /> : <FaStore color={color} size={18} />;
+        return (
+          <Tooltip title={text}>
+            {icon}
+          </Tooltip>
+        )
+      }
     },
     {
       title: 'Fecha y Hora',
