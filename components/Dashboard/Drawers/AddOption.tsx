@@ -98,7 +98,7 @@ export const AddOption = ({ open, onClose, mutate }: AddOptionProps) => {
           name="quantity"
         >
           <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button onClick={() => setQuantity(quantity - 1)} type="primary">-</Button>
+            <Button onClick={() => setQuantity((value) => (value > 1 ? value - 1 : value))} type="primary">-</Button>
             <Input onChange={({ target }) => setQuantity(Number(target.value))} style={{ textAlign: 'center' }} value={quantity} defaultValue={quantity} />
             <Button onClick={() => setQuantity(quantity + 1)} type="primary">+</Button>
           </Space.Compact>

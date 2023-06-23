@@ -20,6 +20,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [stockChange, setChangeStock] = useState(false)
   const [stock, setStock] = useState(1)
+  const [alertStock, setAlertStock] = useState(1)
 
   const [showCropper, setShowCropper] = useState(false);
   const [cropIsLoading, setCropIsLoading] = useState(false);
@@ -182,7 +183,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           name={stockChange ? 'q_stock' : 'kg_stock'}
         >
           <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button onClick={() => setStock(stock - 1)} type="primary">-</Button>
+            <Button onClick={() => setStock((value) => (value > 1 ? value - 1 : value))} type="primary">-</Button>
             <Input onChange={({ target }) => setStock(Number(target.value))} style={{ textAlign: 'center' }} value={stock} defaultValue={stock} />
             <Button onClick={() => setStock(stock + 1)} type="primary">+</Button>
           </Space.Compact>
@@ -192,9 +193,9 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           label='Alerta de Stock'
         >
           <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button onClick={() => { }} type="primary">-</Button>
-            <Input style={{ textAlign: 'center' }} defaultValue={0} />
-            <Button onClick={() => { }} type="primary">+</Button>
+            <Button onClick={() => setAlertStock((value) => (value > 1 ? value - 1 : value))} type="primary">-</Button>
+            <Input style={{ textAlign: 'center' }} onChange={({ target }) => setAlertStock(Number(target.value))} value={alertStock} defaultValue={alertStock} />
+            <Button onClick={() => setAlertStock(alertStock + 1)} type="primary">+</Button>
           </Space.Compact>
         </Form.Item>
 
