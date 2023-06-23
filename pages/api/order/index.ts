@@ -134,11 +134,12 @@ const CreateOrder = async (
     // await schema.validateAsync(req.body);
     const data = await Order.create({
       ...req.body,
-      userID: session.user.id
+      userID: session ? session.user.id : null
     })
-    // axios.post('http://54.209.160.199:8000/send-message', {
-    //   phoneNumber: phone,
-    //   uniqueID: data.uniqueID
+
+    // sendMessage({
+    //   message: `¡Hola! Gracias por realizar tu pedido con nosotros. Nos complace confirmar que hemos recibido tu pedido con el número de orden #${data.uniqueID} y estamos trabajando diligentemente para prepararlo y enviarlo lo antes posible. Si tienes alguna pregunta o inquietud sobre tu pedido, no dudes en ponerte en contacto con nosotros con el número de orden correspondiente. ¡Gracias por elegirnos!`,
+    //   phone: `whatsapp:+${phone}`,
     // })
 
     return res.status(200).json(data)
