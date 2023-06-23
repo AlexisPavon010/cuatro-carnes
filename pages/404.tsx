@@ -35,7 +35,7 @@ export default function Custom404() {
           }
           title="¡Estamos trabajando en los útimos detalles de nuestra nueva App!"
           subTitle="Podes seguir haciendo tus pedidos acá mientras trabajamos"
-          extra={<Button onClick={() => router.push('/')} type="primary">Volver al sitio</Button>}
+          extra={<Button onClick={() => window.open('https://pedimosfacil.com/cuatrocarnes')} type="primary">Hace tu Pedido</Button>}
         />
       </ConfigProvider>
     </main>

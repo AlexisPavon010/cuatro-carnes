@@ -1,43 +1,37 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { Button, ConfigProvider, Result } from 'antd';
+import { GetServerSideProps } from 'next';
 
-export default function Custom404() {
+import { Slider } from '@/components/Slider'
+import { Main } from '@/components/Main'
+import { Layout } from '@/components/Layout';
+import { getProductsOffers } from '@/database/dbOffers';
+import { IProduct } from '@/interfaces/products';
 
-  const router = useRouter()
+interface HomeProps {
+  products: IProduct[]
+}
+
+export default function Home({ products }: HomeProps) {
 
   return (
-    <main style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Head>
-        <title>Cuatro Carnes</title>
-        <meta name="description" content='Somos una empresa de origen y tradición familiar creada tras la asociación de dos hermanos con gran trayectoria en el rubro de la carne. En los comienzos nos dedicábamos al abastecimiento de restaurantes y gastronómicos cumpliendo con los más altos estándares de calidad, pero con la llegada de la cuarentena en 2020 tuvimos que reinventarnos para superar la crisis. Fue así como desarrollamos la flota con la que proveemos carne de primera calidad, fresca y envasada al vacío a las familias y hogares de CABA y Zona Norte. Gracias a eso empezamos a crecer en el mercado del consumidor final y hoy en día contamos con tres camionetas para la distribución a nuestros clientes tanto mayoristas como particulares que nos siguen eligiendo.' />
-        <meta property="og:site_name" content="Bienvenidos a Cuatro Carnes" />
-        <meta property="og:image" content="https://cuatro-carnes.vercel.app/assets/logo-side.svg" />
-        <meta property="og:image:height" content="813" />
-        <meta property="og:image:width" content="813" />
-      </Head>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: '#a92b3c',
-          },
-        }}
-      >
-        <Result
-          icon={
-            <img
-              src="/assets/logo-mail.png"
-              alt="Logo Cuatro Carnes"
-              style={{
-                height: '120px'
-              }}
-            />
-          }
-          title="¡Estamos trabajando en los útimos detalles de nuestra nueva App!"
-          subTitle="Podes seguir haciendo tus pedidos acá mientras trabajamos"
-          extra={<Button onClick={() => window.open('https://pedimosfacil.com/cuatrocarnes')} type="primary">Hace tu Pedido</Button>}
-        />
-      </ConfigProvider>
-    </main>
+    <Layout
+      title='Cuatro Carnes'
+      description='Somos una empresa de origen y tradición familiar creada tras la asociación de dos hermanos con gran trayectoria en el rubro de la carne. En los comienzos nos dedicábamos al abastecimiento de restaurantes y gastronómicos cumpliendo con los más altos estándares de calidad, pero con la llegada de la cuarentena en 2020 tuvimos que reinventarnos para superar la crisis. Fue así como desarrollamos la flota con la que proveemos carne de primera calidad, fresca y envasada al vacío a las familias y hogares de CABA y Zona Norte. Gracias a eso empezamos a crecer en el mercado del consumidor final y hoy en día contamos con tres camionetas para la distribución a nuestros clientes tanto mayoristas como particulares que nos siguen eligiendo.'
+    >
+      <main>
+        <Main />
+        <Slider products={products} />
+      </main>
+    </Layout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+  const data = await getProductsOffers()
+
+  return {
+    props: {
+      products: data
+    }
+  }
 }
