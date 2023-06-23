@@ -116,6 +116,12 @@
 }
 
 @media (max-width: 1200px) {
+  .login__container_goback {
+    &>svg {
+      fill: #3C3C3B;
+    }
+  }
+
   .login__container_left {
     display: none;
   }
