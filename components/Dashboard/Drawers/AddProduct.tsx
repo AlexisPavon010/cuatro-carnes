@@ -8,7 +8,6 @@ import axios from 'axios';
 import { createProduct, getProductById, updateProductById } from '@/client';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { ICategories } from '@/interfaces/categories';
-import { CropModal } from '../CropModal';
 
 const { TextArea } = Input;
 
@@ -22,47 +21,24 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [stock, setStock] = useState(1)
   const [alertStock, setAlertStock] = useState(1)
 
-  const [showCropper, setShowCropper] = useState(false);
-  const [cropIsLoading, setCropIsLoading] = useState(false);
-  const [src, setSrc] = useState<string | ArrayBuffer | null>(null);
-
-  const handleCancel = () => {
-    setSrc(null);
-    setShowCropper(false);
-  }
-
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        console.log(reader.result)
-        setSrc(reader.result);
-        setShowCropper(true);
-      });
-      reader.readAsDataURL(info.file.originFileObj as RcFile);
+      setLoadingImage(true);
+      const formData = new FormData();
+      formData.append("file", info.file.originFileObj as RcFile);
+      formData.append("upload_preset", "prueba");
+
+      axios
+        .post('https://api.cloudinary.com/v1_1/alexispavon010/image/upload', formData)
+        .then((response) => {
+          setLoadingImage(false);
+          setImageUrl(response.data.secure_url);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
-
-  const handleUploadIamge = (file: File) => {
-    setCropIsLoading(true)
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "prueba");
-
-    axios
-      .post('https://api.cloudinary.com/v1_1/alexispavon010/image/upload', formData)
-      .then((response) => {
-        setSrc(null);
-        setShowCropper(false);
-        setLoadingImage(false);
-        setImageUrl(response.data.secure_url);
-      })
-      .catch((error) => {
-        setLoadingImage(false);
-        console.log(error);
-      })
-      .finally(() => setCropIsLoading(false))
-  }
 
   const handleSubmit = (values: any) => {
     setLoading(true)
@@ -249,7 +225,6 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           />
         </Form.Item>
       </Form >
-      <CropModal visible={showCropper} loading={cropIsLoading} image={src} close={handleCancel} save={handleUploadIamge} />
     </Drawer >
   )
 }
