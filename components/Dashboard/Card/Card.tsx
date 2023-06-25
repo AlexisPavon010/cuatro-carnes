@@ -5,12 +5,13 @@ const { Title, Paragraph } = Typography;
 interface CardProps {
   title: string;
   total: number;
+  active: boolean
   description: string;
   loading: boolean;
   setDateFilter: () => void
 }
 
-export const Card = ({ title, description, total = 0, loading, setDateFilter }: CardProps) => {
+export const Card = ({ active, title, description, total = 0, loading, setDateFilter }: CardProps) => {
 
   return (
     <AntdCard
@@ -23,7 +24,7 @@ export const Card = ({ title, description, total = 0, loading, setDateFilter }: 
           {title}
         </Col>
         <Col>
-          <Button onClick={setDateFilter} size="small">
+          <Button type={active ? 'primary' : 'default'} onClick={setDateFilter} size="small">
             VER PEDIDOS
           </Button>
         </Col>

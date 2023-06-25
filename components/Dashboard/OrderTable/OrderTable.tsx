@@ -1,15 +1,14 @@
-import { Button, Card, Col, Dropdown, MenuProps, Radio, Row, Space, Table, Tag, Tooltip } from "antd"
 import { AiOutlineMail, AiOutlineProfile } from "react-icons/ai";
+import { Button, Space, Table, Tag, Tooltip } from "antd";
 import { BsPencil, BsWhatsapp } from "react-icons/bs";
 import { MdDeliveryDining } from "react-icons/md";
 import { ColumnsType } from "antd/es/table";
-import { useRouter } from "next/router";
 import { FaStore } from "react-icons/fa";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import moment from "moment";
 
 import { OrderModal } from "../Modals/OrderModal";
-import { orderToXLS } from "@/utils/reports";
 import { EmailModal } from "../Modals/EmailModal";
 import { IOrder } from "@/interfaces/order";
 import { STATUSES } from "@/constants/status";
@@ -18,10 +17,9 @@ import { openWhatsApp } from "@/utils/openWhatsApp";
 interface OrderTableProps {
   orders: IOrder[];
   isLoading: boolean;
-  setDateFilter: (value: string) => void
 }
 
-export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTableProps) => {
+export const OrderTable = ({ orders = [], isLoading }: OrderTableProps) => {
   const [modalOpen, setModalOpen] = useState({ visible: false, order: {} })
   const [emailOpen, setEmailOpen] = useState({ visible: false, order: {} })
   const [skip, setSkip] = useState(1)
@@ -131,50 +129,8 @@ export const OrderTable = ({ orders = [], isLoading, setDateFilter }: OrderTable
     setLimit(size)
   }
 
-  const downloadReport = () => {
-    const formatOrders = orders.map((order: IOrder) =>
-      [`${order.uniqueID}`, `${moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}`, `$${order.total.toFixed(2)}`, `${order.username}`, `${order.email}`, `${order.status}`]
-    )
-    orderToXLS(
-      ['Nro', 'Fecha y Hora', 'Monto', 'Cliente', 'Correo', 'Estado'],
-      formatOrders
-    )
-  }
-
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: 'Excel (XLS)',
-      onClick: downloadReport
-    },
-    {
-      key: '2',
-      label: 'Imprimir',
-      onClick: () => window.print()
-    },
-  ];
-
   return (
     <>
-      <Card id="section-not-print">
-        <Row>
-          <Col flex={1}>
-            <Radio.Group onChange={({ target }) => setDateFilter(target.value ? `date=${target.value}` : '')} defaultValue='all' >
-              <Radio.Button value="all">Todos</Radio.Button>
-              <Radio.Button value="day">Dia</Radio.Button>
-              <Radio.Button value="week">Semana</Radio.Button>
-              <Radio.Button value="month">Mes</Radio.Button>
-            </Radio.Group>
-          </Col>
-          <Col>
-          </Col>
-          <Col>
-            <Dropdown menu={{ items }} trigger={['click']} >
-              <Button >Descargar Reporte</Button>
-            </Dropdown>
-          </Col>
-        </Row>
-      </Card>
       <Table
         loading={isLoading}
         scroll={{ x: 1000 }}
