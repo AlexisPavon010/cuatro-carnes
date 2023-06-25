@@ -1,31 +1,37 @@
-import { Button, Card, DatePicker, Form, Input, message } from 'antd';
-import es_ES from "antd/lib/date-picker/locale/es_ES";
+import DatePicker, { registerLocale } from "react-datepicker";
+import { Button, Card, Form, Input, message } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import "react-datepicker/dist/react-datepicker.css";
+import es from 'date-fns/locale/es';
+registerLocale('es', es)
 
 import { Layout } from '@/components/Layout';
 import styles from './styles.module.scss';
 import { updateUser } from '@/client';
+import { useSwrFetcher } from "@/hooks/useSwrFetcher";
 
 const AccountSettings = () => {
   const [loading, setLoading] = useState(false)
-  const [form] = Form.useForm()
   const { data: session }: any = useSession()
+  const { data: { birthday_date } } = useSwrFetcher(`/api/users/${session?.user?.id}`)
+  const [startDate, setStartDate] = useState(moment(birthday_date).toDate());
+  const [form] = Form.useForm()
 
   useEffect(() => {
     if (!session) return
+    setStartDate(moment(birthday_date).toDate())
     form.setFieldValue('name', session.user.name)
     form.setFieldValue('email', session.user.email)
-    form.setFieldValue('birthday_date', moment(session.user.birthday_date))
     form.setFieldValue('phone', session.user.phone)
-  }, [session])
+  }, [session, birthday_date])
 
-  const handleUpdateUser = ({ name, phone, email, birthday_date }: any) => {
+  const handleUpdateUser = ({ name, phone, email }: any) => {
     setLoading(true)
     updateUser({
-      birthday_date: moment(birthday_date.toISOString()),
+      birthday_date: startDate.toISOString(),
       id: session?.user.id,
       username: name,
       phone,
@@ -75,10 +81,10 @@ const AccountSettings = () => {
                   rules={[{ required: true }]}
                 >
                   <DatePicker
-                    locale={es_ES}
-                    format="YYYY-MM-DD"
-                    style={{ width: '100%' }}
-                    rootClassName={styles.settings__card_input}
+                    locale={es}
+                    selected={startDate}
+                    className={styles.settings__card_input}
+                    onChange={(date: Date) => setStartDate(date)}
                   />
                 </Form.Item>
 
