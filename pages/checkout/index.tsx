@@ -119,7 +119,6 @@ const CheckoutPage = () => {
               style={{ border: 'none', padding: 0 }}
               bodyStyle={{
                 minHeight: '400px',
-                height: 'calc(100vh - 500px)',
                 backgroundColor: '#f4e8e4',
                 padding: 0
               }}
@@ -193,7 +192,7 @@ const CheckoutPage = () => {
                     <Form.Item
                       label="Dirección"
                       name="address"
-                      initialValue={userDirection || address}
+                      initialValue={'' || address}
                       rules={[{ required: true, message: 'Escriba una dirección' }]}
                     >
                       <Input className={styles.checkout__input} />
