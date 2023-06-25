@@ -1,91 +1,26 @@
-import { Avatar, Badge, Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
-import mapboxgl, { Map, Marker, LngLatBounds, AnySourceData } from 'mapbox-gl';
+import { Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
 import { BsCash, BsCreditCard2Back } from 'react-icons/bs';
 import { AiOutlineBank } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
 import { GetServerSideProps } from 'next';
-import { useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
 
 import { Layout } from '@/components/Dashboard/Layout';
-import { directionsApi } from '@/client/Direction';
 import { IOrder } from '@/interfaces/order';
 import { getOrdersById } from '@/database/dbOrders';
 import { IProduct } from '@/interfaces/products';
 import { STATUSES } from '@/constants/status';
 import { FLEETS } from '@/constants/fleets';
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
-
 interface OrderDetailsProps {
   order: IOrder
 }
 
 const OrderDetails = ({ order }: OrderDetailsProps) => {
-  const mapDiv = useRef<HTMLDivElement>(null)
-  const markerRef = useRef<Marker | any>(null)
-  const mapRef = useRef<Map>()
   const router = useRouter()
-
-  const getRoutesBetweenPoints = async () => {
-    if (!order.cords) return;
-    const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.5834884218762%2C-34.445437599619716`)
-    const { geometry } = data.routes[0]
-
-    const bounds = new LngLatBounds(order.cords, order.cords)
-
-
-    for (const coord of geometry.coordinates) {
-      const newCoord: [number, number] = [coord[0], coord[1]]
-      bounds.extend(newCoord)
-    }
-
-
-    mapRef.current!.fitBounds(bounds, {
-      padding: 100
-    })
-
-    const sourceData: AnySourceData = {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: geometry.coordinates
-            }
-          }
-        ]
-      },
-    }
-
-    mapRef.current?.on('load', () => {
-      mapRef.current?.addSource('RouteString', sourceData)
-      mapRef.current?.addLayer({
-        id: 'RouteString',
-        type: 'line',
-        source: 'RouteString',
-        layout: {
-          'line-cap': 'round',
-          'line-join': 'round'
-        },
-        paint: {
-          'line-color': 'cyan',
-          'line-width': 3
-        }
-      })
-    })
-
-    new Marker()
-      .setLngLat([-58.5834884218762, -34.445437599619716])
-      .addTo(mapRef.current!)
-  }
 
   const renderPaymentMethod = (method: string) => {
     let icon
@@ -135,27 +70,6 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
       </Tooltip >
     )
   }
-
-
-  useEffect(() => {
-
-    if (order.shipping === 'PICKUP') return
-
-    if (!mapRef.current) {
-      mapRef.current = new Map({
-        container: mapDiv.current!,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: order.cords,
-        zoom: 14
-      })
-
-      markerRef.current = new Marker()
-        .setLngLat(mapRef.current.getCenter())
-        .addTo(mapRef.current)
-      getRoutesBetweenPoints()
-    }
-  }, [order])
-
 
   return (
     <Layout
@@ -226,7 +140,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
               <Space direction='vertical'>
                 {
                   item.options?.map((item) => (
-                    <Typography style={{ textAlign: 'start' }}>{item.title}: {item?.name} ${item?.price}</Typography>
+                    <Typography.Title level={5} style={{ textAlign: 'start' }}>{item.title}: {item?.name} ${item?.price}</Typography.Title >
                   ))
                 }
               </Space>
@@ -241,7 +155,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
             <List.Item.Meta
               // avatar={<Avatar shape='square' src={item.image} />}
               title={item.title}
-              description={`Cantidad: ${item.quantity}`}
+              description={<Typography.Title level={5}>Cantidad: {item.quantity}</Typography.Title>}
             />
             {/* {item.description} */}
           </List.Item >
@@ -252,14 +166,6 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         itemLayout="vertical"
         bordered
       />
-      {order.shipping === 'DELIVERY' ? (
-        <Card id="section-not-print">
-          <div style={{
-            height: '600px',
-            width: '100%',
-          }} ref={mapDiv} />
-        </Card>
-      ) : (<div />)}
     </Layout >
   )
 }
