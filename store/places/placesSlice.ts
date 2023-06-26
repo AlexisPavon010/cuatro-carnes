@@ -13,7 +13,7 @@ const initialState: initialStateProps = {
   map: undefined,
   isLoading: true,
   isMapVisible: false,
-  userDirection: 'Av. Crisólogo Larralde 2306, B1648 Tigre, Provincia de Buenos Aires',
+  userDirection: '',
   pickUpTime: 'Mañana (8:00am - 13:30pm)',
   userLocation: [-58.587295973638355, -34.442304238763754],
 };

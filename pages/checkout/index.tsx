@@ -234,7 +234,13 @@ const CheckoutPage = () => {
                 <h2 className={styles.checkout_subtitle}>Resumen de la orden</h2>
                 <div className={styles.checkout__content_summary_card}>
                   <div>
-                    <h2 className={styles.checkout__content_summary_card_title}>{userDirection}</h2>
+                    <h2 className={styles.checkout__content_summary_card_title}>
+                      {
+                        pickup_or_delivery === 'DELIVERY'
+                          ? userDirection
+                          : 'Av. Crisólogo Larralde 2306, B1648 Tigre, Provincia de Buenos Aires'
+                      }
+                    </h2>
                     <p>
                       {
                         pickup_or_delivery === 'DELIVERY'
