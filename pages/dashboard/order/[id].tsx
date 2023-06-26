@@ -1,26 +1,106 @@
 import { Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
+import { AnySourceData, LngLatBounds, Map, Marker } from 'mapbox-gl';
 import { BsCash, BsCreditCard2Back } from 'react-icons/bs';
 import { AiOutlineBank } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
+import { useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
 
 import { Layout } from '@/components/Dashboard/Layout';
-import { IOrder } from '@/interfaces/order';
 import { getOrdersById } from '@/database/dbOrders';
+import { directionsApi } from '@/client/Direction';
 import { IProduct } from '@/interfaces/products';
 import { STATUSES } from '@/constants/status';
 import { FLEETS } from '@/constants/fleets';
+import { IOrder } from '@/interfaces/order';
 
 interface OrderDetailsProps {
   order: IOrder
 }
 
 const OrderDetails = ({ order }: OrderDetailsProps) => {
+  const mapDiv = useRef<HTMLDivElement>(null)
+  const markerRef = useRef<Marker | any>(null)
+  const mapRef = useRef<Map>()
   const router = useRouter()
+
+  const getRoutesBetweenPoints = async () => {
+    if (!order.cords) return;
+    const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.5834884218762%2C-34.445437599619716`)
+    const { geometry } = data.routes[0]
+
+    const bounds = new LngLatBounds(order.cords, order.cords)
+
+    for (const coord of geometry.coordinates) {
+      const newCoord: [number, number] = [coord[0], coord[1]]
+      bounds.extend(newCoord)
+    }
+
+    mapRef.current!.fitBounds(bounds, {
+      padding: 100
+    })
+
+    const sourceData: AnySourceData = {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: geometry.coordinates
+            }
+          }
+        ]
+      },
+    }
+
+    mapRef.current?.on('load', () => {
+      mapRef.current?.addSource('RouteString', sourceData)
+      mapRef.current?.addLayer({
+        id: 'RouteString',
+        type: 'line',
+        source: 'RouteString',
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round'
+        },
+        paint: {
+          'line-color': 'cyan',
+          'line-width': 3
+        }
+      })
+    })
+
+    new Marker()
+      .setLngLat([-58.5834884218762, -34.445437599619716])
+      .addTo(mapRef.current!)
+  }
+
+  useEffect(() => {
+    if (order.shipping === 'PICKUP') return
+
+    if (!mapRef.current) {
+      mapRef.current = new Map({
+        container: mapDiv.current!,
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: order.cords,
+        zoom: 14
+      })
+
+      markerRef.current = new Marker()
+        .setLngLat(mapRef.current.getCenter())
+        .addTo(mapRef.current)
+      getRoutesBetweenPoints()
+    }
+  }, [order])
 
   const renderPaymentMethod = (method: string) => {
     let icon
@@ -120,7 +200,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
             {renderPaymentMethod(order.payment_option)}
           </Descriptions.Item>
           <Descriptions.Item label="Fecha alta">{moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</Descriptions.Item>
-          <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' || 'DELIVERED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
+          {/* <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' || 'DELIVERED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item> */}
         </Descriptions>
       </Card>
       <List
@@ -166,6 +246,14 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         itemLayout="vertical"
         bordered
       />
+      {order.shipping === 'DELIVERY' ? (
+        <Card id="section-not-print">
+          <div style={{
+            height: '600px',
+            width: '100%',
+          }} ref={mapDiv} />
+        </Card>
+      ) : (<div />)}
     </Layout >
   )
 }
