@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
 import { setShippingMethod, setDiscountPercentage } from '@/store/cart/shoppingSlice';
+import { setShowMap } from '@/store/places/placesSlice';
 import { MapboxMaps } from '../MapboxMaps';
 import styles from './styles.module.scss';
 
@@ -14,8 +15,7 @@ export const Main = () => {
   const handleNavigate = (method: string) => {
     dispatch(setShippingMethod(method))
     if (method === 'DELIVERY') {
-      router.push('/products')
-      // dispatch(setShowMap(true))
+      dispatch(setShowMap(true))
       dispatch(setShippingMethod(method))
       dispatch(setDiscountPercentage(0.00))
     } else {
