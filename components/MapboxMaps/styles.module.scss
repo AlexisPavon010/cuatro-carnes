@@ -1,3 +1,15 @@
 .autocomplete_input {
   width: 100%;
 }
+
+.mapboxgl_map {
+  height: 400px;
+
+  :global(.mapboxgl-ctrl-bottom-left) {
+    display: none;
+  }
+
+  :global(.mapboxgl-ctrl-bottom-right) {
+    display: none;
+  }
+}
