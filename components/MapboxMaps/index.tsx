@@ -68,7 +68,7 @@ interface ISearchBoxProps {
 const libraries: Libraries = ["places"];
 
 const CustomSearch = ({ onSelectAddress, defaultValue = '' }: ISearchBoxProps) => {
-  const { isLoaded, loadError } = useGoogleMapsScript({ googleMapsApiKey: "AIzaSyCZ9NKA4zi5wRAYx8UbYXAP_fehw4Vdzw0", libraries, });
+  const { isLoaded, loadError } = useGoogleMapsScript({ googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!, libraries, });
   const dispatch = useDispatch()
   const {
     ready,
