@@ -192,7 +192,7 @@ const CheckoutPage = () => {
                     <Form.Item
                       label="Dirección"
                       name="address"
-                      initialValue={'' || address}
+                      initialValue={userDirection || address}
                       rules={[{ required: true, message: 'Escriba una dirección' }]}
                     >
                       <Input className={styles.checkout__input} />

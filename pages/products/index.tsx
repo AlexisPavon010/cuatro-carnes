@@ -145,8 +145,8 @@ const ProductsPage = () => {
               <div className={styles.order__card}>
                 <div className={styles.order__card_wrapper}>
                   <p>Para</p>
-                  <Tooltip title={pickup_or_delivery === 'DELIVERY' ? '' : ''}>
-                    {pickup_or_delivery === 'DELIVERY' ? 'Delivery' : 'Retiro en el local'}
+                  <Tooltip title={pickup_or_delivery === 'DELIVERY' ? userDirection : ''}>
+                    {pickup_or_delivery === 'DELIVERY' ? userDirection.slice(0, 30) + '...' : 'Para retirar en el local.'}
                   </Tooltip>
                 </div>
                 <hr className={styles.order__card_divider}></hr>
