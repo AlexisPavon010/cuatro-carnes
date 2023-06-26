@@ -1,92 +1,37 @@
-import { useEffect, useRef, useState } from 'react';
+import usePlacesAutocomplete, { getGeocode, getLatLng, } from "use-places-autocomplete";
+import { useGoogleMapsScript, Libraries } from "use-google-maps-script";
+import { useState } from 'react';
 import { Alert, AutoComplete, Button, Input, Modal, Space, notification, } from 'antd';
-import mapboxgl, { Map, Marker } from 'mapbox-gl'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserLocation } from '@/utils/getUserLocation';
-import { setShowMap, setUserDirection, setUserLocation } from '@/store/places/placesSlice';
 import { MdOutlineLocationOn } from 'react-icons/md';
-import { searchApi } from '@/client/Places';
 import { useRouter } from 'next/router';
 
+import { setShowMap, setUserDirection, setUserLocation } from '@/store/places/placesSlice';
 import styles from './styles.module.scss'
-
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 
 export const MapboxMaps = () => {
   const { userLocation, isMapVisible } = useSelector((state: any) => state.places)
   const [selectedPlaces, setSelectedPlaces] = useState('')
-  const markerRef = useRef<Marker | any>(null)
-  const mapDiv = useRef<HTMLDivElement>(null)
-  const mapRef = useRef<Map>()
   const dispatch = useDispatch()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!isMapVisible) return
-
-    if (!mapRef.current) {
-      mapRef.current = new Map({
-        container: mapDiv.current!,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: userLocation,
-        zoom: 14
-      })
-    }
-
-    markerRef.current = new Marker({
-      draggable: true
-    })
-      .setLngLat(mapRef.current.getCenter())
-      .addTo(mapRef.current)
-
-    markerRef.current.on('dragend', () => {
-      const lngLat = markerRef.current.getLngLat();
-      const { lng, lat } = lngLat
-      searchApi
-        .get(`${lng},${lat}.json/`, {
-          params: {
-            proximity: userLocation.join(","),
-          },
-        })
-        .then(({ data }) => {
-          setSelectedPlaces(data.features[0].place_name)
-        })
-    });
-
-
-  }, [userLocation, isMapVisible])
-
-
-  useEffect(() => {
-    return () => {
-      if (markerRef.current) {
-        markerRef.current.remove()
-        markerRef.current = undefined
-      }
-
-      if (mapRef.current) {
-        mapRef.current.remove()
-        mapRef.current = undefined
-      }
-    }
-  }, [userLocation, isMapVisible])
-
-  useEffect(() => {
-    getUserLocation()
-      .then((location) => {
-        const [lng, lat] = location
-        dispatch(setUserLocation(location))
-        searchApi
-          .get(`${lng},${lat}.json/`, {
-            params: {
-              proximity: userLocation.join(","),
-            },
-          })
-          .then(({ data }) => {
-            setSelectedPlaces(data.features[0].place_name)
-          })
-      })
-  }, [])
+  // useEffect(() => {
+  //   getUserLocation()
+  //     .then((location) => {
+  //       const [lng, lat] = location
+  //       dispatch(setUserLocation(location))
+  //       searchApi
+  //         .get(`${lng},${lat}.json/`, {
+  //           params: {
+  //             proximity: userLocation.join(","),
+  //           },
+  //         })
+  //         .then(({ data }) => {
+  //           setSelectedPlaces(data.features[0].place_name)
+  //         })
+  //     })
+  // }, [])
 
   return (
     <Modal
@@ -95,8 +40,8 @@ export const MapboxMaps = () => {
       open={isMapVisible}
       onCancel={() => dispatch(setShowMap(false))}
       onOk={() => {
-        const lngLat = markerRef.current.getLngLat();
-        dispatch(setUserLocation([lngLat.lng, lngLat.lat]))
+        // const lngLat = markerRef.current.getLngLat();
+        // dispatch(setUserLocation([lngLat.lng, lngLat.lat]))
         dispatch(setUserDirection(selectedPlaces))
         dispatch(setShowMap(false))
         router.push('/products')
@@ -104,59 +49,56 @@ export const MapboxMaps = () => {
       okText='Selecionar'
       cancelText='Cancelar'
     >
-      <CustomSearch
-        setSelectedPlaces={setSelectedPlaces}
-        selectedPlaces={selectedPlaces}
-      />
+      <CustomSearch onSelectAddress={(value) => setSelectedPlaces(value)} />
       <Alert
         style={{ marginBottom: '20px' }}
         message="Puede arrastrar el pin hacia su ubicación"
         type="info"
         closable
       />
-      <div className={styles.mapboxgl_map} ref={mapDiv} />
     </Modal>
   )
 }
 
-const CustomSearch = ({ setSelectedPlaces, selectedPlaces }: any) => {
-  const [options, setOptions] = useState([])
-  const [loading, setLoading] = useState(false)
-  const debounceRef = useRef<NodeJS.Timeout>()
+interface ISearchBoxProps {
+  onSelectAddress: (address: string) => void;
+  defaultValue?: string;
+}
+
+const libraries: Libraries = ["places"];
+
+const CustomSearch = ({ onSelectAddress, defaultValue = '' }: ISearchBoxProps) => {
+  const { isLoaded, loadError } = useGoogleMapsScript({ googleMapsApiKey: "AIzaSyCZ9NKA4zi5wRAYx8UbYXAP_fehw4Vdzw0", libraries, });
   const dispatch = useDispatch()
-  const { userLocation } = useSelector((state: any) => state.places)
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete({ debounce: 300, defaultValue });
 
+  if (!isLoaded) return null;
+  if (loadError) return <div>Error loading</div>;
 
-  const onQueryChanged = (query: string) => {
-    if (query.length === 0) {
-      setOptions([]);
-      return;
+  const handleChange = (value: string) => {
+    setValue(value);
+    if (value === "") {
+      onSelectAddress("");
     }
-    setLoading(true);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+  };
 
-    debounceRef.current = setTimeout(() => {
-      console.log(query);
-      searchApi
-        .get(`${query}.json/`, {
-          params: {
-            limit: 5,
-            proximity: userLocation.join(","),
-          },
-        })
-        .then(({ data }) => {
-          console.log(data.features);
-          setOptions(
-            data.features.map((place: any) => ({
-              label: place.place_name,
-              value: place.geometry.coordinates,
-            }))
-          );
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 500);
+  const handleSelect = async (address: string) => {
+    setValue(address, false);
+    clearSuggestions();
+
+    try {
+      const results = await getGeocode({ address });
+      const { lat, lng } = await getLatLng(results[0]);
+      onSelectAddress(address);
+    } catch (error) {
+      console.error(`😱 Error:`, error);
+    }
   };
 
   const getCurrentPosition = async () => {
@@ -164,15 +106,6 @@ const CustomSearch = ({ setSelectedPlaces, selectedPlaces }: any) => {
       .then((location) => {
         const [lng, lat] = location
         dispatch(setUserLocation(location))
-        searchApi
-          .get(`${lng},${lat}.json/`, {
-            params: {
-              proximity: userLocation.join(","),
-            },
-          })
-          .then(({ data }) => {
-            setSelectedPlaces(data.features[0].place_name)
-          })
       })
       .catch(() =>
         notification.error({
@@ -183,26 +116,21 @@ const CustomSearch = ({ setSelectedPlaces, selectedPlaces }: any) => {
       )
   }
 
-  const onSelect = (value: string, values: any) => {
-    setSelectedPlaces(values.label)
-    dispatch(setUserLocation(values.value))
-  }
+  const options = status === "OK" ? data.map(({ place_id, description }) => ({ value: description, key: place_id })) : [];
 
   return (
     <Space.Compact size='large' style={{ width: '100%', marginBottom: '20px' }}>
       <AutoComplete
-        value={selectedPlaces}
-        style={{ width: '100%' }}
-        popupClassName="certain-category-search-dropdown"
-        dropdownMatchSelectWidth={500}
+        value={value}
+        onChange={handleChange}
+        disabled={!ready}
+        className={styles.autocomplete_input}
         options={options}
-        onSelect={onSelect}
-        onSearch={onQueryChanged}
-        onChange={(value) => setSelectedPlaces(value)}
+        onSelect={handleSelect}
       >
         <Input placeholder="Seleccione la dirección de entrega" />
       </AutoComplete>
-      <Button loading={loading} onClick={getCurrentPosition} icon={<MdOutlineLocationOn size={24} />} type="default" />
+      <Button loading={false} onClick={getCurrentPosition} icon={<MdOutlineLocationOn size={24} />} type="default" />
     </Space.Compact>
   )
 }

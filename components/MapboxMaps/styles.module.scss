@@ -1,12 +1,3 @@
-.mapboxgl_map {
-  height: 400px;
+.autocomplete_input {
   width: 100%;
-
-  :global(.mapboxgl-ctrl-bottom-left) {
-    display: none;
-  };
-
-  :global(.mapboxgl-ctrl-bottom-right) {
-    display: none;
-  };
 }
