@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { Drawer } from "../Drawer";
 import { Footer } from "../Footer";
 import { Header } from "../Header";
+import { WhatsAppButton } from '../WhatsAppButton';
 
 interface LayoutProps {
   children: JSX.Element | JSX.Element[]
@@ -41,6 +42,7 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         closeDrawer={closeDrawer}
       />
       <Footer />
+      <WhatsAppButton />
     </ConfigProvider>
   )
 }

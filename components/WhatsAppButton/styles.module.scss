@@ -1,0 +1,13 @@
+.button__whatsapp {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  height: 56px !important;
+  width: 56px !important;
+  bottom: 10px;
+  right: 10px;
+  color: white;
+  box-shadow: 2px 2px 6px rgb(0 0 0 / 40%);
+  position: fixed !important;
+  z-index: 5
+}
