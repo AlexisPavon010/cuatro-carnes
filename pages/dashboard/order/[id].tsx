@@ -202,7 +202,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
             {renderPaymentMethod(order.payment_option)}
           </Descriptions.Item>
           <Descriptions.Item label="Fecha alta">{moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</Descriptions.Item>
-          {/* <Descriptions.Item label="Fecha entrega"> {order.status === 'COMPLETED' || 'DELIVERED' ? moment(order.updatedAt).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item> */}
+          <Descriptions.Item label="Fecha entrega"> {order.deadline ? moment(order.deadline).format('DD/MM/YYYY, h:mm:ss a') : '--------'}</Descriptions.Item>
         </Descriptions>
       </Card>
       <List

@@ -18,6 +18,7 @@ export const OrderSchema = new Schema({
   fleet: { type: String, default: 'default' },
   cords: [Number, Number],
   items: [],
+  deadline: { type: Date, default: Date.now },
   status: {
     type: String,
     default: 'PENDING',

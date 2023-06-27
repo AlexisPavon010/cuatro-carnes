@@ -15,5 +15,6 @@ export interface IOrder {
   updatedAt: string,
   uniqueID: string,
   items: any
+  deadline?: Date;
   cords?: [number, number]
 }

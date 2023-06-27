@@ -1,5 +1,10 @@
 import { Col, Form, FormInstance, Modal, Row, Select, Tag, notification } from "antd"
+import ReactDatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useEffect, useState } from 'react'
+import es from 'date-fns/locale/es';
+import moment from "moment";
+registerLocale('es', es)
 
 import { STATUSES } from '@/constants/status';
 import { updateOrder } from '@/client/Order';
@@ -18,8 +23,10 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const [fleet, setFleet] = useState('')
+  const [startDate, setStartDate] = useState(moment().toDate());
 
   const onFinish = (values: any) => {
+    console.log(values)
     setLoading(true)
     updateOrder(isModalOpen.order._id, values)
       .then((res) => {
@@ -38,9 +45,13 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
   };
 
   useEffect(() => {
+    setStartDate(moment().toDate())
     if (!isModalOpen.order.status) return
     setFleet(isModalOpen.order.fleet)
     form.setFieldValue('status', isModalOpen.order.status)
+    if (isModalOpen.order.deadline) {
+      setStartDate(moment(isModalOpen.order.deadline).toDate())
+    }
   }, [isModalOpen])
 
   return (
@@ -58,8 +69,12 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
         layout='vertical'
         form={form}
         requiredMark={false}
+        initialValues={{
+          fleet: 'default',
+          deadline: new Date()
+        }}
       >
-        <Row gutter={[12, 12]}>
+        <Row gutter={[30, 0]}>
           <Col>
             <Form.Item
               label="Estado"
@@ -79,6 +94,25 @@ export const OrderModal = ({ isModalOpen, setIsModalOpen }: any) => {
               name="fleet"
             >
               <CustomSelect form={form} fleet={fleet} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[30, 0]}>
+          <Col>
+            <Form.Item
+              label="Fecha de entrega"
+              name="deadline"
+            >
+              <ReactDatePicker
+                locale={es}
+                dateFormat="Pp"
+                selected={startDate}
+                className="react-date-picker"
+                onChange={(date: Date) => {
+                  setStartDate(date)
+                  form.setFieldValue('deadline', date)
+                }}
+              />
             </Form.Item>
           </Col>
         </Row>

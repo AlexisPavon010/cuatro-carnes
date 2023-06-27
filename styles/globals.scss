@@ -109,6 +109,19 @@ a {
   }
 }
 
+.react-date-picker {
+  background-color: transparent !important;
+  outline: none;
+  width: 200px;
+  padding: 4px 11px;
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 6px;
+}
+
 .react-datepicker-wrapper {
   width: 100%;
 }
