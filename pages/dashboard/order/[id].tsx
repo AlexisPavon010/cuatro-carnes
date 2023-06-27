@@ -1,5 +1,5 @@
 import { Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
-import { AnySourceData, LngLatBounds, Map, Marker } from 'mapbox-gl';
+import mapboxgl, { AnySourceData, LngLatBounds, Map, Marker } from 'mapbox-gl';
 import { BsCash, BsCreditCard2Back } from 'react-icons/bs';
 import { AiOutlineBank } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
@@ -18,6 +18,8 @@ import { IProduct } from '@/interfaces/products';
 import { STATUSES } from '@/constants/status';
 import { FLEETS } from '@/constants/fleets';
 import { IOrder } from '@/interfaces/order';
+
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 
 interface OrderDetailsProps {
   order: IOrder
