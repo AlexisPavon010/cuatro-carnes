@@ -79,12 +79,13 @@ export const MapboxMaps = () => {
 
   const saveUserAddress = (address: string, location: number[]) => {
     if (!address || !location) return
-
-    console.log(address, location)
-
+    
     const MAX_ADDRESSES = 5;
 
     let addresses = cookies.userAddresses ? JSON.parse(cookies.userAddresses) : [];
+
+    // Filtrar direcciones existentes para evitar duplicados
+    addresses = addresses.filter((item: any) => item.userDirection !== address);
 
     // Remover la última dirección si ya se alcanzó el límite
     if (addresses.length === MAX_ADDRESSES) {
