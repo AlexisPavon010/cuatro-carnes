@@ -11,6 +11,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { setShowMap, setUserDirection, setUserLocation } from '@/store/places/placesSlice';
 import { getUserLocation } from '@/utils/getUserLocation';
 import styles from './styles.module.scss';
+import { parseCookies, setCookie } from "nookies";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 const libraries: Libraries = ["places"];
@@ -22,7 +23,7 @@ export const MapboxMaps = () => {
   const mapDiv = useRef<HTMLDivElement>(null)
   const mapRef = useRef<Map>()
   const router = useRouter()
-
+  const cookies = parseCookies();
   const { isLoaded, loadError } = useGoogleMapsScript({ googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!, libraries, });
   const dispatch = useDispatch()
   const {
@@ -80,6 +81,26 @@ export const MapboxMaps = () => {
         })
       )
   }
+
+  const saveUserAddress = (address: string, location: number[]) => {
+    const MAX_ADDRESSES = 5;
+
+    let addresses = cookies.userAddresses ? JSON.parse(cookies.userAddresses) : [];
+
+    // Remover la última dirección si ya se alcanzó el límite
+    if (addresses.length === MAX_ADDRESSES) {
+      addresses.pop();
+    }
+
+    // Agregar la nueva dirección al principio del array
+    addresses.unshift({ userDirection: address, userLocation: location });
+
+    // Guardar el array de direcciones en las cookies
+    setCookie(null, 'userAddresses', JSON.stringify(addresses), {
+      maxAge: 30 * 24 * 60 * 60, // 30 días de duración de la cookie
+      path: '/',
+    });
+  };
 
   useEffect(() => {
     if (!isMapVisible) return
@@ -145,7 +166,21 @@ export const MapboxMaps = () => {
       })
   }, [])
 
-  const options = status === "OK" ? data.map(({ place_id, description }) => ({ value: description, key: place_id })) : [];
+  const userAddresses = cookies.userAddresses ? JSON.parse(cookies.userAddresses) : [];
+  const userOptions = userAddresses.map(({ userDirection }: { userDirection: string }) => ({
+    value: userDirection,
+    label: userDirection,
+  }));
+
+  const userAddressesOption = {
+    label: 'Mis direcciones',
+    options: userOptions,
+  };
+
+  const options = [
+    ...data.map(({ place_id, description }) => ({ value: description, key: place_id })),
+    userAddressesOption,
+  ];
 
   if (!isLoaded) return null;
   if (loadError) return <div>Error loading</div>;
@@ -160,6 +195,7 @@ export const MapboxMaps = () => {
         const lngLat = markerRef.current.getLngLat();
         dispatch(setUserLocation([lngLat.lng, lngLat.lat]))
         dispatch(setUserDirection(selectedPlaces))
+        saveUserAddress(selectedPlaces, [lngLat.lng, lngLat.lat])
         dispatch(setShowMap(false))
         router.push('/products')
       }}
