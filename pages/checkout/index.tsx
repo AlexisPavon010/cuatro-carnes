@@ -131,7 +131,7 @@ const CheckoutPage = () => {
                   <Button onClick={() => router.push('/my-orders')} type="primary" key="console">
                     Ver pedido
                   </Button>,
-                  <Button onClick={() => router.push('/products')} key="buy">Volver a ordenar</Button>,
+                  <Button onClick={() => router.push('/')} key="buy">Volver a ordenar</Button>,
                 ]}
               />
             </Card>
