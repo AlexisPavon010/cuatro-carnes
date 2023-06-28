@@ -3,20 +3,23 @@ import { AutoComplete, Button, Input, Modal, Space, notification, } from 'antd';
 import { useGoogleMapsScript, Libraries } from "use-google-maps-script";
 import { useDispatch, useSelector } from 'react-redux';
 import { MdOutlineLocationOn } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { setShowMap, setUserDirection, setUserLocation } from '@/store/places/placesSlice';
 import { getUserLocation } from '@/utils/getUserLocation';
 import styles from './styles.module.scss';
+import { parseCookies, setCookie } from "nookies";
 
 const libraries: Libraries = ["places"];
 
 export const MapboxMaps = () => {
   const { userLocation, isMapVisible } = useSelector((state: any) => state.places)
-  const [selectedPlaces, setSelectedPlaces] = useState('')
-  const router = useRouter()
   const { isLoaded, loadError } = useGoogleMapsScript({ googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!, libraries, });
+  const [selectedPlaces, setSelectedPlaces] = useState('')
+  const [options, setOptions] = useState([]);
+  const cookies = parseCookies();
+  const router = useRouter()
   const dispatch = useDispatch()
   const {
     ready,
@@ -74,7 +77,57 @@ export const MapboxMaps = () => {
       )
   }
 
-  const options = status === "OK" ? data.map(({ place_id, description }) => ({ value: description, key: place_id })) : [];
+  const saveUserAddress = (address: string, location: number[]) => {
+    if (!address || !location) return
+
+    console.log(address, location)
+
+    const MAX_ADDRESSES = 5;
+
+    let addresses = cookies.userAddresses ? JSON.parse(cookies.userAddresses) : [];
+
+    // Remover la última dirección si ya se alcanzó el límite
+    if (addresses.length === MAX_ADDRESSES) {
+      addresses.pop();
+    }
+
+    // Agregar la nueva dirección al principio del array
+    addresses.unshift({ userDirection: address, userLocation: location });
+
+    // Guardar el array de direcciones en las cookies
+    setCookie(null, 'userAddresses', JSON.stringify(addresses), {
+      maxAge: 30 * 24 * 60 * 60, // 30 días de duración de la cookie
+      path: '/',
+    });
+  };
+
+  useEffect(() => {
+    // Obtener las direcciones guardadas de las cookies
+    const userAddresses = cookies.userAddresses ? JSON.parse(cookies.userAddresses) : [];
+
+    // Crear las opciones de usuario solo si hay direcciones guardadas
+    const userOptions = userAddresses.map(({ userDirection }: { userDirection: string }) => ({
+      value: userDirection,
+      label: userDirection,
+    }));
+
+    const userAddressesOption: any = {
+      label: 'Mis direcciones',
+      options: userOptions,
+    };
+
+    // Actualizar las opciones de selección
+    const updatedOptions: any = [...data.map(({ place_id, description }) => ({ value: description, key: place_id }))];
+
+    if (userOptions.length > 0) {
+      updatedOptions.push(userAddressesOption);
+    }
+
+    // Actualizar las opciones en el estado
+    setOptions(updatedOptions);
+  }, [data]);
+
+  // const options = status === "OK" ? data.map(({ place_id, description }) => ({ value: description, key: place_id })) : [];
 
   if (!isLoaded) return null;
   if (loadError) return <div>Error loading</div>;
@@ -87,6 +140,7 @@ export const MapboxMaps = () => {
       onCancel={() => dispatch(setShowMap(false))}
       onOk={() => {
         dispatch(setUserDirection(selectedPlaces))
+        saveUserAddress(selectedPlaces, userLocation)
         dispatch(setShowMap(false))
         router.push('/products')
       }}
