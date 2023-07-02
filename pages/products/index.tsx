@@ -56,7 +56,7 @@ const ProductsPage = () => {
 
   return (
     <Layout title='Productos - Cuatro Carnes'>
-      <section className={styles.hero}>
+      <section className={styles.hero} id='hero'>
         <div className={styles.hero__container}>
           {/* <Slider /> */}
           <div className={styles.slider__list}>

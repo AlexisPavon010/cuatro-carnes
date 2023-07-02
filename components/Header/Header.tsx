@@ -3,7 +3,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import styles from './styles.module.scss'
@@ -38,6 +38,51 @@ export const Header = ({ openDrawer }: any) => {
       onClick: () => signOut()
     },
   ];
+
+  useEffect(() => {
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        const nav = document.getElementById('categories__container');
+        const header = document.getElementsByTagName('header')[0];
+
+        if (nav) {
+          if (entry.isIntersecting) {
+            header.style.opacity = '1'
+            header.style.zIndex = '5'
+            nav.style.boxShadow = 'none'
+          } else {
+            header.style.opacity = '0'
+            header.style.zIndex = '3'
+            nav.style.boxShadow = '0 2px 4px 0 rgba(80, 35, 20, 0.1)'
+          }
+        }
+      });
+    };
+
+    const observerOptions = {
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    const observeSections = () => {
+      const sections = document.querySelectorAll('section');
+      if (sections.length > 0) {
+        sections.forEach((section) => {
+          observer.observe(section);
+        });
+      } else {
+        setTimeout(observeSections, 100);
+      }
+    };
+
+    observeSections();
+
+    return () => {
+      observer.disconnect();
+    };
+
+  }, [])
 
   return (
     <header className={styles.header}>
