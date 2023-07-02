@@ -14,10 +14,6 @@ interface OfferSliderProps {
 
 export const OfferSlider = ({ products, setOpenModal }: OfferSliderProps) => {
 
-  function filterProductsByOffers(products: IProduct[]) {
-    return products.filter(p => p.category === 'Ofertas semanales')
-  }
-
   return (
     <Swiper
       modules={[Navigation]}
@@ -38,13 +34,13 @@ export const OfferSlider = ({ products, setOpenModal }: OfferSliderProps) => {
       }}
     >
       {
-        filterProductsByOffers(products).length === 0
+        products.length === 0
           ? Array(3).fill('').map((_: any, i: number) => (
             <SwiperSlide key={i}>
               <LoadingCard />
             </SwiperSlide>
           ))
-          : filterProductsByOffers(products).map((product, i) => (
+          : products.map((product, i) => (
             <SwiperSlide key={i}>
               <OfferItem product={product} setOpenModal={setOpenModal} />
             </SwiperSlide>

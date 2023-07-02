@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Swiper, SwiperSlide, } from 'swiper/react';
-import { Navigation } from "swiper";
-import "swiper/css/navigation";
-import 'swiper/css';
 
 import styles from './styles.module.scss';
+import { Dropdown, Space } from 'antd';
+import { BiChevronDown } from 'react-icons/bi';
 
-export const NavbarCategories = ({ categories }: any) => {
+export const NavbarCategories = ({ categories, filterProductsByCategory }: any) => {
   const [active, setActive] = useState(0)
+  const buttonRefs = useRef<Array<HTMLButtonElement | any>>([]);
+  const [dropdownCategories, setDropdownCategories] = useState(categories);
 
   const scrollToSection = (sectionId: string) => {
     const section: any = document.getElementById(sectionId);
@@ -18,8 +18,6 @@ export const NavbarCategories = ({ categories }: any) => {
       console.log(`La sección ${sectionId} no existe`);
     }
   };
-
-  const buttonRefs = useRef<Array<HTMLButtonElement | any>>([]);
 
   useEffect(() => {
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -61,57 +59,101 @@ export const NavbarCategories = ({ categories }: any) => {
     };
   }, [categories, active]);
 
+
+  useEffect(() => {
+    const handleResize = () => {
+      const containerWidth = document.getElementById('categories__container')!.offsetWidth;
+      const categoriesWidth = document.getElementById('categories__wrapper')!.offsetWidth;
+
+      let visibleCategoriesArray: any = [];
+      let dropdownCategoriesArray: any = [];
+
+      let totalWidth = 150;
+      if (containerWidth && categoriesWidth) {
+        if (!buttonRefs.current) return
+        buttonRefs.current.forEach((button) => {
+          const buttonWidth = button.offsetWidth;
+          if (totalWidth + buttonWidth <= containerWidth) {
+            visibleCategoriesArray.push(button.dataset.category);
+            totalWidth += buttonWidth;
+          } else {
+            dropdownCategoriesArray.push(button.dataset.category);
+          }
+        });
+        setDropdownCategories(dropdownCategoriesArray)
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [categories]);
+
+  const items = dropdownCategories.map((name: string) =>
+  ({
+    label: name, id: name,
+    onClick: () => {
+      scrollToSection('list-menu'),
+        filterProductsByCategory([{ name: name }])
+    }
+  }))
+
   return (
-    <div className={styles.categories__container}>
-      <div className={styles.categories__wrapper}>
-        <div className={styles.categories__start}>
-          <Swiper
-            modules={[Navigation]}
-            navigation={true}
-            spaceBetween={0}
-            slidesPerView={3}
-            breakpoints={{
-              360: {
-                slidesPerView: 3,
-              },
-              480: {
-                slidesPerView: 3,
-              },
-              768: {
-                slidesPerView: 4,
-              },
-              808: {
-                slidesPerView: 4,
-              },
-              1024: {
-                slidesPerView: 5,
-              }
+    <div className={styles.categories__container} id="categories__container">
+      <div className={styles.categories__wrapper} id="categories__wrapper">
+        <nav className={styles.categories__start} >
+          <button
+            className={styles.categories__button}
+            ref={(button) => {
+              buttonRefs.current[0] = button;
+            }}
+            onClick={() => {
+              filterProductsByCategory(categories)
+              scrollToSection('list-menu')
+              setActive(0)
             }}
           >
-            {categories.map(({ name }: any, i: number) => {
-              const truncatedName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
-              return (
-                <SwiperSlide style={{ textAlign: 'center' }} key={i}>
-                  <button
-                    key={i}
-                    className={styles.categories__button}
-                    data-category={name}
-                    ref={(button) => {
-                      buttonRefs.current[i] = button;
-                    }}
-                    onClick={() => {
-                      scrollToSection(name);
-                      setActive(i)
-                    }}
-                  >
-                    {name.toUpperCase()}
-                  </button>
-                </SwiperSlide>
-              )
-            })}
-          </Swiper>
-        </div >
+            TODOS
+          </button>
+          {categories.map(({ name }: any, i: number) => {
+            const truncatedName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
+            return (
+              <button
+                key={i}
+                className={styles.categories__button}
+                data-category={name}
+                ref={(button) => {
+                  buttonRefs.current[i + 1] = button;
+                }}
+                onClick={() => {
+                  filterProductsByCategory([{ name: name }])
+                  scrollToSection('list-menu')
+                  setActive(i + 1)
+                }}
+              >
+                {name.toUpperCase()}
+              </button>
+            )
+          })}
+
+        </nav>
+        <div className={styles.categories__end}>
+          {dropdownCategories && (
+            <Dropdown
+              trigger={['click']}
+              menu={{ items }}
+            >
+              <Space style={{ whiteSpace: 'nowrap' }}>
+                Mas
+                <BiChevronDown />
+              </Space>
+            </Dropdown>
+          )}
+        </div>
       </div>
-    </div>
+    </div >
   );
 };

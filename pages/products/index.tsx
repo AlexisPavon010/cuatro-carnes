@@ -1,7 +1,6 @@
-import 'swiper/css';
 import Image from 'next/image'
 import { Select, Tag, Tooltip } from 'antd'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -21,21 +20,19 @@ import { LoadingCategories } from '@/components/LoadingCategories';
 
 const ProductsPage = () => {
   const [openCartMobile, setOpenCartMobile] = useState(false)
+  const [products, setProducts] = useState([])
   const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
   const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
   const { userDirection, pickUpTime } = useSelector((state: any) => state.places)
   const { data: categories, isLoading } = useSwrFetcher('/api/categories')
-  const { data: products } = useSwrFetcher('/api/products')
-  const targetRefs = useRef<any>([]);
+  const { data } = useSwrFetcher('/api/products')
   const dispatch = useDispatch()
 
-  function filterProductsByCategory(products: IProduct[], categories: ICategories[]) {
+  function filterProductsByCategory(categories: ICategories[]) {
     const filteredProductsByCategory = {};
 
     categories.forEach((category) => {
-      const filteredProducts = products.filter((product: IProduct) => {
-        return product.category === category.name;
-      });
+      const filteredProducts = data.filter((product: IProduct) => { return product.category === category.name; });
 
       if (filteredProducts.length > 0) {
         // @ts-ignore 
@@ -46,13 +43,16 @@ const ProductsPage = () => {
       }
     });
 
-    return Object.values(filteredProductsByCategory);
+    setProducts(Object.values(filteredProductsByCategory));
   }
 
   function filterProductsByOffers(products: IProduct[]) {
     return products.filter(p => p.category === 'Ofertas semanales')
   }
 
+  useEffect(() => {
+    filterProductsByCategory(categories)
+  }, [data])
 
   return (
     <Layout title='Productos - Cuatro Carnes'>
@@ -60,7 +60,7 @@ const ProductsPage = () => {
         <div className={styles.hero__container}>
           {/* <Slider /> */}
           <div className={styles.slider__list}>
-            <OfferSlider products={products} setOpenModal={setOpenModal} />
+            <OfferSlider products={filterProductsByOffers(data)} setOpenModal={setOpenModal} />
           </div>
         </div >
       </section >
@@ -68,14 +68,17 @@ const ProductsPage = () => {
         {
           categories.length === 0
             ? <LoadingCategories />
-            : <NavbarCategories categories={categories} />
+            : <NavbarCategories
+              categories={categories}
+              filterProductsByCategory={filterProductsByCategory}
+            />
         }
         <div className={styles.list}>
-          <div className={styles.list__menu}>
+          <div className={styles.list__menu} id='list-menu'>
             <div className={styles.list__menu_wrapper}>
-              {filterProductsByOffers(products).length === 0
+              {categories.length === 0
                 ? <LoadingItem />
-                : filterProductsByCategory(products, categories).map(({ name, products }: any, i: number) => (
+                : products.map(({ name, products }: any, i: number) => (
                   <aside key={i} id={name} className={styles.list__menu_subcategory}>
                     <div>
                       <h2 className={styles.list__menu_subcategory_title}>{name}</h2>
