@@ -20,39 +20,17 @@ import { LoadingCategories } from '@/components/LoadingCategories';
 
 const ProductsPage = () => {
   const [openCartMobile, setOpenCartMobile] = useState(false)
-  const [products, setProducts] = useState([])
   const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
   const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
   const { userDirection, pickUpTime } = useSelector((state: any) => state.places)
-  const { data: categories, isLoading } = useSwrFetcher('/api/categories')
-  const { data } = useSwrFetcher('/api/products')
+  const { data: { offers, categories = [], feed }, isLoading } = useSwrFetcher('/api/products/feed')
+  const [products, setProducts] = useState([])
   const dispatch = useDispatch()
 
-  function filterProductsByCategory(categories: ICategories[]) {
-    const filteredProductsByCategory = {};
-
-    categories.forEach((category) => {
-      const filteredProducts = data.filter((product: IProduct) => { return product.category === category.name; });
-
-      if (filteredProducts.length > 0) {
-        // @ts-ignore 
-        filteredProductsByCategory[category.name] = {
-          name: category.name,
-          products: filteredProducts,
-        };
-      }
-    });
-
-    setProducts(Object.values(filteredProductsByCategory));
-  }
-
-  function filterProductsByOffers(products: IProduct[]) {
-    return products.filter(p => p.category === 'Ofertas semanales')
-  }
-
   useEffect(() => {
-    filterProductsByCategory(categories)
-  }, [data])
+    if (!feed) return
+    setProducts(feed)
+  }, [feed])
 
   return (
     <Layout title='Productos - Cuatro Carnes'>
@@ -60,25 +38,26 @@ const ProductsPage = () => {
         <div className={styles.hero__container}>
           {/* <Slider /> */}
           <div className={styles.slider__list}>
-            <OfferSlider products={filterProductsByOffers(data)} setOpenModal={setOpenModal} />
+            <OfferSlider products={offers} setOpenModal={setOpenModal} />
           </div>
         </div >
       </section >
       <section className={styles.categories}>
         {
-          categories.length === 0
+          categories?.length === 0
             ? <LoadingCategories />
             : <NavbarCategories
+              feed={feed}
               categories={categories}
-              filterProductsByCategory={filterProductsByCategory}
+              setProducts={setProducts}
             />
         }
         <div className={styles.list}>
           <div className={styles.list__menu} id='list-menu'>
             <div className={styles.list__menu_wrapper}>
-              {categories.length === 0
+              {products?.length === 0
                 ? <LoadingItem />
-                : products.map(({ name, products }: any, i: number) => (
+                : products?.map(({ name, products }: any, i: number) => (
                   <aside key={i} id={name} className={styles.list__menu_subcategory}>
                     <div>
                       <h2 className={styles.list__menu_subcategory_title}>{name}</h2>
@@ -162,7 +141,7 @@ const ProductsPage = () => {
                     value={pickUpTime}
                   >
                     <option value="Mañana (8:00am - 13:30pm)">Mañana (8:00am - 13:30pm)</option>
-                    <option value="Tarde (14:30pm - 17:00pm)">Tarde (14:30pm - 17:00pm)</option>
+                    <option value="Tarde (14:30pm - 18:30pm)">Tarde (14:30pm - 18:30pm)</option>
                   </Select>
                 </div>
               </div>

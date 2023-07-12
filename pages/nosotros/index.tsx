@@ -23,7 +23,7 @@ const widgets = [
     icon: <FaRegCreditCard color="#f4e8e4" size='44px' />
   },
   {
-    name: 'Envíos gratis en compras superiores a $6.000',
+    name: 'Envíos gratis con compra de $9000 o más.',
     icon: <AiOutlineShoppingCart color="#f4e8e4" size='44px' />
   },
 ]
@@ -99,7 +99,7 @@ const AboutUsPage = () => {
               </p>
               <iframe src="https://maps.google.com/maps?q=Av.Juan%20B.%20Justo%202085%2C%20Troncos%20del%20Talar&amp;t=m&amp;z=15&amp;output=embed&amp;iwloc=near" height="600" style={{ border: 0 }} allowFullScreen></iframe>
               <p className={styles.hero__container_maps_description}>
-                Lunes a viernes 8 a 12:30 y 13:30 a 17hs, sábados 8 a 14hs.
+                Lunes a viernes 8 a 13:30 y 14:30 a 18:30, sábados 8 a 14hs.
               </p>
             </div>
             <div className={styles.hero__container_maps_wrapper}>
@@ -108,7 +108,7 @@ const AboutUsPage = () => {
               </p>
               <iframe src="https://maps.google.com/maps?q=Av%20Cris%C3%B3logo%20Larralde%202306%2C%20Troncos%20del%20Talar&t=m&z=14&output=embed&iwloc=near" height="600" style={{ border: 0 }} allowFullScreen></iframe>
               <p className={styles.hero__container_maps_description}>
-                Lunes a viernes 8 a 12:30 y 13:30 a 17hs, sábados 8 a 14hs.
+                Lunes a viernes 8 a 13:30 y 14:30 a 18:30, sábados 8 a 14hs.
               </p>
             </div>
           </div>

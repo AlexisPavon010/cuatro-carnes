@@ -12,7 +12,7 @@ interface OfferSliderProps {
   setOpenModal: (state: any) => void;
 }
 
-export const OfferSlider = ({ products, setOpenModal }: OfferSliderProps) => {
+export const OfferSlider = ({ products = [], setOpenModal }: OfferSliderProps) => {
 
   return (
     <Swiper

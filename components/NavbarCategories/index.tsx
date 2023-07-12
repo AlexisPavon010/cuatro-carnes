@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-
-import styles from './styles.module.scss';
-import { Dropdown, Space } from 'antd';
 import { BiChevronDown } from 'react-icons/bi';
+import { Dropdown, Space } from 'antd';
 
-export const NavbarCategories = ({ categories, filterProductsByCategory }: any) => {
+import { ICategories } from '@/interfaces/categories';
+import styles from './styles.module.scss';
+
+export const NavbarCategories = ({ categories, setProducts, feed = [] }: any) => {
   const [active, setActive] = useState(0)
   const buttonRefs = useRef<Array<HTMLButtonElement | any>>([]);
   const [dropdownCategories, setDropdownCategories] = useState(categories);
@@ -19,6 +20,16 @@ export const NavbarCategories = ({ categories, filterProductsByCategory }: any) 
     }
   };
 
+  function filterProductsByCategory(name: string) {
+    const filteredCategory = feed.find((categoryObj: ICategories) => categoryObj.name === name);
+
+    if (filteredCategory) {
+      setProducts([filteredCategory]); // Retorna el resultado envuelto en un array
+    } else {
+      setProducts(feed);
+    }
+  }
+
   useEffect(() => {
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -26,6 +37,7 @@ export const NavbarCategories = ({ categories, filterProductsByCategory }: any) 
           const sectionId = entry.target.id;
           categories.forEach(({ name }: { name: string }) => {
             const button = buttonRefs.current.find((ref) => ref?.dataset.category === name);
+            if (!button.classList) return
             button.classList.remove(styles.categories__button_active);
             if (sectionId === name) {
               button.classList.add(styles.categories__button_active);
@@ -97,7 +109,7 @@ export const NavbarCategories = ({ categories, filterProductsByCategory }: any) 
     label: name, id: name,
     onClick: () => {
       scrollToSection('list-menu'),
-        filterProductsByCategory([{ name: name }])
+        filterProductsByCategory(name)
     }
   }))
 
@@ -111,7 +123,7 @@ export const NavbarCategories = ({ categories, filterProductsByCategory }: any) 
               buttonRefs.current[0] = button;
             }}
             onClick={() => {
-              filterProductsByCategory(categories)
+              filterProductsByCategory('')
               scrollToSection('list-menu')
               setActive(0)
             }}
@@ -129,7 +141,7 @@ export const NavbarCategories = ({ categories, filterProductsByCategory }: any) 
                   buttonRefs.current[i + 1] = button;
                 }}
                 onClick={() => {
-                  filterProductsByCategory([{ name: name }])
+                  filterProductsByCategory(name)
                   scrollToSection('list-menu')
                   setActive(i + 1)
                 }}

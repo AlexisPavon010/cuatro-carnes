@@ -1,5 +1,5 @@
 import usePlacesAutocomplete, { getGeocode, getLatLng, } from "use-places-autocomplete";
-import { AutoComplete, Button, Input, Modal, Space, notification, } from 'antd';
+import { Alert, AutoComplete, Button, Input, Modal, Space, notification, } from 'antd';
 import { useGoogleMapsScript, Libraries } from "use-google-maps-script";
 import { useDispatch, useSelector } from 'react-redux';
 import { MdOutlineLocationOn } from 'react-icons/md';
@@ -79,7 +79,7 @@ export const MapboxMaps = () => {
 
   const saveUserAddress = (address: string, location: number[]) => {
     if (!address || !location) return
-    
+
     const MAX_ADDRESSES = 5;
 
     let addresses = cookies.userAddresses ? JSON.parse(cookies.userAddresses) : [];
@@ -161,6 +161,7 @@ export const MapboxMaps = () => {
         </AutoComplete>
         <Button loading={false} onClick={getCurrentPosition} icon={<MdOutlineLocationOn size={24} />} type="default" />
       </Space.Compact>
+      <Alert message="Si no encuentra  su dirección exacta, recuerde que siempre tendrá la opción de modificarla al final del pedido." type="info" closable />
     </Modal>
   )
 }

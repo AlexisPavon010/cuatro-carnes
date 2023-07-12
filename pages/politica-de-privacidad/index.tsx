@@ -16,7 +16,7 @@ const PoliticaDePrivacidad = () => {
             />
             <h1 className={styles.policy__title}>Política de privacidad de Cuatro Carnes</h1>
             <p className={styles.policy__p}>
-              Última actualización: [Fecha de actualización]
+              Última actualización: 12/07/2023
             </p>
             <p className={styles.policy__p}>
               En Cuatro Carnes, nos comprometemos a proteger y respetar su privacidad. Esta política de privacidad describe cómo recopilamos, utilizamos y protegemos la información personal que obtenemos a través de nuestro sitio web. Lea detenidamente esta política para comprender cómo tratamos su información personal.
