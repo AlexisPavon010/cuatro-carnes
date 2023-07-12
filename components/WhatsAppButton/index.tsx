@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 
 export const WhatsAppButton = () => {
   return (
-    <Tooltip title='Necesitas Ayuda?'>
+    <Tooltip title='¿Necesitas Ayuda?'>
       <Button
         onClick={() => window.open('https://api.whatsapp.com/send?phone=5491167478945')}
         className={styles.button__whatsapp}

@@ -162,7 +162,7 @@ const ProductsPage = () => {
                     value={pickUpTime}
                   >
                     <option value="Mañana (8:00am - 13:30pm)">Mañana (8:00am - 13:30pm)</option>
-                    <option value="Tarde (14:30pm - 17:00pm)">Tarde (14:30pm - 17:00pm)</option>
+                    <option value="Tarde (14:30pm - 18:30pm)">Tarde (14:30pm - 18:30pm)</option>
                   </Select>
                 </div>
               </div>

@@ -150,11 +150,7 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
             <span className={styles.button__content}>
               <div>
                 <CurrencyFormat
-                  value={
-                    count > 2
-                      ? offert_price ? offert_price : price! * count
-                      : price! * count
-                  }
+                  value={offert_price ? offert_price * count : price! * count}
                   displayType={'text'}
                   thousandSeparator={true}
                   prefix={'$'}
