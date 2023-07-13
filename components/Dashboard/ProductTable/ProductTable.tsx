@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Card, Col, Dropdown, MenuProps, Row, Select, Space, Table, Tag } from "antd"
+import { Button, Card, Col, Dropdown, Input, MenuProps, Row, Select, Space, Table, Tag } from "antd"
 import { ColumnsType } from "antd/es/table";
 import { AiOutlineLock, AiOutlineMenu, AiOutlineUnlock } from "react-icons/ai";
 import { BiPencil } from "react-icons/bi";
@@ -12,11 +12,14 @@ import { IProduct } from '@/interfaces/products';
 import { activateProductById } from '@/client';
 import { OptionsModal } from '../Modals/OptionsModal';
 
+const { Search } = Input;
+
 export const ProductTable = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined });
   const [isModalOpen, setIsModalOpen] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined });
   const [category, setCategory] = useState('')
-  const { data, error, isLoading, mutate } = useSwrFetcher(`/api/products${category}`)
+  const [term, setTerm] = useState('')
+  const { data, error, isLoading, mutate } = useSwrFetcher(`/api/products?${category}${term}`)
   const { data: categories } = useSwrFetcher('/api/categories')
   const [isDrawerOpen, setIsDrawerOpen] = useState<{ visible: boolean, id: string | undefined }>({ visible: false, id: undefined })
   const [selectedRecord, setSelectedRecord] = useState<IProduct | undefined>(undefined);
@@ -86,7 +89,7 @@ export const ProductTable = () => {
       )
     },
     {
-      align: 'center',  
+      align: 'center',
       title: 'Precio Oferta',
       dataIndex: 'offert_price',
       key: 'offert_price',
@@ -121,10 +124,13 @@ export const ProductTable = () => {
   return (
     <>
       <Card>
-        <Row gutter={[0, 12]}>
+        <Row gutter={[12, 12]}>
+          <Col xs={24} md={4} lg={6}>
+            <Search placeholder="Buscar..." onSearch={(value) => setTerm(value ? `term=${value}&` : '')} />
+          </Col>
           <Col xs={24} md={6} lg={6}>
             <Select
-              onChange={(value) => setCategory(value ? `?category=${value}` : '')}
+              onChange={(value) => setCategory(value ? `category=${value}&` : '')}
               placeholder='Seleccione una categoría'
               style={{ width: '100%' }}
               allowClear

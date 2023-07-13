@@ -40,13 +40,24 @@ const getProducts = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { category } = req.query
+  const { category, term = '' } = req.query
+
+  console.log(term)
 
   let condition = {}
 
   if (category) {
-    condition = { category }
+    condition = { ...condition, category }
   }
+
+  if (term) {
+    condition = {
+      ...condition,
+      $text: { $search: term }
+    }
+  }
+
+
 
   const data = await Product.find(condition).lean();
   return res.status(200).json(data)
