@@ -75,6 +75,7 @@
 .cart__end_price {}
 
 .cart__end_button {
+  cursor: pointer;
   margin-left: 12px;
   display: flex;
   height: auto;
@@ -91,8 +92,28 @@
   border: none;
 }
 
+.cart__total {
+  border-bottom: 1px solid #2c2c3133;
+  padding: 19px 0 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart__total_text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: -.34px;
+}
+
+.cart__total_price {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: -.34px;
+}
+
 .cart__subtotal {
-  border-top: 1px solid #2c2c3133;
   padding: 19px 0 17px;
   display: flex;
   justify-content: space-between;

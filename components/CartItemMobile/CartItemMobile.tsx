@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { AiOutlineClose } from 'react-icons/ai';
+import CurrencyFormat from 'react-currency-format';
+import { BiTrash } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import { Drawer } from 'antd';
 
@@ -52,17 +53,33 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
           <div className={styles.cart__end}>
             <span className={styles.cart__end_price}>${item.price.toFixed(2)}</span>
             <button onClick={() => removeItemToCart(item._id)} className={styles.cart__end_button}>
-              <AiOutlineClose color='#a92b3c' />
+              <BiTrash size={16} color='#a92b3c' />
             </button>
           </div>
         </div>
       ))}
+      <div className={styles.cart__total}>
+        <div className={styles.cart__total_text}>
+          Descuento (%7)
+        </div>
+        <div className={styles.cart__total_price}>
+          ${Math.round(getCartTotal(cart) * discount)}
+        </div>
+      </div>
+      <div className={styles.cart__total}>
+        <div className={styles.cart__total_text}>
+          Subtotal
+        </div>
+        <div className={styles.cart__total_price}>
+          <CurrencyFormat value={getCartTotal(cart)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+        </div>
+      </div>
       <div className={styles.cart__subtotal}>
         <div className={styles.cart__subtotal_text}>
           Total
         </div>
         <div className={styles.cart__subtotal_price}>
-          ${getCartTotal(cart)}
+          <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
         </div>
       </div>
       <div className={styles.list__mobile_content}>
