@@ -31,6 +31,8 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
   const mapRef = useRef<Map>()
   const router = useRouter()
 
+  console.log(order)
+
   const getRoutesBetweenPoints = async () => {
     if (!order.cords) return;
     const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.5834884218762%2C-34.445437599619716`)
@@ -209,7 +211,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         header={<Descriptions title="Detalles del pedido" size='small' extra={`(${order.items ? order.items.length : 0}) items`} />}
         footer={
           <Descriptions column={{ xs: 1, sm: 2, lg: 4 }}>
-            <Descriptions.Item label="Subtotal">${order.total && order.total.toFixed(2)}</Descriptions.Item>
+            <Descriptions.Item label="Subtotal">${order.sub_total && order.sub_total.toFixed(2)}</Descriptions.Item>
             <Descriptions.Item label="Descuentos ">$0.00</Descriptions.Item>
             <Descriptions.Item label="Envío">$0.00</Descriptions.Item>
             <Descriptions.Item label="Total">${order.total && order.total.toFixed(2)}</Descriptions.Item>
