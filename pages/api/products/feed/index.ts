@@ -30,7 +30,7 @@ const getProducts = async (
 
   const [categories, products] = await Promise.all([
     Category.find().sort({ name: 1 }).lean(),
-    Product.find().lean()
+    Product.find({ status: true }).lean()
   ])
 
   // Filtración por categoría
