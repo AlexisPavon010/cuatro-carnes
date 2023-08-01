@@ -13,7 +13,7 @@ export const NavbarCategories = ({ categories, setProducts, feed = [] }: any) =>
   const scrollToSection = (sectionId: string) => {
     const section: any = document.getElementById(sectionId);
     if (section) {
-      const topPos = section.offsetTop - 100;
+      const topPos = section.offsetTop - 50;
       window.scrollTo({ top: topPos, behavior: 'smooth' });
     } else {
       console.log(`La sección ${sectionId} no existe`);

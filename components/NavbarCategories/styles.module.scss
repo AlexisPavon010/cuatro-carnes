@@ -1,7 +1,6 @@
 .categories__container {
-  max-width: 1176px;
+  // max-width: 1176px;
   padding: 0 24px;
-  margin: 0 auto;
   position: sticky;
   top: 0;
   z-index: 4;
@@ -9,6 +8,8 @@
 }
 
 .categories__wrapper {
+  max-width: 1176px;
+  margin: 0 auto;
   padding: 2px;
   display: flex;
   flex-direction: row;
@@ -17,7 +18,7 @@
 }
 
 .categories__start {
-  display: flex;
+  // display: flex;
   flex: 1 1 auto;
   flex-direction: row;
   flex-wrap: wrap;
