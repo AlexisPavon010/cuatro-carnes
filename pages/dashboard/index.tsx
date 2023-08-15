@@ -13,7 +13,7 @@ import { IOrder } from '@/interfaces/order';
 
 const DashboardPage = () => {
   const [dateFilter, setDateFilter] = useState('')
-  const { data: orders, isLoading } = useSwrFetcher(`/api/order?${dateFilter}`, {
+  const { data: { results = [], metadata }, isLoading } = useSwrFetcher(`/api/order?${dateFilter}`, {
     refreshInterval: 5 * 1000
   })
 
@@ -26,7 +26,7 @@ const DashboardPage = () => {
   }
 
   const downloadReport = () => {
-    const formatOrders = orders.map((order: IOrder) =>
+    const formatOrders = results.map((order: IOrder) =>
       [`${order.uniqueID}`, `${moment(order.createdAt).format('DD/MM/YYYY, h:mm:ss a')}`, `$${order.total.toFixed(2)}`, `${order.username}`, `${order.email}`, `${order.status}`]
     )
     orderToXLS(
@@ -67,7 +67,7 @@ const DashboardPage = () => {
           <DashboardCard
             setDateFilter={() => handleDataFilter('date=day')}
             active={dateFilter === 'date=day'}
-            total={orders?.metadata?.today}
+            total={metadata?.today}
             loading={isLoading}
             title='Pedidos del Dia'
             description='Total de pedidos recibidos en el día'
@@ -77,7 +77,7 @@ const DashboardPage = () => {
           <DashboardCard
             setDateFilter={() => handleDataFilter('status=DELIVERED&date=day')}
             active={dateFilter === 'status=DELIVERED&date=day'}
-            total={orders?.metadata?.delivered}
+            total={metadata?.delivered}
             loading={isLoading}
             title='Pedidos Entregados'
             description='Pedidos entregados del día'
@@ -87,7 +87,7 @@ const DashboardPage = () => {
           <DashboardCard
             setDateFilter={() => handleDataFilter('status=PENDING')}
             active={dateFilter === 'status=PENDING'}
-            total={orders?.metadata?.pending}
+            total={metadata?.pending}
             loading={isLoading}
             title='Pedidos Pendientes'
             description='Falta entregar'
@@ -97,7 +97,7 @@ const DashboardPage = () => {
           <DashboardCard
             setDateFilter={() => handleDataFilter('status=CANCELLED')}
             active={dateFilter === 'status=CANCELLED'}
-            total={orders?.metadata?.cancelled}
+            total={metadata?.cancelled}
             loading={isLoading}
             title='Pedidos Cancelados'
             description='Cancelados'
@@ -124,7 +124,7 @@ const DashboardPage = () => {
             </Row>
           </Card>
           <OrderTable
-            orders={orders.result}
+            orders={results}
             isLoading={isLoading}
           />
         </Col>

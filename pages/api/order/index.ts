@@ -119,7 +119,7 @@ const getOrders = async (
       delivered,
       pending,
     },
-    result: orders
+    results: orders
   })
 }
 
