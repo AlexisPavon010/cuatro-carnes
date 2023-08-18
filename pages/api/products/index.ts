@@ -59,7 +59,7 @@ const getProducts = async (
 
 
 
-  const data = await Product.find(condition).lean();
+  const data = await Product.find(condition).sort({ title: 1 }).lean();
   return res.status(200).json(data)
 }
 
