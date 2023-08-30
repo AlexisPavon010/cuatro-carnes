@@ -1,5 +1,4 @@
 import { Layout } from '@/components/Layout';
-import { Slider } from '@/components/Slider';
 import { Main } from '@/components/Main';
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
     >
       <main>
         <Main />
-        {/* <Slider /> */}
       </main>
     </Layout>
   )
