@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { getSession, useSession } from 'next-auth/react'
 import axios from 'axios'
 import Joi from 'joi'
 
 import Order from '@/models/Order'
 import '../../../database/db'
-import { getSession, useSession } from 'next-auth/react'
 
 type Data = {
   message: string
@@ -38,11 +38,13 @@ const getOrders = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { date = 'all', status = '', skip = 1, limit = 10 } = req.query
+  const { date = 'all', status = '', skip = '1', limit = '10' } = req.query
 
   let condition: any = {}
 
   const day = new Date();
+  const skipValue = Number(skip);
+  const limitValue = Number(limit);
   const nowArgentina = new Date(day.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
   const startOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate());
   const endOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() + 1);
@@ -90,7 +92,11 @@ const getOrders = async (
     delivered,
     pending
   ] = await Promise.all([
-    Order.find(condition).sort({ 'createdAt': -1 }).limit(20).lean(),
+    Order.find(condition)
+      .sort({ 'createdAt': -1 })
+      .skip((skipValue - 1) * limitValue)
+      .limit(limitValue)
+      .lean(),
     Order.count(),
     Order.find({
       createdAt: {

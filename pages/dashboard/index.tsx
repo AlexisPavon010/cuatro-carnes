@@ -13,9 +13,39 @@ import { IOrder } from '@/interfaces/order';
 
 const DashboardPage = () => {
   const [dateFilter, setDateFilter] = useState('')
-  const { data: { results = [], metadata }, isLoading } = useSwrFetcher(`/api/order?${dateFilter}`, {
-    refreshInterval: 5 * 1000
-  })
+  const [currentPage, setCurrentPage] = useState<any>(1)
+  const [pageSize, setPageSize] = useState<any>(10)
+
+  const buildQuery = () => {
+    const queryParams: string[] = [];
+
+    if (dateFilter) {
+      queryParams.push(`dateFilter=${dateFilter}`);
+    }
+    if (currentPage) {
+      queryParams.push(`skip=${currentPage}`);
+    }
+    if (pageSize) {
+      queryParams.push(`limit=${pageSize}`);
+    }
+
+    return queryParams.join('&');
+  };
+
+  const { data: { results = [], metadata }, isLoading } = useSwrFetcher(
+    `/api/order?${buildQuery()}`, // Usa la función buildQuery para construir la URL
+    {
+      refreshInterval: 5 * 1000
+    }
+  );
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const onPageSizeChange = (current: any, size: any) => {
+    setPageSize(size);
+  };
 
   const handleDataFilter = (filter: string) => {
     if (dateFilter === filter) {
@@ -23,7 +53,7 @@ const DashboardPage = () => {
     } else {
       setDateFilter(filter);
     }
-  }
+  };
 
   const downloadReport = () => {
     const formatOrders = results.map((order: IOrder) =>
@@ -126,6 +156,11 @@ const DashboardPage = () => {
           <OrderTable
             orders={results}
             isLoading={isLoading}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+            pageSize={pageSize}
+            pages={metadata?.total / pageSize}
           />
         </Col>
       </Row>

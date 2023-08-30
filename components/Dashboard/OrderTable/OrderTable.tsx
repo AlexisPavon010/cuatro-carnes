@@ -1,9 +1,8 @@
 import { AiOutlineMail, AiOutlineProfile } from "react-icons/ai";
 import { Button, Space, Table, Tag, Tooltip } from "antd";
 import { BsPencil, BsWhatsapp } from "react-icons/bs";
-import { MdDeliveryDining } from "react-icons/md";
+import { MdOutlineLocalShipping, MdStorefront } from "react-icons/md";
 import { ColumnsType } from "antd/es/table";
-import { FaStore } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import moment from "moment";
@@ -17,13 +16,24 @@ import { openWhatsApp } from "@/utils/openWhatsApp";
 interface OrderTableProps {
   orders: IOrder[];
   isLoading: boolean;
+  pages?: number;
+  currentPage?: number;
+  onPageChange?: any;
+  onPageSizeChange?: any;
+  pageSize?: number;
 }
 
-export const OrderTable = ({ orders = [], isLoading }: OrderTableProps) => {
+export const OrderTable = ({
+  orders = [],
+  isLoading,
+  pages = 0,
+  currentPage = 1,
+  onPageChange,
+  onPageSizeChange,
+  pageSize = 0,
+}: OrderTableProps) => {
   const [modalOpen, setModalOpen] = useState({ visible: false, order: {} })
   const [emailOpen, setEmailOpen] = useState({ visible: false, order: {} })
-  const [skip, setSkip] = useState(1)
-  const [limit, setLimit] = useState(10)
   const router = useRouter()
 
   const columns: ColumnsType<any> = [
@@ -42,7 +52,7 @@ export const OrderTable = ({ orders = [], isLoading }: OrderTableProps) => {
       render: (value) => {
         let text = value === 'DELIVERY' ? 'Delivery' : 'Retiro';
         let color = value === 'DELIVERY' ? '#87d068' : '#2db7f5';
-        let icon = value === 'DELIVERY' ? <MdDeliveryDining color={color} size={24} /> : <FaStore color={color} size={18} />;
+        let icon = value === 'DELIVERY' ? <MdOutlineLocalShipping color={color} size={24} /> : <MdStorefront color={color} size={22} />;
         return (
           <Tooltip title={text}>
             {icon}
@@ -121,14 +131,6 @@ export const OrderTable = ({ orders = [], isLoading }: OrderTableProps) => {
     },
   ];
 
-  const onPageChange = (page: any) => {
-    setSkip(page)
-  }
-
-  const onPageSizeChange = (current: any, size: number) => {
-    setLimit(size)
-  }
-
   return (
     <>
       <Table
@@ -141,7 +143,13 @@ export const OrderTable = ({ orders = [], isLoading }: OrderTableProps) => {
           className: 'section-not-print',
           locale: {
             items_per_page: 'x pág.',
-          }
+          },
+          total: pageSize * pages,
+          current: currentPage,
+          pageSize: pageSize,
+          onChange: onPageChange,
+          onShowSizeChange: onPageSizeChange,
+          showSizeChanger: true
         }}
       />
       <OrderModal
