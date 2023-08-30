@@ -1,13 +1,8 @@
-import { Slider } from '@/components/Slider'
-import { Main } from '@/components/Main'
 import { Layout } from '@/components/Layout';
-import { IProduct } from '@/interfaces/products';
+import { Slider } from '@/components/Slider';
+import { Main } from '@/components/Main';
 
-interface HomeProps {
-  products: IProduct[]
-}
-
-export default function Home({ products }: HomeProps) {
+export default function Home() {
 
   return (
     <Layout
