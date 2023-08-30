@@ -10,7 +10,7 @@ export default function Home() {
     >
       <main>
         <Main />
-        <Slider />
+        {/* <Slider /> */}
       </main>
     </Layout>
   )
