@@ -1,17 +1,18 @@
+import 'swiper/css';
+import { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import { useEffect, useRef } from 'react';
-import 'swiper/css';
 
-import styles from './styles.module.scss';
+import { getProductsOffer } from '@/utils/getProductsOffer';
+import { LoadingCard } from '@/components/LoadingCard';
+import { useSwrFetcher } from '@/hooks/useSwrFetcher';
+import { OfferItem } from '@/components/OfferItem';
 import { IProduct } from '@/interfaces/products';
-import { OfferItem } from '../OfferItem';
+import styles from './styles.module.scss';
 
-interface SliderProps {
-  products: IProduct[]
-}
+export const Slider = () => {
+  const { data } = useSwrFetcher('/api/products')
 
-export const Slider = ({ products }: SliderProps) => {
   const swiperRef = useRef<any>(null);
   const swiper = useRef<any>(null);
 
@@ -56,11 +57,17 @@ export const Slider = ({ products }: SliderProps) => {
                 }
               }}
             >
-              {products.map((product, i) => (
+              {data.length !== 0 ? getProductsOffer(data).map((product: IProduct, i: number) => (
                 <SwiperSlide key={i}>
                   <OfferItem product={product} />
                 </SwiperSlide>
-              ))}
+              )) : (
+                Array(3).fill('').map((_: any, i: number) => (
+                  <SwiperSlide key={i}>
+                    <LoadingCard />
+                  </SwiperSlide>
+                ))
+              )}
             </Swiper>
           </div>
         </div>

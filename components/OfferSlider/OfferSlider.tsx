@@ -4,6 +4,8 @@ import { Navigation } from 'swiper';
 import { IProduct } from '@/interfaces/products';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { getProductsOffer } from '@/utils/getProductsOffer';
+import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingCard } from '../LoadingCard';
 import { OfferItem } from '../OfferItem';
 
@@ -13,7 +15,8 @@ interface OfferSliderProps {
 }
 
 export const OfferSlider = ({ products = [], setOpenModal }: OfferSliderProps) => {
-
+  const { data } = useSwrFetcher('/api/products');
+  
   return (
     <Swiper
       modules={[Navigation]}
@@ -33,19 +36,17 @@ export const OfferSlider = ({ products = [], setOpenModal }: OfferSliderProps) =
         }
       }}
     >
-      {
-        products.length === 0
-          ? Array(3).fill('').map((_: any, i: number) => (
-            <SwiperSlide key={i}>
-              <LoadingCard />
-            </SwiperSlide>
-          ))
-          : products.map((product, i) => (
-            <SwiperSlide key={i}>
-              <OfferItem product={product} setOpenModal={setOpenModal} />
-            </SwiperSlide>
-          ))
-      }
+      {data.length !== 0 ? getProductsOffer(data).map((product: IProduct, i: number) => (
+        <SwiperSlide key={i}>
+          <OfferItem product={product} />
+        </SwiperSlide>
+      )) : (
+        Array(3).fill('').map((_: any, i: number) => (
+          <SwiperSlide key={i}>
+            <LoadingCard />
+          </SwiperSlide>
+        ))
+      )}
     </Swiper>
   )
 }
