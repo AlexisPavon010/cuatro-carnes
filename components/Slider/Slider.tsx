@@ -68,7 +68,6 @@ export const Slider = () => {
                 ))
               )}
             </Swiper>
-            <h1 hidden>asdsaasd</h1>
           </div>
         </div>
       </div>
