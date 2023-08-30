@@ -12,7 +12,6 @@ import styles from './styles.module.scss';
 
 export const Slider = () => {
   const { data } = useSwrFetcher('/api/products')
-
   const swiperRef = useRef<any>(null);
   const swiper = useRef<any>(null);
 
