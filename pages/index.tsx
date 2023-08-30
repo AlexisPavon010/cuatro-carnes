@@ -25,13 +25,13 @@ export default function Home({ products }: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+// export const getServerSideProps: GetServerSideProps = async () => {
 
-  const data = await getProductsOffers()
+//   const data = await getProductsOffers()
 
-  return {
-    props: {
-      products: data
-    }
-  }
-}
+//   return {
+//     props: {
+//       products: data
+//     }
+//   }
+// }
