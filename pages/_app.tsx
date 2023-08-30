@@ -1,8 +1,10 @@
 import '../public/antd.min.css';
 import '../styles/globals.scss';
 
+import { SkeletonTheme } from 'react-loading-skeleton';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { SessionProvider } from 'next-auth/react';
+import 'react-loading-skeleton/dist/skeleton.css';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { SWRConfig } from 'swr';
@@ -19,7 +21,9 @@ export default function App({ Component, pageProps }: AppProps) {
       >
         <Provider store={store}>
           <StyleProvider hashPriority='high'>
-            <Component {...pageProps} />
+            <SkeletonTheme baseColor='#0000000f' highlightColor='#e9dddd'>
+              <Component {...pageProps} />
+            </SkeletonTheme>
           </StyleProvider>
         </Provider>
       </SWRConfig>

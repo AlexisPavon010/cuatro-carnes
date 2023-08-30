@@ -1,6 +1,9 @@
 .slider__list_item {
   padding: 16px 0;
   font-size: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .slider__list_item_skeleton {
@@ -10,10 +13,19 @@
   &>:nth-child(1) {
     display: flex !important;
     height: 240px !important;
+    border-radius: 16px;
     flex: 1;
   }
 }
 
 .slider__list_item_text {
   padding-top: 16px;
+}
+
+.skeleton_image_path {
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  max-width: 192px;
+  max-height: 192px;
 }
