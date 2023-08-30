@@ -90,7 +90,7 @@ const getOrders = async (
     delivered,
     pending
   ] = await Promise.all([
-    Order.find(condition).sort({ 'createdAt': -1 }).lean(),
+    Order.find(condition).sort({ 'createdAt': -1 }).limit(20).lean(),
     Order.count(),
     Order.find({
       createdAt: {
