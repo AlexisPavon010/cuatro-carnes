@@ -22,7 +22,7 @@ export const Footer = () => {
             <p className={styles.footer__menu_info_subtitle}>Sitemap</p>
           </div> */}
           <div className={styles.footer__menu_info_end}>
-            <h5 className={styles.footer__menu_info_text}>Compañía</h5>
+            <h3 className={styles.footer__menu_info_text}>Compañía</h3>
             <Link href='/nosotros#contact' className={styles.footer__menu_info_subtitle}>
               Contáctanos
             </Link>
@@ -40,7 +40,7 @@ export const Footer = () => {
             </div> */}
             <div className={styles.footer__social_icon}>
               <Link href='https://www.instagram.com/cuatro_carnes' passHref legacyBehavior>
-                <a target="_blank" rel="noopener noreferrer">
+                <a target="_blank" rel="noopener noreferrer" aria-label="Link de Instagram">
                   <FaInstagram size={24} color='#f4e8e4' />
                 </a>
               </Link>
