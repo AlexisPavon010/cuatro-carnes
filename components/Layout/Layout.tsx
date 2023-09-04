@@ -1,11 +1,16 @@
 import { ConfigProvider } from 'antd';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import Head from 'next/head';
 
 import { Drawer } from "../Drawer";
 import { Footer } from "../Footer";
 import { Header } from "../Header";
-import { WhatsAppButton } from '../WhatsAppButton';
+
+const WhatsAppButton = dynamic(() =>
+  import('../WhatsAppButton').then((mod) => mod.WhatsAppButton), {
+  ssr: false
+})
 
 interface LayoutProps {
   children: JSX.Element | JSX.Element[]
