@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ant-design/static-style-extract": "^1.0.1",
+    "@builder.io/partytown": "^0.8.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@sentry/nextjs": "^7.57.0",
     "@types/node": "18.15.0",
