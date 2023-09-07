@@ -1,6 +1,3 @@
-import '../public/antd.min.css';
-import '../styles/globals.scss';
-
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { SessionProvider } from 'next-auth/react';
@@ -10,6 +7,7 @@ import { Provider } from 'react-redux';
 import { SWRConfig } from 'swr';
 
 import { store } from '@/store';
+import '../styles/globals.scss';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
