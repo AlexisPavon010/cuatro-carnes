@@ -8,10 +8,9 @@ export default function Document() {
       <Head>
         <link rel="icon" href="/assets/favicon.png" />
         <Partytown debug={true} logScriptExecution={true} />
-        <Script
+        <script
           id="googlemaps"
           type="text/javascript"
-          strategy='afterInteractive'
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}&libraries=places`}
         />
         {/* Fragmento de código de Google Analytics */}

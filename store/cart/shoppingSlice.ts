@@ -2,7 +2,7 @@ import { IProduct } from "@/interfaces/products";
 import { createSlice } from "@reduxjs/toolkit";
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
-const { cart } = parseCookies()
+const { cart, pickup_or_delivery } = parseCookies()
 
 interface initialStateProps {
   cart: any,
@@ -12,7 +12,7 @@ interface initialStateProps {
 
 const initialState: initialStateProps = {
   cart: cart ? JSON.parse(cart) : [],
-  pickup_or_delivery: 'DELIVERY',
+  pickup_or_delivery: pickup_or_delivery ? JSON.parse(pickup_or_delivery) : 'DELIVERY',
   discount: 0.00
 };
 
@@ -90,6 +90,7 @@ export const shoppingSlice = createSlice({
 
     setShippingMethod: (state, action) => {
       state.pickup_or_delivery = action.payload;
+      setCookie(null, 'pickup_or_delivery', JSON.stringify(action.payload), { path: '/', })
     },
 
     setDiscountPercentage: (state, action) => {
