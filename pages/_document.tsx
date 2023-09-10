@@ -10,7 +10,8 @@ export default function Document() {
         <Partytown debug={true} logScriptExecution={true} />
         <Script
           id="googlemaps"
-          type="text/partytown"
+          type="text/javascript"
+          strategy='afterInteractive'
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}&libraries=places`}
         />
         {/* Fragmento de código de Google Analytics */}
