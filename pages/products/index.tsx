@@ -1,6 +1,5 @@
-import Image from 'next/image'
-import { Select, Tag, Tooltip } from 'antd'
-import { useRef, useState, useEffect } from 'react'
+import { Select } from 'antd'
+import { useState, useEffect } from 'react'
 import { BsChevronRight, } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -9,21 +8,20 @@ import { Layout } from '@/components/Layout';
 import { IProduct } from '@/interfaces/products';
 import { OrderModal } from '@/components/Modals';
 import { CartItem } from '@/components/CartItem';
-import { ICategories } from '@/interfaces/categories';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
+import { ProductItem } from '@/components/ProductItem';
 import { LoadingItem } from '@/components/LoadingItem';
 import { OfferSlider } from '@/components/OfferSlider';
 import { setPickUpTime } from '@/store/places/placesSlice';
 import { CartItemMobile } from '@/components/CartItemMobile';
+import { setShippingMethod } from '@/store/cart/shoppingSlice';
 import { NavbarCategories } from '@/components/NavbarCategories';
 import { LoadingCategories } from '@/components/LoadingCategories';
 
 const ProductsPage = () => {
-  const [openCartMobile, setOpenCartMobile] = useState(false)
-  const [openModal, setOpenModal] = useState<{ visible: boolean, product: undefined | IProduct }>({ visible: false, product: undefined })
-  const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
-  const { userDirection, pickUpTime } = useSelector((state: any) => state.places)
   const { data: { offers, categories = [], feed }, isLoading } = useSwrFetcher('/api/products/feed')
+  const { cart, pickup_or_delivery } = useSelector((state: any) => state.shopping)
+  const [openCartMobile, setOpenCartMobile] = useState(false)
   const [products, setProducts] = useState([])
   const dispatch = useDispatch()
 
@@ -38,7 +36,7 @@ const ProductsPage = () => {
         <div className={styles.hero__container}>
           {/* <Slider /> */}
           <div className={styles.slider__list}>
-            <OfferSlider products={offers} setOpenModal={setOpenModal} />
+            <OfferSlider />
           </div>
         </div >
       </section >
@@ -64,25 +62,8 @@ const ProductsPage = () => {
                       <p className={styles.list__menu_subcategory_description}>Todos los precios son por kg.</p>
                     </div>
                     <div className={styles.list__products}>
-                      {products.map((item: IProduct) => (
-                        <div key={item._id} onClick={() => setOpenModal({ visible: true, product: item })} className={styles.list__products_item}>
-                          <div>
-                            <h3 className={styles.list__products_title}>{item.title}</h3>
-                            <div className={styles.list__products_price}>{`$${item.price}`}</div>
-                          </div>
-                          <div>
-                            <Image
-                              src={item.image}
-                              height={50}
-                              width={70}
-                              style={{
-                                height: '100%',
-                                objectFit: 'contain'
-                              }}
-                              alt=''
-                            />
-                          </div>
-                        </div>
+                      {products.map((item: IProduct, i: number) => (
+                        <ProductItem key={i} item={item} />
                       ))}
                     </div>
                   </aside>
@@ -127,12 +108,21 @@ const ProductsPage = () => {
               <div className={styles.order__card}>
                 <div className={styles.order__card_wrapper}>
                   <p>Para</p>
-                  <Tooltip title={pickup_or_delivery === 'DELIVERY' ? userDirection : ''}>
+                  <Select
+                    className={styles.order__select}
+                    onChange={(value) => dispatch(setShippingMethod(value))}
+                    style={{ width: 'calc(100% - 80px)' }}
+                    value={pickup_or_delivery}
+                  >
+                    <option value="DELIVERY">Delivery</option>
+                    <option value="PICKUP">Retirar en el local</option>
+                  </Select>
+                  {/* <Tooltip title={pickup_or_delivery === 'DELIVERY' ? userDirection : ''}>
                     {pickup_or_delivery === 'DELIVERY' ? userDirection.slice(0, 30) + '...' : 'Para retirar en el local.'}
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
                 <hr className={styles.order__card_divider}></hr>
-                <div className={styles.order__card_wrapper}>
+                {/* <div className={styles.order__card_wrapper}>
                   <p>Hora</p>
                   <Select
                     className={styles.order__select}
@@ -143,7 +133,7 @@ const ProductsPage = () => {
                     <option value="Mañana (8:00am - 13:30pm)">Mañana (8:00am - 13:30pm)</option>
                     <option value="Tarde (14:30pm - 18:30pm)">Tarde (14:30pm - 18:30pm)</option>
                   </Select>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className={styles.cart_card}>
@@ -158,7 +148,7 @@ const ProductsPage = () => {
           </div>
         </div>
       </section>
-      <OrderModal open={openModal} close={setOpenModal} />
+      <OrderModal />
     </Layout >
   )
 }
