@@ -5,19 +5,21 @@ export const ProductSchema = new Schema({
   price: { type: Number },
   image: { type: String },
   stock: { type: String },
-  q_stock: { type: Number },
-  kg_stock: { type: Number },
+  category: { type: String },
+  description: { type: String },
   product_code: { type: Number },
   offert_price: { type: Number },
-  category: { type: String },
   status: { type: Boolean, default: true },
-  description: { type: String },
+  is_new: { type: Boolean, default: false },
+  is_offer: { type: Boolean, default: false },
+  is_offer_quantity: { type: Boolean, default: false },
+  offer_quantity: { type: Number, default: 0 },
   options: []
 }, {
   timestamps: true
 })
 
-ProductSchema.index({ title: 'text', tags: 'text' })
+ProductSchema.index({ title: 'text', description: 'text' })
 
 const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema)
 

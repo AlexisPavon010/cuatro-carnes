@@ -7,11 +7,12 @@ export interface IProduct {
   price: number;
   image: string;
   status: boolean;
+  is_new: boolean;
+  is_offer: boolean;
   options?: IOption[];
   quantity?: number;
   category: string;
-  q_stock: number;
-  kg_stock: number;
   description: string;
   offert_price: number;
+  is_offer_quantity: boolean;
 }
