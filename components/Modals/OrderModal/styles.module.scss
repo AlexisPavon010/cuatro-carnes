@@ -70,6 +70,10 @@
       letter-spacing: -.3px;
     }
 
+    .modal__subtitle_offer {
+      text-decoration: line-through;
+    }
+
     .divider {
       border: none;
       border-top: 1px solid rgba(44, 44, 49, 0.2);
@@ -110,6 +114,12 @@
     }
 
     .modal_options_list {}
+
+    .modal_options_button {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 24px;
+    }
 
     .modal_options_list_item {
       padding: 8px 14px;

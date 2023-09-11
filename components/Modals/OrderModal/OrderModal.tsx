@@ -1,25 +1,22 @@
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import CurrencyFormat from 'react-currency-format';
-import { Button, Modal, Radio } from "antd";
-import { useDispatch } from 'react-redux';
+import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { NumericFormat } from 'react-number-format';
+import { Button, Modal, Radio, Tooltip } from "antd";
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-import styles from './styles.module.scss'
-import { IProduct } from "@/interfaces/products"
-import { addToCart } from "@/store/cart/shoppingSlice"
+import { addToCart } from "@/store/cart/shoppingSlice";
 import { IItem } from "@/interfaces/options";
+import styles from './styles.module.scss';
+import { setOpenOrderModal } from "@/store/ui/uiSlice";
 
-interface OrderModalProps {
-  open: { visible: boolean, product: undefined | IProduct };
-  close: (value: { visible: boolean, product: undefined | IProduct }) => void
-}
-
-export const OrderModal = ({ open, close }: OrderModalProps) => {
+export const OrderModal = () => {
+  const { is_open_modal } = useSelector((state: any) => state.ui)
   const [count, setCount] = useState(1)
   const [selectedOptions, setSelectedOptions] = useState<any>([])
   const dispatch = useDispatch()
-  const { image, title, price, offert_price, description } = open.product || {}
+  const { product, visible } = is_open_modal
+  const { image, title, price, offert_price, description, is_offer, } = product || {}
 
   const productsWithItem = selectedOptions.filter((item: IItem) => item.item);
   const options = productsWithItem.map((item: IItem) => ({ title: item.name, name: item.item.name, price: item.item.price }));
@@ -43,28 +40,32 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
   useEffect(() => {
     setCount(1)
     setSelectedOptions(
-      open.product?.options?.map(option => ({
+      product?.options?.map((option: any) => ({
         name: option.name,
         item: null
       })) || []
     )
-  }, [open.product])
+  }, [product])
 
   const addItemToCart = () => {
     dispatch(addToCart({
       quantity: count,
-      ...open.product,
+      ...product,
       options: options
     }))
-    close({ visible: false, product: undefined })
+    handleCloseModal()
+  }
+
+  const handleCloseModal = () => {
+    dispatch(setOpenOrderModal({ visible: false, product: undefined }))
   }
 
   return (
     <Modal
       className={styles.modal}
       style={{ top: 25 }}
-      open={open.visible}
-      onCancel={() => close({ visible: false, product: undefined })}
+      open={visible}
+      onCancel={() => handleCloseModal()}
       footer={<div></div>}
     >
       <div className={styles.modal__container}>
@@ -83,7 +84,10 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
           <div className={styles.modal__card}>
             <h2 className={styles.modal__title}>{title}</h2>
             <div className={styles.modal__subtitle}>
-              <CurrencyFormat value={price} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+              {is_offer && (
+                <p className={styles.modal__subtitle_offer}>${price}</p>
+              )}
+              <NumericFormat value={is_offer ? offert_price : price} prefix={'$'} displayType="text" />
             </div>
             <p>{description}</p>
             <hr className={styles.divider} />
@@ -103,24 +107,31 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
           </div>
           {/* <div className={styles.combo_item_divider}></div> */}
           <div className={styles.modal_options}>
-            {open.product?.options?.map((option) => (
+            {product?.options?.map((option: any) => (
               <>
                 <div className={styles.modal_options_header}>
                   <h2 className={styles.modal_options_text}>{option.name}</h2>
                   <h2 className={styles.modal_options_text}>Seleccione una opción</h2>
                 </div>
                 <div className={styles.modal_options_list}>
-                  <Button
-                    type="text"
-                    onClick={() => handleOptionChange(option.name, null)}
-                    disabled={!selectedOptions.some(
-                      (opt: any) =>
-                        opt.name === option.name
-                    )}
-                  >
-                    Quitar opciones
-                  </Button>
-                  {option.items.map((item) => (
+                  <div className={styles.modal_options_button}>
+                    <p>Opciones:</p>
+                    <Tooltip title='Quitar Opciones'>
+                      <Button
+                        shape="circle"
+                        size="middle"
+                        type="text"
+                        onClick={() => handleOptionChange(option.name, null)}
+                        disabled={!selectedOptions.some(
+                          (opt: any) =>
+                            opt.name === option.name
+                        )}
+                      >
+                        <AiOutlineClose size={24} color='grey' />
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  {option.items.map((item: any) => (
                     <div className={styles.modal_options_list_item}>
                       <Radio
                         value={item}
@@ -149,10 +160,11 @@ export const OrderModal = ({ open, close }: OrderModalProps) => {
           <button onClick={addItemToCart} className={styles.button}>
             <span className={styles.button__content}>
               <div>
-                <CurrencyFormat
-                  value={offert_price ? offert_price * count : price! * count}
-                  displayType={'text'}
-                  thousandSeparator={true}
+                <NumericFormat
+                  value={is_offer ? offert_price * count : price * count}
+                  displayType="text"
+                  decimalScale={2}
+                  fixedDecimalScale
                   prefix={'$'}
                 />
               </div>
