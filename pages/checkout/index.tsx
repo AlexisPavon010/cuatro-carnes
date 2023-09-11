@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Radio, Result, Select, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import CurrencyFormat from 'react-currency-format';
+import { NumericFormat } from 'react-number-format';
 import { parseCookies, setCookie } from "nookies";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from 'react';
@@ -277,7 +277,7 @@ const CheckoutPage = () => {
                       Total
                     </span>
                     <span className={styles.checkout__title}>
-                      <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                      <NumericFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                     </span>
                   </div>
                 </div>

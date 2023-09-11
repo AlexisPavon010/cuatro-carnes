@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import CurrencyFormat from 'react-currency-format';
+import { NumericFormat } from 'react-number-format';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 
@@ -56,7 +56,7 @@ export const CartItem = () => {
           Subtotal
         </div>
         <div className={styles.cart__total_price}>
-          <CurrencyFormat value={getCartTotal(cart)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          <NumericFormat value={getCartTotal(cart)} prefix={'$'} displayType="text" />
         </div>
       </div>
       <div className={styles.cart__subtotal}>
@@ -64,12 +64,12 @@ export const CartItem = () => {
           Total
         </div>
         <div className={styles.cart__subtotal_price}>
-          <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          <NumericFormat value={calculateDiscountedPrice()} prefix={'$'} displayType="text" />
         </div>
       </div>
       <button onClick={() => router.push('/checkout')} className={styles.cart__button}>
         <span className={styles.cart__button_content}>
-          <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          <NumericFormat value={calculateDiscountedPrice()} prefix={'$'} displayType="text" />
           <div>Pedir</div>
         </span>
       </button>

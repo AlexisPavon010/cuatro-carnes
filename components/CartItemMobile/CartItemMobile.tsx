@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import CurrencyFormat from 'react-currency-format';
+import { NumericFormat } from 'react-number-format';
 import { BiTrash } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import { Drawer } from 'antd';
@@ -71,7 +71,7 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
           Subtotal
         </div>
         <div className={styles.cart__total_price}>
-          <CurrencyFormat value={getCartTotal(cart)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          <NumericFormat value={getCartTotal(cart)} prefix={'$'} displayType="text" />
         </div>
       </div>
       <div className={styles.cart__subtotal}>
@@ -79,7 +79,7 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
           Total
         </div>
         <div className={styles.cart__subtotal_price}>
-          <CurrencyFormat value={calculateDiscountedPrice()} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          <NumericFormat value={calculateDiscountedPrice()} prefix={'$'} displayType="text" />
         </div>
       </div>
       <div className={styles.list__mobile_content}>
