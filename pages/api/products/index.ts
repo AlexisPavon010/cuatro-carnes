@@ -17,7 +17,9 @@ const schema = Joi.object({
   category: Joi.string().min(3).required(),
   image: Joi.string().required(),
   stock: Joi.string(),
-  is_new: Joi.boolean()
+  is_new: Joi.boolean(),
+  is_offer: Joi.boolean(),
+  is_offer_quantity: Joi.boolean(),
 });
 
 export default function handler(
@@ -41,8 +43,6 @@ const getProducts = async (
 ) => {
   const { category, term = '' } = req.query
 
-  console.log(term)
-
   let condition = {}
 
   if (category) {
@@ -56,10 +56,16 @@ const getProducts = async (
     }
   }
 
+  try {
+    const data = await Product.find(condition).sort({ title: 1 }).lean();
 
+    if (!data) return res.status(404).json([])
 
-  const data = await Product.find(condition).sort({ title: 1 }).lean();
-  return res.status(200).json(data)
+    return res.status(200).json(data)
+  } catch (error: any) {
+    console.log(error)
+    return res.status(500).json([])
+  }
 }
 
 const CreateProduct = async (
