@@ -8,6 +8,7 @@ import axios from 'axios';
 import { createProduct, getProductById, updateProductById } from '@/client';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { ICategories } from '@/interfaces/categories';
+import { IProduct } from '@/interfaces/products';
 
 const { TextArea } = Input;
 
@@ -18,8 +19,8 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [stockChange, setChangeStock] = useState(false)
-  const [stock, setStock] = useState(1)
-  const [alertStock, setAlertStock] = useState(1)
+  const [isOffer, setIsOffer] = useState(false)
+  const [isOfferQuantity, setIsOfferQuantity] = useState(false)
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
@@ -40,15 +41,13 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
     }
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: IProduct) => {
     setLoading(true)
     if (!open.id) {
       createProduct({
         ...values,
         price: Number(values.price),
-        stock: stockChange ? 'QUANTITY' : 'KILOGRAM',
-        [stockChange ? 'q_stock' : 'kg_stock']: Number(stock),
-        image: imageUrl
+        image: imageUrl!
       })
         .then(() => {
           mutate(null);
@@ -60,9 +59,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
     } else {
       updateProductById(open.id, {
         ...values,
-        image: imageUrl,
-        stock: stockChange ? 'QUANTITY' : 'KILOGRAM',
-        [stockChange ? 'q_stock' : 'kg_stock']: Number(stock)
+        image: imageUrl!,
       })
         .then(() => {
           form.resetFields()
@@ -128,6 +125,11 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         onFinish={handleSubmit}
         autoComplete="off"
         requiredMark={false}
+        initialValues={{
+          is_new: false,
+          is_offer: isOffer,
+          stock: 'QUANTITY'
+        }}
       >
         <Form.Item
           label="Nombre del Producto"
@@ -147,32 +149,32 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
 
         <Form.Item
           label='Stock'
+          name="stock"
         >
-          <Radio.Group defaultValue={false} onChange={() => setChangeStock((state) => !state)}>
-            <Radio value={true}>Cantidad</Radio>
-            <Radio value={false}>Kg.</Radio>
+          <Radio.Group defaultValue={'QUANTITY'}>
+            <Radio value='QUANTITY'>Cantidad</Radio>
+            <Radio value='KILOGRAM'>Kg.</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item
-          label={stockChange ? 'Cantidad' : 'Kilogramo (kg.)'}
-          name={stockChange ? 'q_stock' : 'kg_stock'}
+          label="Es Nuevo."
+          name="is_new"
         >
-          <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button onClick={() => setStock((value) => (value > 1 ? value - 1 : value))} type="primary">-</Button>
-            <Input onChange={({ target }) => setStock(Number(target.value))} style={{ textAlign: 'center' }} value={stock} defaultValue={stock} />
-            <Button onClick={() => setStock(stock + 1)} type="primary">+</Button>
-          </Space.Compact>
+          <Radio.Group>
+            <Radio value={false}>No</Radio>
+            <Radio value={true}>Si</Radio>
+          </Radio.Group>
         </Form.Item>
 
         <Form.Item
-          label='Alerta de Stock'
+          label="Esta en oferta."
+          name="is_offer"
         >
-          <Space.Compact size='large' style={{ width: '100%' }}>
-            <Button onClick={() => setAlertStock((value) => (value > 1 ? value - 1 : value))} type="primary">-</Button>
-            <Input style={{ textAlign: 'center' }} onChange={({ target }) => setAlertStock(Number(target.value))} value={alertStock} defaultValue={alertStock} />
-            <Button onClick={() => setAlertStock(alertStock + 1)} type="primary">+</Button>
-          </Space.Compact>
+          <Radio.Group value={isOffer} onChange={() => setIsOffer((value) => !value)}>
+            <Radio value={false}>No</Radio>
+            <Radio value={true}>Si</Radio>
+          </Radio.Group>
         </Form.Item>
 
         <Form.Item
@@ -183,21 +185,47 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
         </Form.Item>
 
+        {
+          isOffer && (
+            <Form.Item
+              label={
+                <span>
+                  Precio Oferta Semanal
+                  {' '}
+                  <Tooltip title='Cuando un producto pertenece a la categoría Ofertas Semanales.'>
+                    <AiOutlineQuestionCircle size='16' />
+                  </Tooltip>
+                </span>
+              }
+              name="offert_price"
+              rules={[{ required: true, message: 'El precio oferta es requerido.' }]}
+            >
+              <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
+            </Form.Item>
+          )
+        }
+
         <Form.Item
-          label={
-            <span>
-              Precio Oferta Semanal
-              {' '}
-              <Tooltip title='Cuando un producto pertenece a la categoría Ofertas Semanales.'>
-                <AiOutlineQuestionCircle size='16' />
-              </Tooltip>
-            </span>
-          }
-          name="offert_price"
-          rules={[{ required: true, message: 'El precio oferta es requerido.' }]}
+          label="Oferta por cantidad."
+          name="is_offer_quantity"
         >
-          <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
+          <Radio.Group value={isOfferQuantity} onChange={() => setIsOfferQuantity((value) => !value)}>
+            <Radio value={false}>No</Radio>
+            <Radio value={true}>Si</Radio>
+          </Radio.Group>
         </Form.Item>
+
+        {
+          isOfferQuantity && (
+            <Form.Item
+              label='Cantidad / Kilogramos'
+              name="offer_quantity"
+              rules={[{ required: true, message: 'El precio oferta es requerido.' }]}
+            >
+              <InputNumber style={{ width: '100%' }} size='large' />
+            </Form.Item>
+          )
+        }
 
         <Form.Item
           label="Categoría"
