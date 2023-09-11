@@ -9,12 +9,7 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingCard } from '../LoadingCard';
 import { OfferItem } from '../OfferItem';
 
-interface OfferSliderProps {
-  products: IProduct[];
-  setOpenModal: (state: any) => void;
-}
-
-export const OfferSlider = ({ products = [], setOpenModal }: OfferSliderProps) => {
+export const OfferSlider = () => {
   const { data } = useSwrFetcher('/api/products');
   
   return (
