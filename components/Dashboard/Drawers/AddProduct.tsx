@@ -90,6 +90,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           is_offer: data.is_offer ? data.is_offer : false,
           is_offer_quantity: data.is_offer_quantity ? data.is_offer_quantity : false
         })
+        setIsOffer(data.is_offer ? data.is_offer : false)
       })
       .catch((error) => console.log(error))
 
