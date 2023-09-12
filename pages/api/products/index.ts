@@ -19,7 +19,9 @@ const schema = Joi.object({
   stock: Joi.string(),
   is_new: Joi.boolean(),
   is_offer: Joi.boolean(),
+  offer_quantity: Joi.number(),
   is_offer_quantity: Joi.boolean(),
+  offer_quantity_price: Joi.number(),
 });
 
 export default function handler(

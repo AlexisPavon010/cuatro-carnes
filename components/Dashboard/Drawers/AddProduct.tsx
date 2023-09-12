@@ -91,6 +91,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           is_offer_quantity: data.is_offer_quantity ? data.is_offer_quantity : false
         })
         setIsOffer(data.is_offer ? data.is_offer : false)
+        setIsOfferQuantity(data.is_offer_quantity ? data.is_offer_quantity : false)
       })
       .catch((error) => console.log(error))
 
@@ -132,7 +133,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         requiredMark={false}
         initialValues={{
           is_new: false,
-          is_offer: isOffer,
+          is_offer: false,
           stock: 'QUANTITY'
         }}
       >
@@ -222,13 +223,22 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
 
         {
           isOfferQuantity && (
-            <Form.Item
-              label='Cantidad / Kilogramos'
-              name="offer_quantity"
-              rules={[{ required: true, message: 'El precio oferta es requerido.' }]}
-            >
-              <InputNumber style={{ width: '100%' }} size='large' />
-            </Form.Item>
+            <>
+              <Form.Item
+                label='Cantidad / Kilogramos'
+                name="offer_quantity"
+                rules={[{ required: true, message: 'La cantidad es requerido.' }]}
+              >
+                <InputNumber style={{ width: '100%' }} size='large' />
+              </Form.Item>
+              <Form.Item
+                label='Precio por cantidad'
+                name="offer_quantity_price"
+                rules={[{ required: true, message: 'El precio por cantidad es requerido.' }]}
+              >
+                <InputNumber style={{ width: '100%' }} size='large' addonBefore="$" />
+              </Form.Item>
+            </>
           )
         }
 
