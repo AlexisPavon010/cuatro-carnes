@@ -38,7 +38,7 @@ const getOrders = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) => {
-  const { date = 'all', status = '', skip = '1', limit = '10' } = req.query
+  const { date = 'all', status = '', skip = '1', limit = '10', term = '', startDate = '', endDate = '' } = req.query
 
   let condition: any = {}
 
@@ -46,8 +46,8 @@ const getOrders = async (
   const skipValue = Number(skip);
   const limitValue = Number(limit);
   const nowArgentina = new Date(day.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-  const startOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate());
-  const endOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() + 1);
+  const startOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate(), 0, 0, 0, 0);
+  const endOfDay = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() + 1, 23, 59, 59, 999);
   const startOfWeek = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() - nowArgentina.getDay());
   const endOfWeek = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), nowArgentina.getDate() - nowArgentina.getDay() + 7);
   const startOfMonth = new Date(nowArgentina.getFullYear(), nowArgentina.getMonth(), 1);
@@ -84,6 +84,23 @@ const getOrders = async (
     condition.status = status;
   }
 
+  if (term) {
+    condition = {
+      ...condition,
+      $text: { $search: term }
+    }
+  }
+
+  if (startDate && endDate) {
+    console.log(startDate)
+    condition = {
+      createdAt: {
+        $gte: startDate,
+        $lt: endDate
+      },
+    }
+  }
+
   const [
     orders,
     total,
@@ -97,11 +114,11 @@ const getOrders = async (
       .skip((skipValue - 1) * limitValue)
       .limit(limitValue)
       .lean(),
-    Order.count(),
+    Order.count(condition),
     Order.find({
       createdAt: {
         $gte: startOfDay,
-        $lt: endOfDay
+        $lt: day
       },
     }).count(),
     Order.find({ status: 'CANCELLED' }).count(),

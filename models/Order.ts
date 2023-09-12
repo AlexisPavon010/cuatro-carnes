@@ -3,10 +3,10 @@ import Product from './Product';
 import { IProduct } from '@/interfaces/products';
 
 export const OrderSchema = new Schema({
-  uniqueID: { type: String, unique: true },
+  uniqueID: { type: String, unique: true, text: true },
   total: { type: Number },
-  username: { type: String },
-  email: { type: String },
+  username: { type: String, text: true },
+  email: { type: String, unique: true, text: true },
   phone: { type: String },
   address: { type: String },
   reference: { type: String },
@@ -32,6 +32,7 @@ export const OrderSchema = new Schema({
   timestamps: true
 })
 
+OrderSchema.index({ uniqueID: 'text', email: 'text', username: 'text' });
 // OrderSchema.pre('findOneAndUpdate', async function (next) {
 //   // Obtenemos la orden actualizada
 //   const order = await Order.findOne({ _id: this.getQuery()._id }).exec();

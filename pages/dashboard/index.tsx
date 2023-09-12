@@ -1,4 +1,4 @@
-import { Col, Card, Radio, Row, Dropdown, Button, MenuProps } from 'antd'
+import { Col, Card, Radio, Row, Dropdown, Button, MenuProps, DatePicker, Input } from 'antd';
 import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -11,10 +11,19 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { orderToXLS } from '@/utils/reports';
 import { IOrder } from '@/interfaces/order';
 
+const { RangePicker } = DatePicker;
+const { Search } = Input;
+
 const DashboardPage = () => {
+  const [searchOrder, setSearchOrder] = useState('')
+  const [searchDate, setSearchDate] = useState<any>()
   const [dateFilter, setDateFilter] = useState('')
   const [currentPage, setCurrentPage] = useState<any>(1)
   const [pageSize, setPageSize] = useState<any>(10)
+
+  const disabledDate = (current: any) => {
+    return current && current > new Date();
+  };
 
   const buildQuery = () => {
     const queryParams: string[] = [];
@@ -27,6 +36,17 @@ const DashboardPage = () => {
     }
     if (pageSize) {
       queryParams.push(`limit=${pageSize}`);
+    }
+    if (searchOrder) {
+      queryParams.push(`term=${searchOrder}`);
+    }
+
+    if (searchDate) {
+      const startDate = new Date(searchDate[0])
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(searchDate[1])
+      endDate.setHours(23, 59, 59, 999);
+      queryParams.push(`startDate=${startDate}&endDate=${endDate}`);
     }
 
     return queryParams.join('&');
@@ -135,20 +155,32 @@ const DashboardPage = () => {
         </Col>
         <Col xs={24}>
           <Card id="section-not-print">
-            <Row>
-              <Col flex={1}>
-                <Radio.Group onChange={({ target }) => setDateFilter(target.value ? `date=${target.value}` : '')} defaultValue='all'>
+            <Row gutter={[8, 8]}>
+              <Col xs={24} md={12} lg={8}>
+                <Radio.Group
+                  onChange={({ target }) => setDateFilter(target.value ? `date=${target.value}` : '')}
+                  defaultValue='all'
+                >
                   <Radio.Button value="all">Todos</Radio.Button>
                   <Radio.Button value="day">Dia</Radio.Button>
                   <Radio.Button value="week">Semana</Radio.Button>
                   <Radio.Button value="month">Mes</Radio.Button>
                 </Radio.Group>
               </Col>
-              <Col>
+              <Col xs={24} md={12} lg={4}>
+                <Search placeholder="Buscar..." onSearch={(value) => setSearchOrder(value)} />
               </Col>
-              <Col>
+              <Col xs={24} md={12} lg={8}>
+                <RangePicker
+                  format={'DD/MM/YYYY'}
+                  style={{ width: '100%' }}
+                  disabledDate={disabledDate}
+                  onChange={(date) => setSearchDate(date)}
+                />
+              </Col>
+              <Col xs={24} md={12} lg={4}>
                 <Dropdown menu={{ items }} trigger={['click']} >
-                  <Button >Descargar Reporte</Button>
+                  <Button style={{ width: '100%' }}>Descargar Reporte</Button>
                 </Dropdown>
               </Col>
             </Row>
