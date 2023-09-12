@@ -1,6 +1,5 @@
 import usePlacesAutocomplete, { getGeocode, getLatLng, } from "use-places-autocomplete";
 import { Alert, AutoComplete, Button, Input, Modal, Space, notification, } from 'antd';
-import { useGoogleMapsScript, Libraries } from "use-google-maps-script";
 import { useDispatch, useSelector } from 'react-redux';
 import { MdOutlineLocationOn } from 'react-icons/md';
 import { useEffect, useState } from 'react';
@@ -11,11 +10,8 @@ import { getUserLocation } from '@/utils/getUserLocation';
 import styles from './styles.module.scss';
 import { parseCookies, setCookie } from "nookies";
 
-const libraries: Libraries = ["places"];
-
 export const MapboxMaps = () => {
   const { userLocation, isMapVisible } = useSelector((state: any) => state.places)
-  const { isLoaded, loadError } = useGoogleMapsScript({ googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!, libraries, });
   const [selectedPlaces, setSelectedPlaces] = useState('')
   const [options, setOptions] = useState([]);
   const cookies = parseCookies();
@@ -130,8 +126,8 @@ export const MapboxMaps = () => {
 
   // const options = status === "OK" ? data.map(({ place_id, description }) => ({ value: description, key: place_id })) : [];
 
-  if (!isLoaded) return null;
-  if (loadError) return <div>Error loading</div>;
+  // if (!isLoaded) return null;
+  // if (loadError) return <div>Error loading</div>;
 
   return (
     <Modal
