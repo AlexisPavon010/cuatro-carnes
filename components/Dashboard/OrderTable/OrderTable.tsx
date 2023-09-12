@@ -61,11 +61,12 @@ export const OrderTable = ({
       }
     },
     {
+      render: (createdAt) => moment(createdAt).format('DD/MM/YYYY, h:mm:ss a'),
       title: 'Fecha y Hora',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      align: 'center',
       width: 200,
-      render: (createdAt) => moment(createdAt).format('DD/MM/YYYY, h:mm:ss a')
     },
     {
       align: 'center',
@@ -78,10 +79,11 @@ export const OrderTable = ({
       )
     },
     {
-      title: 'Cliente',
       dataIndex: 'username',
+      title: 'Cliente',
       key: 'username',
-      width: 150,
+      ellipsis: true,
+      width: 200,
     },
     {
       title: 'Correo',
@@ -94,11 +96,12 @@ export const OrderTable = ({
       title: 'Dirección',
       dataIndex: 'address',
       key: 'address',
-      ellipsis: true
+      ellipsis: true,
     },
     {
       align: 'center',
       title: 'Estado',
+      width: 150,
       dataIndex: 'status',
       key: 'status',
       render: (value) => {
@@ -112,6 +115,7 @@ export const OrderTable = ({
       title: 'Acciones',
       dataIndex: 'actions',
       key: 'actions',
+      width: 200,
       render: (_, record) => (
         <Space>
           <Tooltip title="Chatear por consulta">
