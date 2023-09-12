@@ -85,7 +85,11 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
     getProductById(open.id)
       .then(({ data }) => {
         setImageUrl(data.image)
-        form.setFieldsValue(data)
+        form.setFieldsValue({
+          ...data,
+          is_offer: data.is_offer ? data.is_offer : false,
+          is_offer_quantity: data.is_offer_quantity ? data.is_offer_quantity : false
+        })
       })
       .catch((error) => console.log(error))
 
@@ -158,7 +162,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Es Nuevo."
+          label="Es Nuevo?"
           name="is_new"
         >
           <Radio.Group>
@@ -168,7 +172,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Esta en oferta."
+          label="Está en oferta?"
           name="is_offer"
         >
           <Radio.Group value={isOffer} onChange={() => setIsOffer((value) => !value)}>
