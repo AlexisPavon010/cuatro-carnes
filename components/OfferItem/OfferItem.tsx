@@ -13,20 +13,22 @@ interface OfferItemProps {
 }
 
 export const OfferItem = ({ product, setOpenModal }: OfferItemProps) => {
+  const { image, offert_price, title, stock } = product || {};
+
   return (
     <div className={styles.slider__list_item} >
       {setOpenModal && (
-        <div className={styles.slider__list_item_plus} onClick={() => setOpenModal({ visible: true, product: { ...product, price: product.offert_price } })} >
+        <div className={styles.slider__list_item_plus} onClick={() => setOpenModal({ visible: true, product: { ...product, price: offert_price } })} >
           <BsCartPlus color='white' size={20} />
         </div>
       )}
       <div className={styles.slider__list_item_image}>
-        <Image src={product.image} width={150} height={120} alt='' />
+        <Image src={image} width={150} height={120} alt='' />
         <div className={styles.slider__list_item_price}>
-          ${product.offert_price ? product.offert_price.toFixed(2) : '00.00'} x Kg.
+          ${offert_price ? offert_price.toFixed(2) : '00.00'}{` x ${stock === 'KILOGRAM' ? 'Kg' : 'Ud'}`}.
         </div>
       </div>
-      <h3 className={styles.slider__list_item_text}>{product.title}</h3>
+      <h3 className={styles.slider__list_item_text}>{title}</h3>
     </div>
   )
 }
