@@ -42,7 +42,7 @@ export const Layout = ({ children, items }: LayoutProps) => {
         >
           {children}
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Cuatro Carnes ® Version Alpha v1.0.3</Footer>
+        <Footer style={{ textAlign: 'center' }}>Cuatro Carnes ® Version Alpha v1.0.4</Footer>
       </AntLAyout>
     </AntLAyout>
   )
