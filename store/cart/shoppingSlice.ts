@@ -20,13 +20,13 @@ const getCartTotal = (cart: any) => {
   return cart
     ?.reduce((amount: number, item: any) => {
       let optionPrice = 0;
-      if (item.options && item.options.length > 0) {
-        // Calcular el precio de las opciones sumándolos al precio del elemento
-        optionPrice = item.options.reduce(
-          (total: number, option: any) => total + option.price,
-          0
-        );
-      }
+      // if (item.options && item.options.length > 0) {
+      //   // Calcular el precio de las opciones sumándolos al precio del elemento
+      //   optionPrice = item.options.reduce(
+      //     (total: number, option: any) => total + option.price,
+      //     0
+      //   );
+      // }
       return item.price * item.quantity + optionPrice + amount;
     }, 0)
     .toFixed(2);
