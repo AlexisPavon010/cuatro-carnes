@@ -14,6 +14,7 @@ export interface IProduct {
   category: string;
   description: string;
   offert_price: number;
+  offer_quantity: number;
   is_offer_quantity: boolean;
   offer_quantity_price: number;
 }
