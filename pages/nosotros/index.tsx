@@ -23,7 +23,7 @@ const widgets = [
     icon: <FaRegCreditCard color="#f4e8e4" size='44px' />
   },
   {
-    name: 'Envíos gratis con compra de $9000 o más.',
+    name: 'Envíos gratis con compra de $15000 o más.',
     icon: <AiOutlineShoppingCart color="#f4e8e4" size='44px' />
   },
 ]
