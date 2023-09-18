@@ -40,6 +40,7 @@ export const CartItemMobile = () => {
       placement="right"
       onClose={onClose}
       open={is_open_cart_drawer}
+      style={{ backgroundColor: '#f4e8e4' }}
     >
       {cart.map((item: any, i: number) => (
         <div key={i} className={styles.cart}>
