@@ -12,16 +12,14 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { ProductItem } from '@/components/ProductItem';
 import { LoadingItem } from '@/components/LoadingItem';
 import { OfferSlider } from '@/components/OfferSlider';
-import { setPickUpTime } from '@/store/places/placesSlice';
-import { CartItemMobile } from '@/components/CartItemMobile';
 import { setShippingMethod } from '@/store/cart/shoppingSlice';
 import { NavbarCategories } from '@/components/NavbarCategories';
 import { LoadingCategories } from '@/components/LoadingCategories';
+import { setOpenCartDrawer } from '@/store/ui/uiSlice';
 
 const ProductsPage = () => {
   const { data: { offers, categories = [], feed }, isLoading } = useSwrFetcher('/api/products/feed')
   const { cart, pickup_or_delivery } = useSelector((state: any) => state.shopping)
-  const [openCartMobile, setOpenCartMobile] = useState(false)
   const [products, setProducts] = useState([])
   const dispatch = useDispatch()
 
@@ -71,15 +69,11 @@ const ProductsPage = () => {
               }
               {cart.length > 0 && (
                 <div className={styles.list__mobile_content}>
-                  <button onClick={() => setOpenCartMobile(true)} className={styles.list__mobile_button}>
+                  <button onClick={() => dispatch(setOpenCartDrawer(true))} className={styles.list__mobile_button}>
                     <span className={styles.list__mobile_button_content}>
                       <div>Ver la orden</div>
                     </span>
                   </button>
-                  <CartItemMobile
-                    open={openCartMobile}
-                    close={setOpenCartMobile}
-                  />
                 </div>
               )}
             </div>
