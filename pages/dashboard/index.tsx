@@ -168,7 +168,7 @@ const DashboardPage = () => {
                 </Radio.Group>
               </Col>
               <Col xs={24} md={12} lg={4}>
-                <Search placeholder="Buscar..." onSearch={(value) => setSearchOrder(value)} />
+                <Search placeholder="Buscar..." onSearch={(value) => setSearchOrder(value)} allowClear />
               </Col>
               <Col xs={24} md={12} lg={8}>
                 <RangePicker
