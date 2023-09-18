@@ -235,18 +235,23 @@ const CheckoutPage = () => {
                 <div className={styles.checkout__content_summary_card}>
                   <div>
                     <h2 className={styles.checkout__content_summary_card_title}>
-                      {
-                        pickup_or_delivery === 'DELIVERY'
-                          ? userDirection
-                          : 'Av. Crisólogo Larralde 2306, B1648 Tigre, Provincia de Buenos Aires'
-                      }
+                      Av. Crisólogo Larralde 2306, B1648 Tigre
                     </h2>
                     <p>
-                      {
-                        pickup_or_delivery === 'DELIVERY'
-                          ? `Delivery para aproximadamente ${pickUpTime}`
-                          : `En el local para aproximadamente ${pickUpTime}`
+                      {pickup_or_delivery === 'DELIVERY'
+                        ? 'Delivery para aproximadamente.'
+                        : 'Retiro en el local.'
                       }
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.checkout__content_summary_card}>
+                  <div>
+                    <h2 className={styles.checkout__content_summary_card_title}>
+                      Envíos a domicilio sin cargo adicional en 24hs.
+                    </h2>
+                    <p>
+                      mínimo $15.000,00 o retiros en local a precio mayorista.
                     </p>
                   </div>
                 </div>
