@@ -8,7 +8,8 @@ import Image from "next/image";
 import { addToCart } from "@/store/cart/shoppingSlice";
 import { IItem } from "@/interfaces/options";
 import styles from './styles.module.scss';
-import { setOpenOrderModal } from "@/store/ui/uiSlice";
+import { setOpenCartDrawer, setOpenOrderModal } from "@/store/ui/uiSlice";
+import { IProduct } from "@/interfaces/products";
 
 export const OrderModal = () => {
   const { is_open_modal } = useSelector((state: any) => state.ui)
@@ -16,7 +17,7 @@ export const OrderModal = () => {
   const [selectedOptions, setSelectedOptions] = useState<any>([])
   const dispatch = useDispatch()
   const { product, visible } = is_open_modal
-  const { image, title, price, offert_price, description, is_offer, } = product || {}
+  const { image, title, price, offert_price, description, is_new, is_offer, is_offer_quantity, offer_quantity_price, offer_quantity } = product as IProduct || {}
 
   const productsWithItem = selectedOptions.filter((item: IItem) => item.item);
   const options = productsWithItem.map((item: IItem) => ({ title: item.name, name: item.item.name, price: item.item.price }));
@@ -37,6 +38,17 @@ export const OrderModal = () => {
     });
   };
 
+  const calculatePrice = () => {
+    if (is_offer_quantity) {
+      const finalPrice = count >= offer_quantity ? count * offer_quantity_price : count * price
+      return finalPrice;
+    } else if (is_offer) {
+      return offert_price * count;
+    } else {
+      return price * count;
+    }
+  };
+
   useEffect(() => {
     setCount(1)
     setSelectedOptions(
@@ -48,6 +60,7 @@ export const OrderModal = () => {
   }, [product])
 
   const addItemToCart = () => {
+    dispatch(setOpenCartDrawer(true))
     dispatch(addToCart({
       quantity: count,
       ...product,
@@ -161,7 +174,7 @@ export const OrderModal = () => {
             <span className={styles.button__content}>
               <div>
                 <NumericFormat
-                  value={is_offer ? offert_price * count : price * count}
+                  value={calculatePrice()}
                   displayType="text"
                   decimalScale={2}
                   fixedDecimalScale
