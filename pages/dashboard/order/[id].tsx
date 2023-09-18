@@ -35,7 +35,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
 
   const getRoutesBetweenPoints = async () => {
     if (!order.cords) return;
-    const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.5834884218762%2C-34.445437599619716`)
+    const { data } = await directionsApi.get(`/${order.cords.join(',')};-58.587295973638355%2C-34.442304238763754`)
     const { geometry } = data.routes[0]
 
     const bounds = new LngLatBounds(order.cords, order.cords)
@@ -84,7 +84,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     })
 
     new Marker()
-      .setLngLat([-58.5834884218762, -34.445437599619716])
+      .setLngLat([-58.587295973638355, -34.442304238763754])
       .addTo(mapRef.current!)
   }
 
@@ -192,7 +192,16 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         </Row>
       </Card>
       <Card style={{ marginBottom: '20px', borderTop: `8px solid ${FLEETS.find((f) => f.value === order.fleet)?.color} ` }}>
-        <Descriptions column={{ xs: 1, sm: 1, lg: 1 }} title={`Pedido Nro. #${order.uniqueID}`} size='small' extra={<Tag color={STATUSES.find(status => status.value === order.status)?.color}>{STATUSES.find(status => status.value === order.status)?.label}</Tag>}>
+        <Descriptions
+          size='small'
+          column={{ xs: 1, sm: 1, lg: 1 }}
+          title={`Pedido Nro. #${order.uniqueID}`}
+          extra={
+            <Tag color={STATUSES.find(status => status.value === order.status)?.color}>
+              {STATUSES.find(status => status.value === order.status)?.label}
+            </Tag>
+          }
+        >
           <Descriptions.Item label="Nombre">{order.username}</Descriptions.Item>
           <Descriptions.Item label="Email">{order.email}</Descriptions.Item>
           <Descriptions.Item label="Domicilio">{`${order.address}, ${order.reference || ''} ` || '--------'}</Descriptions.Item>
@@ -208,7 +217,13 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         </Descriptions>
       </Card>
       <List
-        header={<Descriptions title="Detalles del pedido" size='small' extra={`(${order.items ? order.items.length : 0}) items`} />}
+        header={
+          <Descriptions
+            extra={`(${order.items ? order.items.length : 0}) items`}
+            title="Detalles del pedido"
+            size='small'
+          />
+        }
         footer={
           <Descriptions column={{ xs: 1, sm: 2, lg: 4 }}>
             <Descriptions.Item label="Subtotal">${order.sub_total && order.sub_total.toFixed(2)}</Descriptions.Item>
@@ -224,13 +239,18 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
               <Space direction='vertical'>
                 {
                   item.options?.map((item) => (
-                    <Typography.Title level={5} style={{ textAlign: 'start' }}>{item.title}: {item?.name} ${item?.price}</Typography.Title >
+                    <Typography.Title
+                      level={5}
+                      style={{ textAlign: 'start', margin: 0 }}
+                    >
+                      {item.title}: {item?.name} ${item?.price}
+                    </Typography.Title >
                   ))
                 }
               </Space>
             ]}
             extra={
-              < Space >
+              <Space>
                 <Typography.Text>${item.price}</Typography.Text>
                 <Typography.Text>${item.price * item.quantity!}</Typography.Text>
               </Space >
@@ -238,8 +258,11 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           >
             <List.Item.Meta
               // avatar={<Avatar shape='square' src={item.image} />}
+              prefixCls='custom__list'
               title={item.title}
-              description={<Typography.Title level={5}>Cantidad: {item.quantity}</Typography.Title>}
+              description={
+                <Typography.Title style={{ margin: 0 }} level={5}>Cantidad: {item.quantity}</Typography.Title>
+              }
             />
             {/* {item.description} */}
           </List.Item >
@@ -250,14 +273,16 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         itemLayout="vertical"
         bordered
       />
-      {order.shipping === 'DELIVERY' ? (
-        <Card id="section-not-print">
-          <div style={{
-            height: '600px',
-            width: '100%',
-          }} ref={mapDiv} />
-        </Card>
-      ) : (<div />)}
+      {
+        order.shipping === 'DELIVERY' ? (
+          <Card id="section-not-print">
+            <div style={{
+              height: '600px',
+              width: '100%',
+            }} ref={mapDiv} />
+          </Card>
+        ) : (<div />)
+      }
     </Layout >
   )
 }
