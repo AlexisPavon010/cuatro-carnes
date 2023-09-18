@@ -7,14 +7,11 @@ import { Drawer } from 'antd';
 import { getCartTotal, removeFromCart } from '@/store/cart/shoppingSlice';
 import { IOption } from '@/interfaces/options';
 import styles from './styles.module.scss';
+import { setOpenCartDrawer } from '@/store/ui/uiSlice';
 
-interface CartItemMobilePros {
-  open: boolean;
-  close: (value: boolean) => void
-}
-
-export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
+export const CartItemMobile = () => {
   const { cart, discount } = useSelector((state: any) => state.shopping)
+  const { is_open_cart_drawer } = useSelector((state: any) => state.ui)
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -29,15 +26,20 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
   }
 
   const onClose = () => {
-    close(false);
+    dispatch(setOpenCartDrawer(false))
   };
+
+  const handleNavigate = () => {
+    router.push('/checkout')
+    dispatch(setOpenCartDrawer(false))
+  }
 
   return (
     <Drawer
       title="Resumen de la Orden"
       placement="right"
       onClose={onClose}
-      open={open}
+      open={is_open_cart_drawer}
     >
       {cart.map((item: any, i: number) => (
         <div key={i} className={styles.cart}>
@@ -83,7 +85,7 @@ export const CartItemMobile = ({ open, close }: CartItemMobilePros) => {
         </div>
       </div>
       <div className={styles.list__mobile_content}>
-        <button onClick={() => router.push('/checkout')} className={styles.list__mobile_button}>
+        <button onClick={handleNavigate} className={styles.list__mobile_button}>
           <span className={styles.list__mobile_button_content}>
             <div>${calculateDiscountedPrice()}</div>
             <div>Pedir</div>

@@ -1,17 +1,22 @@
-import { Dropdown, MenuProps, Skeleton } from 'antd';
+import { Badge, Dropdown, MenuProps, Skeleton } from 'antd';
 import { useSession, signOut } from 'next-auth/react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import styles from './styles.module.scss'
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { setOpenCartDrawer } from '@/store/ui/uiSlice';
 
 export const Header = ({ openDrawer }: any) => {
+  const { cart } = useSelector((state: any) => state.shopping)
   const [loading, setLoading] = useState(false)
   const { data: session }: any = useSession()
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleNavigate = () => {
     router.push('/auth/signin')
@@ -101,6 +106,11 @@ export const Header = ({ openDrawer }: any) => {
                 </Link>
               </div> */}
               <div className={styles.header__nav_item}>
+                <Link href='/products'>
+                  Productos
+                </Link>
+              </div>
+              <div className={styles.header__nav_item}>
                 <Link href='/nosotros'>
                   Nosotros
                 </Link>
@@ -176,6 +186,14 @@ export const Header = ({ openDrawer }: any) => {
               className={styles.header__button_menu}
             >
               <RxHamburgerMenu size={24} />
+            </button>
+            <button
+              onClick={() => dispatch(setOpenCartDrawer(true))}
+              aria-label="boton menu"
+              className={styles.header__button_cart}
+            >
+              <AiOutlineShoppingCart size={24} />
+              <Badge showZero color='#A92B3C' count={cart.length} />
             </button>
           </div>
         </nav>

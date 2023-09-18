@@ -150,6 +150,33 @@
   }
 }
 
+.header__button_cart {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: none;
+  border-radius: 32px;
+  background-color: transparent;
+
+  &:hover {
+    transition: opacity .2s cubic-bezier(.4, 0, .6, 1);
+    background: rgba(80, 35, 20, 0.06);
+    opacity: 1;
+  }
+
+  svg {
+    background-color: transparent;
+  }
+
+  &>:nth-child(2) {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
 .header__button_content {
   display: flex;
   align-items: center;
