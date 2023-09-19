@@ -13,7 +13,7 @@ const initialState: initialStateProps = {
   map: undefined,
   isLoading: true,
   isMapVisible: false,
-  userDirection: '',
+  userDirection: 'Av. Crisólogo Larralde 2306, Troncos del Talar.',
   pickUpTime: 'Mañana (8:00am - 13:30pm)',
   userLocation: [-58.587295973638355, -34.442304238763754],
 };
