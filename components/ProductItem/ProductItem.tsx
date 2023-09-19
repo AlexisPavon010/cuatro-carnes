@@ -17,8 +17,13 @@ export const ProductItem = ({ item }: ProductItemProps) => {
 
   return (
     <div key={item._id} onClick={() => dispatch(setOpenOrderModal({ visible: true, product: item }))} className={styles.list__products_item}>
-      <div>
+      <div className={styles.list__products_wrapper}>
         <h3 className={styles.list__products_title}>{item.title}</h3>
+        {item.is_offer && (
+          <div className={styles.list__products_price_ofert}>
+            {`$${item.price}`}
+          </div>
+        )}
         <div className={styles.list__products_price}>
           {`$${item.price}`}
         </div>

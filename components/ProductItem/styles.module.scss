@@ -19,10 +19,19 @@
   }
 }
 
+.list__products_wrapper {}
+
 .list__products_title {
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 8px;
+}
+
+.list__products_price_ofert {
+  text-decoration: line-through;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: gray;
 }
 
 .list__products_price {
