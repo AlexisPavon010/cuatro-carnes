@@ -138,7 +138,6 @@ const CheckoutPage = () => {
           </div>
         </div>
       ) : (
-
         <div className={styles.checkout}>
           <div className={styles.checkout__container}>
             <div>
@@ -235,13 +234,13 @@ const CheckoutPage = () => {
                 <div className={styles.checkout__content_summary_card}>
                   <div>
                     <h2 className={styles.checkout__content_summary_card_title}>
-                      Av. Crisólogo Larralde 2306, B1648 Tigre
-                    </h2>
-                    <p>
                       {pickup_or_delivery === 'DELIVERY'
-                        ? 'Delivery para aproximadamente.'
+                        ? 'Delivery en aproximadamente 24hs.'
                         : 'Retiro en el local.'
                       }
+                    </h2>
+                    <p>
+                      {userDirection}
                     </p>
                   </div>
                 </div>
@@ -251,7 +250,20 @@ const CheckoutPage = () => {
                       Envíos a domicilio sin cargo adicional en 24hs.
                     </h2>
                     <p>
-                      mínimo $15.000,00 o retiros en local a precio mayorista.
+                      Mínimo $15.000,00 o retiros en local a precio mayorista.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.checkout__content_summary_card}>
+                  <div>
+                    <h2 className={styles.checkout__content_summary_card_title}>
+                      Días y Zona de entrega
+                    </h2>
+                    <p className={styles.checkout__content_summary_card_shipping}>
+                      <strong>Zona Norte:</strong> Lunes, Miércoles y Viernes.
+                    </p>
+                    <p>
+                      <strong>CABA:</strong> Martes, Jueves y Sábado.
                     </p>
                   </div>
                 </div>
@@ -290,8 +302,7 @@ const CheckoutPage = () => {
             </div>
           </div>
         </div>
-      )
-      }
+      )}
     </Layout >
   )
 }
