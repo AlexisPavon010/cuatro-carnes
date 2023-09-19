@@ -143,7 +143,7 @@ export const Header = ({ openDrawer }: any) => {
                 </div>
                 <Dropdown className={styles.header__dropdown} overlayClassName={styles.header__dropdown_menu} placement="bottomRight" menu={{ items }} trigger={['click']}>
                   <button aria-label="boton menu" className={styles.header__session_menu}>
-                    <RxHamburgerMenu size={24} />
+                    <RxHamburgerMenu color='#3C3C3B' size={24} />
                   </button>
                 </Dropdown>
               </div>
@@ -185,14 +185,14 @@ export const Header = ({ openDrawer }: any) => {
               aria-label="boton menu"
               className={styles.header__button_menu}
             >
-              <RxHamburgerMenu size={24} />
+              <RxHamburgerMenu color='#3C3C3B' size={24} />
             </button>
             <button
               onClick={() => dispatch(setOpenCartDrawer(true))}
               aria-label="boton menu"
               className={styles.header__button_cart}
             >
-              <AiOutlineShoppingCart size={24} />
+              <AiOutlineShoppingCart color='#3C3C3B' size={24} />
               <Badge showZero color='#A92B3C' count={cart.length} />
             </button>
           </div>
