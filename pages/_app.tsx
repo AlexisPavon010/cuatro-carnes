@@ -2,6 +2,7 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { SessionProvider } from 'next-auth/react';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useState, useEffect } from 'react'
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { SWRConfig } from 'swr';
@@ -10,6 +11,16 @@ import { store } from '@/store';
 import '../styles/globals.scss';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [showChild, setShowChild] = useState(false);
+
+  useEffect(() => {
+    setShowChild(true);
+  }, []);
+
+  if (!showChild) {
+    return null;
+  }
+
   return (
     <SessionProvider session={pageProps.session}>
       <SWRConfig
