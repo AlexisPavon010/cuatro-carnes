@@ -54,7 +54,7 @@ const SigninPage = ({ providers, error }: SigninPageProps) => {
       </Head>
       <div className={styles.login__container}>
         <Link href='/' className={styles.login__container_goback}>
-          <BsArrowLeft color='white' size={26} />
+          <BsArrowLeft color='#f4e8e4' size={26} />
         </Link>
         <div className={styles.login__container_left}>
           <div className={styles.login__container_left_content}>

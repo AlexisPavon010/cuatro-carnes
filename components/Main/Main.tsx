@@ -37,7 +37,7 @@ export const Main = () => {
             <div className={styles.hero__card_item} onClick={() => handleNavigate('PICKUP')}>
               <div className={styles.hero__card_item_content}>
                 <div className={styles.hero__card_item_image}>
-                  <FaStoreAlt color='white' size={24} />
+                  <FaStoreAlt color='#f4e8e4' size={24} />
                 </div>
                 <div className={styles.hero__card_item_text_wrap}>
                   <h2 className={styles.hero__card_item_text}>
@@ -52,7 +52,7 @@ export const Main = () => {
             <div className={styles.hero__card_item} onClick={() => handleNavigate('DELIVERY')}>
               <div className={styles.hero__card_item_content}>
                 <div className={styles.hero__card_item_image}>
-                  <MdDeliveryDining color='white' size={24} />
+                  <MdDeliveryDining color='#f4e8e4' size={24} />
                 </div>
                 <div className={styles.hero__card_item_text_wrap}>
                   <h2 className={styles.hero__card_item_text}>

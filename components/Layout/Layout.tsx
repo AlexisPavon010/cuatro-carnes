@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { Drawer } from "../Drawer";
 import { Footer } from "../Footer";
 import { Header } from "../Header";
-import { CartItemMobile } from '../CartItemMobile';
+import { CartDrawer } from '../CartDrawer';
 
 const WhatsAppButton = dynamic(() =>
   import('../WhatsAppButton').then((mod) => mod.WhatsAppButton), {
@@ -49,7 +49,7 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
       />
       <Footer />
       <WhatsAppButton />
-      <CartItemMobile />
+      <CartDrawer />
     </ConfigProvider>
   )
 }

@@ -28,7 +28,7 @@ export const OfferItem = ({ product }: OfferItemProps) => {
   return (
     <div className={styles.slider__list_item} >
       <div className={styles.slider__list_item_plus} onClick={handleAddToCart} >
-        <BsCartPlus color='white' size={20} />
+        <BsCartPlus color='#f4e8e4' size={20} />
       </div>
       <div className={styles.slider__list_item_image}>
         <Image src={image} width={150} height={120} alt='' />

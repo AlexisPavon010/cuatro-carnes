@@ -9,7 +9,7 @@ import { IOption } from '@/interfaces/options';
 import styles from './styles.module.scss';
 import { setOpenCartDrawer } from '@/store/ui/uiSlice';
 
-export const CartItemMobile = () => {
+export const CartDrawer = () => {
   const { cart, discount } = useSelector((state: any) => state.shopping)
   const { is_open_cart_drawer } = useSelector((state: any) => state.ui)
   const dispatch = useDispatch();
