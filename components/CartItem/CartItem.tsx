@@ -18,8 +18,8 @@ export const CartItem = () => {
     return priceWithDiscount;
   }
 
-  const removeItemToCart = (id: string) => {
-    dispatch(removeFromCart(id))
+  const removeItemToCart = (index: number) => {
+    dispatch(removeFromCart(index))
   }
 
   return (
@@ -37,7 +37,7 @@ export const CartItem = () => {
           </div>
           <div className={styles.cart__end}>
             <span className={styles.cart__end_price}>${item.price.toFixed(2)}</span>
-            <button onClick={() => removeItemToCart(item._id)} className={styles.cart__end_button}>
+            <button onClick={() => removeItemToCart(i)} className={styles.cart__end_button}>
               <AiOutlineClose color='#a92b3c' />
             </button>
           </div>

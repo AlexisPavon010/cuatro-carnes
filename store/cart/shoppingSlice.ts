@@ -71,21 +71,19 @@ export const shoppingSlice = createSlice({
     },
 
     removeFromCart: (state, action) => {
-      const itemIndex = state.cart.findIndex(
-        (cartItem: IProduct) => cartItem._id === action.payload
-      );
-      let newCart = [...state.cart];
-      if (itemIndex >= 0) {
+      const itemIndex = action.payload; // El índice del producto que deseas eliminar
+      if (itemIndex >= 0 && itemIndex < state.cart.length) {
+        let newCart = [...state.cart];
         if (newCart[itemIndex].quantity > 1) {
           newCart[itemIndex].quantity -= 1;
         } else {
-          newCart.splice(itemIndex, 1);
+          newCart.splice(itemIndex, 1); // Elimina el producto del carrito
         }
+        setCookie(null, 'cart', JSON.stringify(newCart), { path: '/', });
+        state.cart = newCart;
       } else {
-        console.warn("Item Not Found");
+        console.warn("Invalid Index");
       }
-      setCookie(null, 'cart', JSON.stringify(newCart), { path: '/', })
-      state.cart = newCart;
     },
 
     removeAllItems: (state, action) => {
