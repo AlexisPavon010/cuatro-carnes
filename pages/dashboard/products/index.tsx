@@ -14,7 +14,7 @@ const DashboardPage = () => {
             title: 'Dashboard',
           },
           {
-            title: <Link href="/options">Productos</Link>,
+            title: <Link href="/dashboard/products">Productos</Link>,
           }
         ]}
     >
