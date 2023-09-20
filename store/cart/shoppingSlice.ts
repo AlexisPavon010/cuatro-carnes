@@ -40,17 +40,34 @@ export const shoppingSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const itemIndex = state.cart.findIndex(
-        (cartItem: IProduct) => cartItem._id === action.payload._id
+      const newItem = action.payload;
+      const existingProduct = state.cart.find(
+        (cartItem: IProduct) =>
+          cartItem._id === newItem._id &&
+          JSON.stringify(cartItem.options) === JSON.stringify(newItem.options)
       );
-      let newCart = [...state.cart];
-      if (itemIndex >= 0) {
-        newCart[itemIndex].quantity += 1;
+
+      if (existingProduct) {
+        // Si el producto con las mismas opciones ya existe, clona el carrito
+        const newCart = [...state.cart];
+        // Encuentra el producto existente en el nuevo carrito
+        const existingProductIndex = newCart.findIndex(
+          (cartItem) =>
+            cartItem._id === newItem._id &&
+            JSON.stringify(cartItem.options) === JSON.stringify(newItem.options)
+        );
+        // Incrementa la cantidad del producto existente
+        newCart[existingProductIndex].quantity += 1;
+        // Actualiza la cookie y el estado con el nuevo carrito
+        setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
+        state.cart = newCart;
       } else {
-        newCart = [...state.cart, action.payload];
+        // Si el producto no existe en el carrito, agrégalo como un nuevo producto
+        const newCart = [...state.cart, { ...newItem, quantity: 1 }];
+        // Actualiza la cookie y el estado con el nuevo carrito
+        setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
+        state.cart = newCart;
       }
-      setCookie(null, 'cart', JSON.stringify(newCart), { path: '/', })
-      state.cart = newCart;
     },
 
     removeFromCart: (state, action) => {
