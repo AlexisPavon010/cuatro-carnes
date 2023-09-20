@@ -40,34 +40,28 @@ export const shoppingSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const newItem = action.payload;
-      const existingProduct = state.cart.find(
-        (cartItem: IProduct) =>
-          cartItem._id === newItem._id &&
-          JSON.stringify(cartItem.options) === JSON.stringify(newItem.options)
-      );
-
-      if (existingProduct) {
-        // Si el producto con las mismas opciones ya existe, clona el carrito
-        const newCart = [...state.cart];
-        // Encuentra el producto existente en el nuevo carrito
-        const existingProductIndex = newCart.findIndex(
-          (cartItem) =>
-            cartItem._id === newItem._id &&
-            JSON.stringify(cartItem.options) === JSON.stringify(newItem.options)
+      const { quantity, ...product } = action.payload;
+      const existingProductIndex = state.cart.findIndex((cartItem: IProduct) => {
+        // Compara el _id y las opciones seleccionadas del producto
+        return (
+          cartItem._id === product._id &&
+          JSON.stringify(cartItem.options) === JSON.stringify(product.options)
         );
-        // Incrementa la cantidad del producto existente
-        newCart[existingProductIndex].quantity += 1;
-        // Actualiza la cookie y el estado con el nuevo carrito
-        setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
-        state.cart = newCart;
+      });
+
+      let newCart = [...state.cart];
+
+      if (existingProductIndex >= 0) {
+        // Si el producto ya existe en el carrito con las mismas opciones, suma la cantidad deseada
+        newCart[existingProductIndex].quantity += quantity;
       } else {
-        // Si el producto no existe en el carrito, agrégalo como un nuevo producto
-        const newCart = [...state.cart, { ...newItem, quantity: 1 }];
-        // Actualiza la cookie y el estado con el nuevo carrito
-        setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
-        state.cart = newCart;
+        // Si el producto no existe en el carrito con las mismas opciones, agrégalo con la cantidad deseada
+        product.quantity = quantity;
+        newCart.push(product);
       }
+
+      setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
+      state.cart = newCart;
     },
 
     removeFromCart: (state, action) => {
