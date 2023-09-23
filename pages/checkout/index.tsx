@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 
 import { emptyCart, getCartTotal } from "@/store/cart/shoppingSlice";
+import { IOption } from "@/interfaces/options";
 import { Layout } from "@/components/Layout";
 import styles from './styles.module.scss';
 import { createOrder } from "@/client";
@@ -53,21 +54,7 @@ const CheckoutPage = () => {
     setCookie(null, 'reference', values.reference ? values.reference : '', { path: '/', })
     setCookie(null, 'code', values.code, { path: '/', })
     setCookie(null, 'phone', values.phone, { path: '/', })
-    console.log({
-      ...values,
-      items: cart,
-      total: getCartTotal(cart),
-      phone: values.code + values.phone
-    })
-    sendSucces({
-      ...values,
-      items: cart,
-      total: getCartTotal(cart),
-      phone: values.code + values.phone
-    })
-      .then(({ data }) => { console.log(data) })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false))
+
     createOrder({
       ...values,
       items: cart,
@@ -78,8 +65,13 @@ const CheckoutPage = () => {
       shipping: pickup_or_delivery,
     })
       .then(({ data }) => {
-        console.log(data)
         setSuccess(true)
+        sendSucces({
+          ...values,
+          items: cart,
+          total: getCartTotal(cart),
+          phone: values.code + values.phone
+        })
         setOrderID(data.uniqueID)
         dispatch(emptyCart())
       })
@@ -279,7 +271,9 @@ const CheckoutPage = () => {
                         <h3 className={styles.checkout__content_summary_card_order_title}>
                           {item.title}
                         </h3>
-                        {/* <p>{item.description}</p> */}
+                        {item.options.map((option: IOption) => (
+                          <div className={styles.checkout__content_summary_card_order_options}>{option.title}: {option.name}</div>
+                        ))}
                       </div>
                       <div>
                         <span>
