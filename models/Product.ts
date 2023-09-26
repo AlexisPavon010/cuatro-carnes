@@ -12,9 +12,10 @@ export const ProductSchema = new Schema({
   status: { type: Boolean, default: true },
   is_new: { type: Boolean, default: false },
   is_offer: { type: Boolean, default: false },
+  is_highlighted: { type: Boolean, default: false },
   is_offer_quantity: { type: Boolean, default: false },
-  offer_quantity: { type: Number, default: 0 },
-  offer_quantity_price: { type: Number, default: 0 },
+  offer_quantity: { type: Number, default: 2 },
+  offer_quantity_price: { type: Number, default: 1 },
   options: []
 }, {
   timestamps: true
