@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
 import { setShippingMethod, setDiscountPercentage } from '@/store/cart/shoppingSlice';
-import { setShowMap } from '@/store/places/placesSlice';
+import { setShowMap, setUserDirection } from '@/store/places/placesSlice';
 import { MapboxMaps } from '../MapboxMaps';
 import styles from './styles.module.scss';
 
@@ -20,6 +20,7 @@ export const Main = () => {
       dispatch(setDiscountPercentage(0.00))
     } else {
       dispatch(setDiscountPercentage(0.07))
+      dispatch(setUserDirection('Av. Crisólogo Larralde 2306, Troncos del Talar.'))
       router.push('/products')
     }
   }
