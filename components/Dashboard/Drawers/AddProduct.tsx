@@ -84,19 +84,24 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
     if (!open.id) return
     getProductById(open.id)
       .then(({ data }) => {
-        setImageUrl(data.image)
+        const {
+          image,
+          is_offer,
+          is_highlighted,
+          is_offer_quantity
+        } = data as IProduct;
+        setImageUrl(image)
         form.setFieldsValue({
           ...data,
-          is_offer: data.is_offer ? data.is_offer : false,
-          is_offer_quantity: data.is_offer_quantity ? data.is_offer_quantity : false
+          is_offer: is_offer ? is_offer : false,
+          is_highlighted: is_highlighted ? is_highlighted : false,
+          is_offer_quantity: is_offer_quantity ? is_offer_quantity : false
         })
-        setIsOffer(data.is_offer ? data.is_offer : false)
-        setIsOfferQuantity(data.is_offer_quantity ? data.is_offer_quantity : false)
+        setIsOffer(is_offer ? is_offer : false)
+        setIsOfferQuantity(is_offer_quantity ? is_offer_quantity : false)
       })
       .catch((error) => console.log(error))
-
   }, [open.id])
-
 
   return (
     <Drawer
@@ -178,6 +183,16 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
           name="is_offer"
         >
           <Radio.Group value={isOffer} onChange={() => setIsOffer((value) => !value)}>
+            <Radio value={false}>No</Radio>
+            <Radio value={true}>Si</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          label="Quieres destacarlo?"
+          name="is_highlighted"
+        >
+          <Radio.Group>
             <Radio value={false}>No</Radio>
             <Radio value={true}>Si</Radio>
           </Radio.Group>

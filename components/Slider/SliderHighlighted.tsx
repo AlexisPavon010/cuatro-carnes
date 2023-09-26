@@ -3,14 +3,14 @@ import { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
-import { getProductsOffer } from '@/utils/getProductsOffer';
 import { LoadingCard } from '@/components/LoadingCard';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { OfferItem } from '@/components/OfferItem';
 import { IProduct } from '@/interfaces/products';
 import styles from './styles.module.scss';
+import { getProductsHighlighted } from '@/utils/getProductsHighlighted';
 
-export const Slider = () => {
+export const SliderHighlighted = () => {
   const { data } = useSwrFetcher('/api/products')
   const swiperRef = useRef<any>(null);
   const swiper = useRef<any>(null);
@@ -27,7 +27,7 @@ export const Slider = () => {
         <div className={styles.slider__layout}>
           <div className={styles.slider__nav}>
             <h2 className={styles.slider__nav_title}>
-              Ofertas Semanales
+              Productos Destacados
             </h2>
             <div className={styles.slider__nav_actions}>
               <button aria-label="boton anterior slider" className={styles.slider__nav_actions_button}>
@@ -56,7 +56,7 @@ export const Slider = () => {
                 }
               }}
             >
-              {data.length !== 0 ? getProductsOffer(data).map((product: IProduct, i: number) => (
+              {data.length !== 0 ? getProductsHighlighted(data).map((product: IProduct, i: number) => (
                 <SwiperSlide key={i}>
                   <OfferItem product={product} />
                 </SwiperSlide>

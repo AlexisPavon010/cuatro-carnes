@@ -41,15 +41,17 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         <meta property="og:image:height" content="813" />
         <meta property="og:image:width" content="813" />
       </Head>
-      <Header openDrawer={openDrawer} />
-      {children}
-      <Drawer
-        isDrawerOpen={isDrawerOpen}
-        closeDrawer={closeDrawer}
-      />
-      <Footer />
-      <WhatsAppButton />
-      <CartDrawer />
+      <main>
+        <Header openDrawer={openDrawer} />
+        {children}
+        <Drawer
+          isDrawerOpen={isDrawerOpen}
+          closeDrawer={closeDrawer}
+        />
+        <Footer />
+        <WhatsAppButton />
+        <CartDrawer />
+      </main>
     </ConfigProvider>
   )
 }

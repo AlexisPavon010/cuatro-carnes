@@ -15,6 +15,7 @@ export interface IProduct {
   description: string;
   offert_price: number;
   offer_quantity: number;
+  is_highlighted: boolean;
   is_offer_quantity: boolean;
   offer_quantity_price: number;
 }
