@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
-import { getProductsOffer } from '@/utils/getProductsOffer';
 import { LoadingCard } from '@/components/LoadingCard';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { OfferItem } from '@/components/OfferItem';
@@ -11,7 +10,7 @@ import { IProduct } from '@/interfaces/products';
 import styles from './styles.module.scss';
 
 export const Slider = () => {
-  const { data } = useSwrFetcher('/api/products')
+  const { data } = useSwrFetcher('/api/products/offers', { revalidateOnFocus: false })
   const swiperRef = useRef<any>(null);
   const swiper = useRef<any>(null);
 
@@ -56,7 +55,7 @@ export const Slider = () => {
                 }
               }}
             >
-              {data.length !== 0 ? getProductsOffer(data).map((product: IProduct, i: number) => (
+              {data.length !== 0 ? data.map((product: IProduct, i: number) => (
                 <SwiperSlide key={i}>
                   <OfferItem product={product} />
                 </SwiperSlide>

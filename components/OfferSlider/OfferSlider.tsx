@@ -4,14 +4,12 @@ import { Navigation } from 'swiper';
 import { IProduct } from '@/interfaces/products';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { getProductsOffer } from '@/utils/getProductsOffer';
 import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { LoadingCard } from '../LoadingCard';
 import { OfferItem } from '../OfferItem';
 
 export const OfferSlider = () => {
-  const { data } = useSwrFetcher('/api/products');
-  
+  const { data } = useSwrFetcher('/api/products/offers');
   return (
     <Swiper
       modules={[Navigation]}
@@ -31,7 +29,7 @@ export const OfferSlider = () => {
         }
       }}
     >
-      {data.length !== 0 ? getProductsOffer(data).map((product: IProduct, i: number) => (
+      {data.length !== 0 ? data.map((product: IProduct, i: number) => (
         <SwiperSlide key={i}>
           <OfferItem product={product} />
         </SwiperSlide>

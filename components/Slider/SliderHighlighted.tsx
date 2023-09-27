@@ -8,10 +8,9 @@ import { useSwrFetcher } from '@/hooks/useSwrFetcher';
 import { OfferItem } from '@/components/OfferItem';
 import { IProduct } from '@/interfaces/products';
 import styles from './styles.module.scss';
-import { getProductsHighlighted } from '@/utils/getProductsHighlighted';
 
 export const SliderHighlighted = () => {
-  const { data } = useSwrFetcher('/api/products')
+  const { data } = useSwrFetcher('/api/products/highlighted', { revalidateOnFocus: false })
   const swiperRef = useRef<any>(null);
   const swiper = useRef<any>(null);
 
@@ -22,7 +21,7 @@ export const SliderHighlighted = () => {
   }, [swiperRef]);
 
   return (
-    <section className={styles.slider}>
+    <section className={styles.slider} style={{ marginBottom: '60px' }}>
       <div className={styles.slider__container}>
         <div className={styles.slider__layout}>
           <div className={styles.slider__nav}>
@@ -56,7 +55,7 @@ export const SliderHighlighted = () => {
                 }
               }}
             >
-              {data.length !== 0 ? getProductsHighlighted(data).map((product: IProduct, i: number) => (
+              {data.length !== 0 ? data.map((product: IProduct, i: number) => (
                 <SwiperSlide key={i}>
                   <OfferItem product={product} />
                 </SwiperSlide>
@@ -71,6 +70,6 @@ export const SliderHighlighted = () => {
           </div>
         </div>
       </div>
-    </section >
+    </section>
   )
 }
