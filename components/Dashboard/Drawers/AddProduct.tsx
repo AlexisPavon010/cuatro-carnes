@@ -169,7 +169,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Es Nuevo?"
+          label="¿Es Nuevo?"
           name="is_new"
         >
           <Radio.Group>
@@ -179,7 +179,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Está en oferta?"
+          label="¿Está en oferta?"
           name="is_offer"
         >
           <Radio.Group value={isOffer} onChange={() => setIsOffer((value) => !value)}>
@@ -189,7 +189,7 @@ export const AddProduct = ({ onClose, open, mutate }: any) => {
         </Form.Item>
 
         <Form.Item
-          label="Quieres destacarlo?"
+          label="¿Quieres destacarlo?"
           name="is_highlighted"
         >
           <Radio.Group>
