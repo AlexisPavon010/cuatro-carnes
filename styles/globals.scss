@@ -50,10 +50,21 @@ a {
     display: none;
   }
 
+  .ant-card {
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  .ant-list {
+    border: none !important;
+  }
+
   .section-not-print,
   #section-not-print * {
-    display: none;
-    visibility: hidden;
+    display: none !important;
+    visibility: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   #section-to-print * {
@@ -71,7 +82,19 @@ a {
   }
 
   .ant-scroll-number-only-unit {
-    color: #000000e0;
+    color: #000000e0 !important;
+  }
+
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
   }
 }
 

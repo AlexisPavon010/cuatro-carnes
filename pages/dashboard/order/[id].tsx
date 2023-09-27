@@ -1,8 +1,9 @@
-import { Button, Card, Col, Descriptions, List, Row, Space, Tag, Tooltip, Typography } from 'antd';
+import { Button, Card, Col, Descriptions, List, Row, Table, Tag, Tooltip } from 'antd';
 import mapboxgl, { AnySourceData, LngLatBounds, Map, Marker } from 'mapbox-gl';
 import { BsCash, BsCreditCard2Back } from 'react-icons/bs';
 import { AiOutlineBank } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
+import { ColumnsType } from 'antd/es/table';
 import { useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -15,6 +16,7 @@ import { Layout } from '@/components/Dashboard/Layout';
 import { getOrdersById } from '@/database/dbOrders';
 import { directionsApi } from '@/client/Direction';
 import { IProduct } from '@/interfaces/products';
+import { IOption } from '@/interfaces/options';
 import { STATUSES } from '@/constants/status';
 import { FLEETS } from '@/constants/fleets';
 import { IOrder } from '@/interfaces/order';
@@ -24,6 +26,79 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 interface OrderDetailsProps {
   order: IOrder
 }
+
+const columns: ColumnsType<IProduct> = [
+  {
+    dataIndex: 'title',
+    title: 'Nombre',
+    key: 'title',
+    render: (_, { title }) => <p style={{ whiteSpace: 'nowrap' }}>{title}</p>
+  },
+  {
+    dataIndex: 'stock',
+    align: 'center',
+    title: 'Unidad',
+    key: 'stock',
+    width: 50,
+    render: (_, { stock }) => {
+      let text = stock === 'KILOGRAM' ? 'Kg.' : 'Ud.'
+      return text
+    }
+  },
+  {
+    dataIndex: 'title',
+    title: 'Opciones',
+    key: 'title',
+    render: (_, { options }) => {
+      return options?.map(({ name }: IOption) => (
+        <Tag>{name}</Tag>
+      ));
+    }
+  },
+  {
+    dataIndex: 'is_offer',
+    title: 'Oferta',
+    key: 'is_offer',
+    align: 'center',
+    width: 60,
+    render: (_, { is_offer }) => {
+      let color = is_offer ? 'green' : 'volcano'
+      let text = is_offer ? 'Si' : 'No'
+      return (<Tag color={color}>{text}</Tag>)
+    }
+  },
+  {
+    dataIndex: 'quantity',
+    title: 'Cantidad',
+    key: 'quantity',
+    align: 'center',
+    width: 30,
+    render: (_, { stock, quantity }) => {
+      let text = stock === 'KILOGRAM' ? 'Kg.' : 'Ud.'
+      return (`${quantity} ${text}`)
+    }
+  },
+  {
+    dataIndex: 'price',
+    title: 'Precio',
+    align: 'center',
+    key: 'price',
+    width: 80,
+    render: (_, { price }) => (
+      `$${price}`
+    )
+  },
+  {
+    dataIndex: 'address',
+    title: 'Subtotal',
+    align: 'center',
+    key: 'address',
+    width: 80,
+    render: (_, { price, quantity }) => (
+      `$${price * quantity!}`
+    )
+  },
+];
 
 const OrderDetails = ({ order }: OrderDetailsProps) => {
   const mapDiv = useRef<HTMLDivElement>(null)
@@ -191,7 +266,10 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           </Col>
         </Row>
       </Card>
-      <Card style={{ marginBottom: '20px', borderTop: `8px solid ${FLEETS.find((f) => f.value === order.fleet)?.color} ` }}>
+      <Card
+        id="section-not-print"
+        style={{ marginBottom: '20px', borderTop: `8px solid ${FLEETS.find((f) => f.value === order.fleet)?.color} ` }}
+      >
         <Descriptions
           size='small'
           column={{ xs: 1, sm: 1, lg: 1 }}
@@ -217,10 +295,11 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         </Descriptions>
       </Card>
       <List
+        size='small'
         header={
           <Descriptions
             extra={`(${order.items ? order.items.length : 0}) items`}
-            title="Detalles del pedido"
+            title={`Detalles del pedido Nro. #${order.uniqueID}`}
             size='small'
           />
         }
@@ -232,44 +311,15 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
             <Descriptions.Item label="Total">${order.total && order.total.toFixed(2)}</Descriptions.Item>
           </Descriptions>
         }
-        renderItem={(item: IProduct) => (
-          <List.Item
-            key={item.title}
-            actions={[
-              <Space direction='vertical'>
-                {
-                  item.options?.map((item) => (
-                    <Typography.Title
-                      level={5}
-                      style={{ textAlign: 'start', margin: 0 }}
-                    >
-                      {item.title}: {item?.name} ${item?.price}
-                    </Typography.Title >
-                  ))
-                }
-              </Space>
-            ]}
-            extra={
-              <Space>
-                <Typography.Text>${item.price}</Typography.Text>
-                <Typography.Text>${item.price * item.quantity!}</Typography.Text>
-              </Space >
-            }
-          >
-            <List.Item.Meta
-              // avatar={<Avatar shape='square' src={item.image} />}
-              prefixCls='custom__list'
-              title={item.title}
-              description={
-                <Typography.Title style={{ margin: 0 }} level={5}>Cantidad: {item.quantity}</Typography.Title>
-              }
-            />
-            {/* {item.description} */}
-          </List.Item >
-        )
+        children={
+          <Table
+            dataSource={order.items}
+            pagination={false}
+            columns={columns}
+            size='small'
+          />
         }
         style={{ marginBottom: '20px' }}
-        dataSource={order.items}
         itemLayout="vertical"
         bordered
       />
@@ -291,6 +341,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id = '' } = query
 
   const data = await getOrdersById(id.toString())
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: `/dashboard`,
+        permanent: false,
+      }
+    }
+  }
 
   return {
     props: {
