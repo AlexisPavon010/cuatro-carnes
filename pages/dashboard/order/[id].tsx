@@ -62,7 +62,7 @@ const columns: ColumnsType<IProduct> = [
     align: 'center',
     width: 60,
     render: (_, { is_offer }) => {
-      let color = is_offer ? 'green' : 'volcano'
+      let color = is_offer ? 'cyan' : 'volcano'
       let text = is_offer ? 'Si' : 'No'
       return (<Tag color={color}>{text}</Tag>)
     }
@@ -267,8 +267,11 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         </Row>
       </Card>
       <Card
-        id="section-not-print"
-        style={{ marginBottom: '20px', borderTop: `8px solid ${FLEETS.find((f) => f.value === order.fleet)?.color} ` }}
+        size='small'
+        style={{
+          marginBottom: '20px',
+          borderTop: `8px solid ${FLEETS.find((f) => f.value === order.fleet)?.color}`
+        }}
       >
         <Descriptions
           size='small'
