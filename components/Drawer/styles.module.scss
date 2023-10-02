@@ -4,6 +4,27 @@
   }
 }
 
+.drawer__session {
+  align-items: center;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.drawer__session_user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  background-color: #5023140f;
+  padding: 8px 12px;
+  border-radius: 32px;
+}
+
+.drawer__button_icon {
+  height: 24px;
+}
+
 .drawer__item {
   display: block;
   width: 100% !important;

@@ -216,6 +216,16 @@
   .header__button {
     display: none;
   }
+
+  .header__nav_end {
+    :global(.ant-skeleton) {
+      display: none !important;
+    }
+  }
+
+  .header__session_user {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
