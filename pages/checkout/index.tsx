@@ -12,12 +12,14 @@ import { Layout } from "@/components/Layout";
 import styles from './styles.module.scss';
 import { createOrder } from "@/client";
 import { sendSucces } from "@/client/Email";
+import { QuizModal } from "@/components/QuizModal";
 
 const { Option } = Select;
 
 const CheckoutPage = () => {
   const { pickUpTime, userDirection, userLocation } = useSelector((state: any) => state.places)
   const { cart, pickup_or_delivery, discount } = useSelector((state: any) => state.shopping)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [orderID, setOrderID] = useState('000000')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -65,6 +67,7 @@ const CheckoutPage = () => {
       shipping: pickup_or_delivery,
     })
       .then(({ data }) => {
+        window.scrollTo(0, 0);
         setSuccess(true)
         sendSucces({
           ...values,
@@ -74,6 +77,7 @@ const CheckoutPage = () => {
         })
         setOrderID(data.uniqueID)
         dispatch(emptyCart())
+        setIsModalOpen(true)
       })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false))
@@ -297,6 +301,7 @@ const CheckoutPage = () => {
           </div>
         </div>
       )}
+      <QuizModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </Layout >
   )
 }
