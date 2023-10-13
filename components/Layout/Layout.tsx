@@ -29,6 +29,11 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         token: {
           colorPrimary: '#a92b3c',
         },
+        components: {
+          Modal: {
+            colorBgElevated: '#f4e8e4'
+          }
+        }
       }}
     >
       <Head>
