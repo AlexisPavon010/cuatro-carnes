@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Radio, Result, Select, Space } from "antd";
+import { Button, Card, Form, Input, Radio, Result, Select, Space, Row, Col } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { NumericFormat } from 'react-number-format';
 import { parseCookies, setCookie } from "nookies";
@@ -13,6 +13,8 @@ import styles from './styles.module.scss';
 import { createOrder } from "@/client";
 import { sendSucces } from "@/client/Email";
 import { QuizModal } from "@/components/QuizModal";
+
+
 
 const { Option } = Select;
 
@@ -45,6 +47,7 @@ const CheckoutPage = () => {
   const {
     reference,
     address,
+    address_1,
     phone,
     code
   } = parseCookies()
@@ -53,6 +56,7 @@ const CheckoutPage = () => {
     if (cart.length === 0) return router.push('/')
     setLoading(true)
     setCookie(null, 'address', values.address, { path: '/', })
+    setCookie(null, 'address_1', values.address_1, { path: '/', })
     setCookie(null, 'reference', values.reference ? values.reference : '', { path: '/', })
     setCookie(null, 'code', values.code, { path: '/', })
     setCookie(null, 'phone', values.phone, { path: '/', })
@@ -193,13 +197,26 @@ const CheckoutPage = () => {
                       <Input className={styles.checkout__input} />
                     </Form.Item>
 
-                    <Form.Item
-                      label="Depto / Piso / Timbre / Lote"
-                      initialValue={'' || reference}
-                      name="reference"
-                    >
-                      <Input className={styles.checkout__input} />
-                    </Form.Item>
+                    <Row gutter={20}>
+                      <Col>
+                        <Form.Item
+                          label="Depto / Piso / Timbre / Lote"
+                          initialValue={'' ||  reference}
+                          name="reference"
+                        >
+                          <Input className={styles.checkout__input} />
+                        </Form.Item>
+                      </Col>
+                      <Col>
+                        <Form.Item
+                          label="Localidad"
+                          initialValue={'' || address_1 }
+                          name="address_1"
+                        >
+                          <Input className={styles.checkout__input} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
                     <Space>
                       <Form.Item

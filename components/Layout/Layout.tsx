@@ -32,6 +32,10 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         components: {
           Modal: {
             colorBgElevated: '#f4e8e4'
+          },
+          Table: {             
+            colorBgContainer: '#f4e8e4',             
+            colorBorderSecondary: '#5023140f',           
           }
         }
       }}

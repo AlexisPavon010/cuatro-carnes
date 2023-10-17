@@ -8,6 +8,7 @@ export interface IOrder {
   fleet?: string,
   sub_total: number
   address: string,
+  address_1: string,
   reference?: string,
   payment_option: string,
   phone: string,
