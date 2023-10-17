@@ -9,6 +9,7 @@ export const OrderSchema = new Schema({
   email: { type: String, unique: true, text: true },
   phone: { type: String },
   address: { type: String },
+  address_1: { type: String },
   reference: { type: String },
   paymentOption: { type: String },
   userID: { type: String },

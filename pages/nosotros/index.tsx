@@ -91,7 +91,7 @@ const AboutUsPage = () => {
       </section>
       <section className={styles.hero__location}>
         <div className={styles.hero__maps_container}>
-          <h3 className={styles.hero__container_location_text}>Nuestros locales</h3>
+          <h3 className={styles.hero__container_location_text}>Nuestros Locales</h3>
           <div className={styles.hero__container_maps}>
             <div className={styles.hero__container_maps_wrapper}>
               <p className={styles.hero__container_maps_text}>
