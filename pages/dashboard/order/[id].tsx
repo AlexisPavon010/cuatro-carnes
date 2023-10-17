@@ -286,8 +286,8 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           <Descriptions.Item label="Nombre">{order.username}</Descriptions.Item>
           <Descriptions.Item label="Email">{order.email}</Descriptions.Item>
           <Descriptions.Item label="Domicilio">{`${order.address} ` || '--------'}</Descriptions.Item>
-          <Descriptions.Item label="Piso/Depto/Lote">{`${order.reference} ` || '--------'}</Descriptions.Item>
-          <Descriptions.Item label="Localidad">{`${order.address_1} ` || '--------'}</Descriptions.Item>
+          <Descriptions.Item label="Piso/Depto/Lote">{`${order.reference ? order.reference : '--------'} `}</Descriptions.Item>
+          <Descriptions.Item label="Localidad">{`${order.address_1 ? order.address_1 : '--------'} `}</Descriptions.Item>
           <Descriptions.Item label="Celular">+{order.phone ? order.phone : '0000000'}</Descriptions.Item>
           <Descriptions.Item label="Para">
             <Tag color='blue'>{order.shipping === 'DELIVERY' ? 'DELIVERY' : 'RETIRAR'}</Tag>
