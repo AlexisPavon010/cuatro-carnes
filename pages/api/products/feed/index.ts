@@ -28,9 +28,22 @@ const getProducts = async (
   res: NextApiResponse<any>
 ) => {
 
+  const { term = '' } = req.query
+
+  let condition: any = {
+    status: true
+  }
+
+  if (term) {
+    condition = {
+      ...condition,
+      $text: { $search: term }
+    }
+  }
+
   const [categories, products] = await Promise.all([
     Category.find().sort({ name: 1 }).lean(),
-    Product.find({ status: true }).lean()
+    Product.find(condition).lean()
   ])
 
   // Filtración por categoría

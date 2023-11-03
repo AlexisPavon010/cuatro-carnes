@@ -28,15 +28,19 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
       theme={{
         token: {
           colorPrimary: '#a92b3c',
+          colorBgElevated: '#f4e8e4'
         },
         components: {
-          Modal: {
-            colorBgElevated: '#f4e8e4'
+          Table: {
+            colorBgContainer: '#f4e8e4',
+            colorBorderSecondary: '#5023140f',
           },
-          Table: {             
-            colorBgContainer: '#f4e8e4',             
-            colorBorderSecondary: '#5023140f',           
-          }
+          Input: {
+            colorBgContainer: 'transparent',
+          },
+          Button: {
+            colorBgContainer: '#a92b3c',
+          },
         }
       }}
     >

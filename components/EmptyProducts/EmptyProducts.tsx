@@ -3,9 +3,10 @@ import { Button, Empty } from 'antd'
 export const EmptyProducts = ({ setSearch }: any) => {
   return (
     <Empty
-      description='Productos no encontrado'
+      image='/assets/not-found.png'
+      description='Producto no encontrado'
     >
-      <Button onClick={() => setSearch('')} type="default">Volver</Button>
+      <Button onClick={() => setSearch('')} type="primary">Volver</Button>
     </Empty>
   )
 }
