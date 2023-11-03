@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { BiChevronDown } from 'react-icons/bi';
-import { Dropdown, Space } from 'antd';
+import { BiMenu, } from 'react-icons/bi';
+import { Dropdown, Input, } from 'antd';
+const { Search } = Input
 
 import { ICategories } from '@/interfaces/categories';
 import styles from './styles.module.scss';
 
-export const NavbarCategories = ({ categories, setProducts, feed = [] }: any) => {
+export const NavbarCategories = ({ categories, setProducts, feed = [], setSearch }: any) => {
   const [active, setActive] = useState(0)
   const buttonRefs = useRef<Array<HTMLButtonElement | any>>([]);
   const [dropdownCategories, setDropdownCategories] = useState(categories);
@@ -104,12 +105,12 @@ export const NavbarCategories = ({ categories, setProducts, feed = [] }: any) =>
     };
   }, [categories]);
 
-  const items = dropdownCategories.map((name: string) =>
+  const items = categories.map((category: ICategories) =>
   ({
-    label: name, id: name,
+    label: category.name, id: category._id,
     onClick: () => {
       scrollToSection('list-menu'),
-        filterProductsByCategory(name)
+        filterProductsByCategory(category.name)
     }
   }))
 
@@ -153,15 +154,17 @@ export const NavbarCategories = ({ categories, setProducts, feed = [] }: any) =>
 
         </nav>
         <div className={styles.categories__end}>
+          <Search
+            allowClear
+            placeholder='Buscar...'
+            onSearch={setSearch}
+          />
           {dropdownCategories && (
             <Dropdown
               trigger={['click']}
               menu={{ items }}
             >
-              <Space style={{ whiteSpace: 'nowrap' }}>
-                Mas
-                <BiChevronDown />
-              </Space>
+              <BiMenu size={32} />
             </Dropdown>
           )}
         </div>

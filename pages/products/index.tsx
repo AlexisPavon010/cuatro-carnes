@@ -16,12 +16,23 @@ import { setShippingMethod } from '@/store/cart/shoppingSlice';
 import { NavbarCategories } from '@/components/NavbarCategories';
 import { LoadingCategories } from '@/components/LoadingCategories';
 import { setOpenCartDrawer } from '@/store/ui/uiSlice';
+import { EmptyProducts } from '@/components/EmptyProducts';
 
 const ProductsPage = () => {
-  const { data: { offers, categories = [], feed }, isLoading } = useSwrFetcher('/api/products/feed')
   const { cart, pickup_or_delivery } = useSelector((state: any) => state.shopping)
+  const [search, setSearch] = useState('')
   const [products, setProducts] = useState([])
   const dispatch = useDispatch()
+
+  const buildQuery = () => {
+    const queryParams: string[] = [];
+    if (search) {
+      queryParams.push(`term=${search}`);
+    }
+    return queryParams.join('&');
+  };
+
+  const { data: { offers, categories = [], feed }, isLoading } = useSwrFetcher(`/api/products/feed?${buildQuery()}`)
 
   useEffect(() => {
     if (!feed) return
@@ -46,14 +57,15 @@ const ProductsPage = () => {
               feed={feed}
               categories={categories}
               setProducts={setProducts}
+              setSearch={setSearch}
             />
         }
         <div className={styles.list}>
           <div className={styles.list__menu} id='list-menu'>
             <div className={styles.list__menu_wrapper}>
-              {products?.length === 0
+              {isLoading
                 ? <LoadingItem />
-                : products?.map(({ name, products }: any, i: number) => (
+                : products.length === 0 ? (<EmptyProducts setSearch={setSearch} />) : products.map(({ name, products }: any, i: number) => (
                   <aside key={i} id={name} className={styles.list__menu_subcategory}>
                     <div>
                       <h2 className={styles.list__menu_subcategory_title}>{name}</h2>
