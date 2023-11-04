@@ -109,10 +109,10 @@ export const OrderModal = () => {
                 <h3>Cantidad: {count}</h3>
                 <div className={styles.modal__quantity_buttons}>
                   <Button onClick={() => setCount((value) => value === 1 ? 1 : value - 1)} size="middle" shape="circle">
-                    <AiOutlineMinus size={24} color='grey' />
+                    <AiOutlineMinus size={24} color='white' />
                   </Button>
                   <Button onClick={() => setCount(count + 1)} size="middle" shape="circle" >
-                    <AiOutlinePlus size={24} color='grey' />
+                    <AiOutlinePlus size={24} color='white' />
                   </Button>
                 </div>
               </div>
