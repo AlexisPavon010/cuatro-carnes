@@ -86,6 +86,11 @@ export const CartDrawer = () => {
         </div>
       </div>
       <div className={styles.list__mobile_content}>
+        <button onClick={onClose} className={styles.list__mobile_button_underline}>
+          <span className={styles.list__mobile_button_content}>
+            <div>Seguir comprando</div>
+          </span>
+        </button>
         <button onClick={handleNavigate} className={styles.list__mobile_button}>
           <span className={styles.list__mobile_button_content}>
             <div>${calculateDiscountedPrice()}</div>

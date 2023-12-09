@@ -149,13 +149,46 @@
   width: 100%;
   min-height: 56px;
   padding: 12px 24px;
-  border: none;
+  border: 1px solid #a92b3c;
   background-color: #a92b3c;
   border-radius: 32px;
   color: #f4e8e4;
-
+  transition: background-color 0.3s ease;
   width: calc(100% - 20px);
   margin: 12px 12px;
+
+  &:hover {
+    border: 1px solid #a92b3c;
+    background-color: #c94f64;
+    color: white;
+  }
+
+}
+
+.list__mobile_button_underline {
+  cursor: pointer;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 24px;
+  border: 1px solid #a92b3c;
+  background-color: transparent;
+  border-radius: 32px;
+  color: #a92b3c;
+  transition: background-color 0.3s ease;
+  width: calc(100% - 20px);
+  margin: 12px 12px;
+
+  &>span {
+    justify-content: center;
+  }
+
+  &:hover {
+    transition: background-color 0.3s ease;
+    border: 1px solid #a92b3c;
+    background-color: #c94f64;
+    color: white;
+  }
+
 }
 
 .list__mobile_button_content {

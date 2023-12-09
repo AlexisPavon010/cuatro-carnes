@@ -23,6 +23,19 @@ a {
   text-decoration: none;
 }
 
+.ant-btn {
+  &:hover {
+    background-color: #c94f64;
+  }
+
+  transition: background-color 0.3s ease;
+}
+
+.anticon-search {
+  color: white;
+  transition: color 0.3s ease;
+}
+
 .ant-layout-sider {
   display: block;
 }

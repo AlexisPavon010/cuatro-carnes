@@ -33,7 +33,7 @@
   cursor: pointer;
   background-color: transparent;
   padding: 8px 12px;
-  border: none;
+  border: 1px solid transparent;
   font-weight: 700;
   border-radius: 15px;
   color: #3C3C3B;
@@ -41,17 +41,20 @@
   margin-bottom: 16px;
   margin-right: 8px;
   min-height: 32px;
+  transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #5023140f;
-    color: #3C3C3B;
+    transition: background-color 0.3s ease;
+    border: 1px solid #a92b3c;
+    background-color: #c94f64;
+    color: white;
   }
 }
 
 .categories__button_active {
   background-color: #a92b3c;
   padding: 8px 12px;
-  border: none;
+  border: 1px solid #a92b3c;
   color: white;
   font-weight: 700;
   border-radius: 15px;
@@ -88,4 +91,8 @@
   .categories__start {
     display: none;
   }
+}
+
+.categories__search_icon {
+  color: white !important;
 }

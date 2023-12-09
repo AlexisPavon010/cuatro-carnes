@@ -109,10 +109,12 @@
   color: white;
   border-radius: 32px;
   padding: 12px;
-  border: none;
+  border: 1px solid #a92b3c;
   background-color: #a92b3c;
+  transition: background-color 0.3s ease;
 
   &:hover {
+    border: 1px solid #a92b3c;
     background-color: #c94f64;
   }
 }
