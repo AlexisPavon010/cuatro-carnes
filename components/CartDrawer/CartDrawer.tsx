@@ -63,7 +63,7 @@ export const CartDrawer = () => {
       ))}
       <div className={styles.cart__total}>
         <div className={styles.cart__total_text}>
-          Descuento (%7)
+          Descuento por retiro (%7)
         </div>
         <div className={styles.cart__total_price}>
           ${Math.round(getCartTotal(cart) * discount)}
