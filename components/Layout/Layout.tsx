@@ -39,6 +39,7 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
           },
           Button: {
             colorBgContainer: '#a92b3c',
+            colorText: 'white',
           },
         }
       }}
@@ -54,6 +55,6 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         <WhatsAppButton />
         <CartDrawer />
       </main>
-    </ConfigProvider>
+    </ConfigProvider >
   )
 }
