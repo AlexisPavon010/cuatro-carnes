@@ -263,7 +263,7 @@ const CheckoutPage = () => {
                       Envíos a domicilio sin cargo adicional en 24hs.
                     </h2>
                     <p>
-                      Mínimo $15.000,00 o retiros en local a precio mayorista.
+                      Mínimo $25.000,00 o retiros en local a precio mayorista.
                     </p>
                   </div>
                 </div>
