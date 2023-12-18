@@ -41,24 +41,25 @@ export const shoppingSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const { quantity, ...product } = action.payload;
-      const existingProductIndex = state.cart.findIndex((cartItem: IProduct) => {
-        // Compara el _id y las opciones seleccionadas del producto
-        return (
-          cartItem._id === product._id &&
-          JSON.stringify(cartItem.options) === JSON.stringify(product.options)
-        );
-      });
+      // const existingProductIndex = state.cart.findIndex((cartItem: IProduct) => {
+      //   // Compara el _id y las opciones seleccionadas del producto
+      //   return (
+      //     cartItem._id === product._id &&
+      //     JSON.stringify(cartItem.options) === JSON.stringify(product.options)
+      //   );
+      // });
 
       let newCart = [...state.cart];
 
-      if (existingProductIndex >= 0) {
-        // Si el producto ya existe en el carrito con las mismas opciones, suma la cantidad deseada
-        newCart[existingProductIndex].quantity += quantity;
-      } else {
-        // Si el producto no existe en el carrito con las mismas opciones, agrégalo con la cantidad deseada
-        product.quantity = quantity;
-        newCart.push(product);
-      }
+      // if (existingProductIndex >= 0) {
+      //   // Si el producto ya existe en el carrito con las mismas opciones, suma la cantidad deseada
+      //   newCart[existingProductIndex].quantity += quantity;
+      // } else {
+      //   // Si el producto no existe en el carrito con las mismas opciones, agrégalo con la cantidad deseada
+      // }
+
+      product.quantity = quantity;
+      newCart.push(product);
 
       setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
       state.cart = newCart;
