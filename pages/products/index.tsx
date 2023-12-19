@@ -41,14 +41,16 @@ const ProductsPage = () => {
 
   return (
     <Layout title='Productos - Cuatro Carnes'>
-      <section className={styles.hero} id='hero'>
-        <div className={styles.hero__container}>
-          {/* <Slider /> */}
-          <div className={styles.slider__list}>
-            <OfferSlider />
-          </div>
-        </div >
-      </section >
+      {offers?.length !== 0 ? (
+        <section className={styles.hero} id='hero'>
+          <div className={styles.hero__container}>
+            {/* <Slider /> */}
+            <div className={styles.slider__list}>
+              <OfferSlider />
+            </div>
+          </div >
+        </section>
+      ) : <section style={{ paddingTop: '120px' }} />}
       <section className={styles.categories}>
         {
           categories?.length === 0
