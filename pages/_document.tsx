@@ -18,7 +18,7 @@ export default function Document() {
         <meta property="og:image:height" content="813" />
         <meta property="og:image:width" content="813" />
         <meta property="og:site_name" content="Bienvenidos a Cuatro Carnes" />
-
+        <meta name="facebook-domain-verification" content="mk5aoz9x8gc6hk68dleirn56jfjk5p" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://cuatrocarnes.com/" />
         <meta property="twitter:title" content="Cuatro Carnes" />
