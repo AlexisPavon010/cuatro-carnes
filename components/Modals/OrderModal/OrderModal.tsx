@@ -38,6 +38,8 @@ export const OrderModal = () => {
     });
   };
 
+  console.log(count)
+
   const calculatePrice = () => {
     if (is_offer_quantity) {
       const finalPrice = count >= offer_quantity ? count * offer_quantity_price : count * price
@@ -62,7 +64,7 @@ export const OrderModal = () => {
   const addItemToCart = () => {
     dispatch(setOpenCartDrawer(true))
     dispatch(addToCart({
-      quantity: count,
+      cantidad: count,
       ...product,
       options: options
     }))

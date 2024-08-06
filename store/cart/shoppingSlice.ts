@@ -40,7 +40,7 @@ export const shoppingSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { quantity, ...product } = action.payload;
+      const { cantidad, ...product } = action.payload;
       // const existingProductIndex = state.cart.findIndex((cartItem: IProduct) => {
       //   // Compara el _id y las opciones seleccionadas del producto
       //   return (
@@ -58,7 +58,7 @@ export const shoppingSlice = createSlice({
       //   // Si el producto no existe en el carrito con las mismas opciones, agrégalo con la cantidad deseada
       // }
 
-      product.quantity = quantity;
+      product.quantity = cantidad;
       newCart.push(product);
 
       setCookie(null, 'cart', JSON.stringify(newCart), { path: '/' });
