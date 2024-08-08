@@ -19,21 +19,3 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-
-const { withSentryConfig } = require("@sentry/nextjs");
-
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    silent: true,
-    org: "pipis",
-    project: "cuatro-carnes",
-  },
-  {
-    widenClientFileUpload: true,
-    transpileClientSDK: true,
-    tunnelRoute: "/monitoring",
-    hideSourceMaps: true,
-    disableLogger: true,
-  }
-);
